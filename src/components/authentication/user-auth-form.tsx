@@ -3,7 +3,8 @@ import React from 'react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
-import { Icons } from '../icons'
+import GitHubButton from './github-button'
+import GoogleButton from './google-button'
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -37,14 +38,8 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
         </div>
       </div>
       <div className='grid grid-cols-2 gap-x-6'>
-        <Button variant='outline' type='button'>
-          <Icons.gitHub className='mr-2 h-4 w-4' />
-          GitHub
-        </Button>
-        <Button variant='outline' type='button'>
-          <Icons.google className='mr-2 h-4 w-4' />
-          Google
-        </Button>
+        <GitHubButton />
+        <GoogleButton />
       </div>
     </div>
   )

@@ -1,9 +1,10 @@
 import { Label } from '@radix-ui/react-label'
-import { Icons } from '../icons'
 import { Button } from '../ui/button'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { Input } from '../ui/input'
 import { useState } from 'react'
+import GoogleButton from './google-button'
+import GitHubButton from './github-button'
 
 const UserLoginModal = () => {
   const [open, setOpen] = useState(false)
@@ -20,14 +21,8 @@ const UserLoginModal = () => {
           <DialogTitle>Sign in to Dynfin</DialogTitle>
         </DialogHeader>
         <div className='grid grid-cols-2 gap-x-6'>
-          <Button variant='outline' type='button'>
-            <Icons.gitHub className='mr-2 h-4 w-4' />
-            GitHub
-          </Button>
-          <Button variant='outline' type='button'>
-            <Icons.google className='mr-2 h-4 w-4' />
-            Google
-          </Button>
+          <GitHubButton />
+          <GoogleButton />
         </div>
         <div className='relative'>
           <div className='absolute inset-0 flex items-center'>
