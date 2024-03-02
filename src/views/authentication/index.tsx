@@ -1,6 +1,6 @@
 import UserAuthForm from '@/components/authentication/user-auth-form'
 import UserLoginModal from '@/components/authentication/user-login-modal'
-import { buttonVariants } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Toaster } from '@/components/ui/toaster'
 import { useToast } from '@/components/ui/use-toast'
 import { cn } from '@/lib/utils'
@@ -39,29 +39,31 @@ const Authentication = () => {
             <UserAuthForm />
             <p className='px-8 text-center text-sm text-muted-foreground'>
               By clicking continue, you agree to our{' '}
-              <button
+              <Button
+                variant='link'
                 onClick={() =>
                   toast({
                     title: 'Terms of Service',
                     description: 'We do not have a terms of service yet.',
                   })
                 }
-                className='underline underline-offset-4 hover:text-primary'
+                className='text-gray px-0 hover:no-underline hover:text-primary'
               >
                 Terms of Service
-              </button>{' '}
+              </Button>{' '}
               and{' '}
-              <a
+              <Button
+                variant='link'
                 onClick={() =>
                   toast({
                     title: 'Privacy Policy',
                     description: 'We do not have a privacy policy yet.',
                   })
                 }
-                className='underline underline-offset-4 hover:text-primary'
+                className='text-gray px-0 hover:no-underline hover:text-primary'
               >
                 Privacy Policy
-              </a>
+              </Button>
               .
             </p>
             <Toaster />
