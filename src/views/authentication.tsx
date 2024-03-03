@@ -1,5 +1,5 @@
 import UserAuthForm from '@/components/authentication/user-auth-form'
-import UserLoginModal from '@/components/authentication/user-login-modal'
+import UserAuthModal from '@/components/authentication/user-auth-modal'
 import { Button } from '@/components/ui/button'
 import { Toaster } from '@/components/ui/toaster'
 import { useToast } from '@/components/ui/use-toast'
@@ -10,6 +10,7 @@ const Authentication = () => {
   return (
     <>
       <div className='container relative hidden flex-1 flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0'>
+        <UserAuthModal />
         <div className='relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r'>
           <div className='absolute inset-0 bg-primary' />
           <div className='relative  flex items-center text-lg font-medium'>dynfin</div>
@@ -63,7 +64,6 @@ const Authentication = () => {
           </div>
         </div>
       </div>
-      <UserLoginModal />
     </>
   )
 }

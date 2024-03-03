@@ -2,33 +2,66 @@ import { cn } from '@/lib/utils'
 import React from 'react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
-import { Label } from '../ui/label'
 import GitHubButton from './github-button'
 import GoogleButton from './google-button'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
+import { useAuth } from '@/lib/firebase'
+import { useCreateUser } from '@/hooks/auth'
+
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+})
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
+  const auth = useAuth()
+  const { mutate } = useCreateUser()
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+  })
+
+  function onSubmit(values: z.infer<typeof schema>) {
+    const { email, password } = values
+    mutate({ auth, email, password }, { onSuccess: () => console.log('success') })
+  }
   return (
     <div className={cn('grid gap-6', className)} {...props}>
-      <form>
-        <div className='grid gap-2'>
-          <div className='grid gap-1'>
-            <Label className='sr-only' htmlFor='email'>
-              Email
-            </Label>
-            <Input
-              id='email'
-              placeholder='name@example.com'
-              type='email'
-              autoCapitalize='none'
-              autoComplete='email'
-              autoCorrect='off'
-            />
-          </div>
-          <Button>Sign In with Email</Button>
-        </div>
-      </form>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='grid gap-2'>
+          <FormField
+            control={form.control}
+            name='email'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder='name@example.com' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='password'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input placeholder='Password' type='password' {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type='submit'>Create Account</Button>
+        </form>
+      </Form>
       <div className='relative'>
         <div className='absolute inset-0 flex items-center'>
           <span className='w-full border-t' />
