@@ -1821,7 +1821,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-router@npm:1.18.3":
+"@tanstack/react-router@npm:1.18.3, @tanstack/react-router@npm:^1.18.3":
   version: 1.18.3
   resolution: "@tanstack/react-router@npm:1.18.3"
   dependencies:
@@ -1833,21 +1833,6 @@ __metadata:
     react: ">=16"
     react-dom: ">=16"
   checksum: d477354ff816fec90993d1a49cd82d59b31f9555ce28a5b698c47ac6944c5608cd502ce8272fd5bdaafa61ccd7c107d9feee3e7d31aa9dac2f05ab838cc062e0
-  languageName: node
-  linkType: hard
-
-"@tanstack/react-router@npm:^1.17.4":
-  version: 1.17.4
-  resolution: "@tanstack/react-router@npm:1.17.4"
-  dependencies:
-    "@tanstack/history": 1.15.13
-    "@tanstack/react-store": ^0.2.1
-    tiny-invariant: ^1.3.1
-    tiny-warning: ^1.0.3
-  peerDependencies:
-    react: ">=16"
-    react-dom: ">=16"
-  checksum: a0777c7d7100603c55a2d6aeda27ac2cafb4e5f30018cdcda119d7c8bdc0131866d591d6533b4b8e75b763269a53954371503e4f12a1e6988e314a147c9ecdab
   languageName: node
   linkType: hard
 
@@ -3646,7 +3631,7 @@ __metadata:
     "@radix-ui/react-slot": ^1.0.2
     "@radix-ui/react-toast": ^1.1.5
     "@tanstack/react-query": ^5.24.1
-    "@tanstack/react-router": ^1.17.4
+    "@tanstack/react-router": ^1.18.3
     "@tanstack/router-devtools": ^1.18.3
     "@types/node": ^20.11.24
     "@types/react": ^18.2.56
