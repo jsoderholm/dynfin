@@ -9903,13 +9903,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-<<<<<<< HEAD
-      ["react-is", [\
-        ["npm:16.13.1", {\
-          "packageLocation": "./.yarn/cache/react-is-npm-16.13.1-a9b9382b4f-f7a19ac349.zip/node_modules/react-is/",\
-          "packageDependencies": [\
-            ["react-is", "npm:16.13.1"]\
-=======
       ["react-hook-form", [\
         ["npm:7.51.0", {\
           "packageLocation": "./.yarn/cache/react-hook-form-npm-7.51.0-193e7534e0-c3d9996a2c.zip/node_modules/react-hook-form/",\
@@ -9928,7 +9921,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packagePeers": [\
             "@types/react",\
             "react"\
->>>>>>> origin/main
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["react-is", [\
+        ["npm:16.13.1", {\
+          "packageLocation": "./.yarn/cache/react-is-npm-16.13.1-a9b9382b4f-f7a19ac349.zip/node_modules/react-is/",\
+          "packageDependencies": [\
+            ["react-is", "npm:16.13.1"]\
           ],\
           "linkType": "HARD"\
         }]\
