@@ -1,5 +1,6 @@
 import { onAuthStateChanged } from 'firebase/auth'
-import Authentication from './views/authentication'
+import { Outlet, Link } from '@tanstack/react-router'
+import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { initializeFirebase, useAuth } from './lib/firebase'
 import useAuthStore from './stores/store'
 import { useEffect } from 'react'
@@ -21,7 +22,19 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Authentication />
+      <div className='flex flex-col h-full'>
+        <div className='p-2 flex gap-2'>
+          <Link to='/' className='[&.active]:font-bold'>
+            Home
+          </Link>{' '}
+          <Link to='/about' className='[&.active]:font-bold'>
+            About
+          </Link>
+        </div>
+        <hr />
+        <Outlet />
+        <TanStackRouterDevtools />
+      </div>
     </QueryClientProvider>
   )
 }

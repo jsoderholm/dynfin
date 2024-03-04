@@ -3,31 +3,17 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import '@/styles/globals.css'
 import '@/styles/index.css'
-import { createRootRoute, Outlet, Link, createRoute, createRouter, RouterProvider } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import { createRootRoute, createRoute, createRouter, RouterProvider } from '@tanstack/react-router'
+import Authentication from './views/authentication.tsx'
 
 const rootRoute = createRootRoute({
-  component: () => (
-    <div className='flex flex-col h-full'>
-      <div className='p-2 flex gap-2'>
-        <Link to='/' className='[&.active]:font-bold'>
-          Home
-        </Link>{' '}
-        <Link to='/about' className='[&.active]:font-bold'>
-          About
-        </Link>
-      </div>
-      <hr />
-      <Outlet />
-      <TanStackRouterDevtools />
-    </div>
-  ),
+  component: () => <App />,
 })
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
   component: function Index() {
-    return <App />
+    return <Authentication />
   },
 })
 
