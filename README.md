@@ -26,12 +26,22 @@ yarn dlx @yarnpkg/sdks vscode vim ... # Generate both the base SDK and the edito
 yarn dlx @yarnpkg/sdks # Update all installed SDKs & editor settings
 ```
 
-### Development
+## Development
 
 To start the development server, run the following command:
 
 ```sh
 yarn dev
+```
+
+### Running Firebase Emulators
+
+Firebase emulators provide a convenient way to develop and test Firebase features locally on your machine. Instead of interacting with production services, you can run emulated versions of Firebase Auth and Cloud Firestore.
+
+To start the Firebase emulators locally, run the following command:
+
+```sh
+yarn firebase emulators:start
 ```
 
 ### Formatting Code
