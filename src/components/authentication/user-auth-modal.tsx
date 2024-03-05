@@ -47,6 +47,9 @@ const UserAuthModal = () => {
           useAuthStore.setState({ user: data.user })
           navigate({ to: '/' })
         },
+        onError: (e) => {
+          console.log(e)
+        },
       },
     )
   }

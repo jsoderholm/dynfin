@@ -1,7 +1,9 @@
 import { cn } from '@/lib/utils'
 import { Link } from '@tanstack/react-router'
 
-export function MainNav({ className, ...props }: React.HTMLAttributes<HTMLElement>) {
+import React from 'react'
+
+const Nav = ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => {
   return (
     <nav
       className={cn('flex items-center space-x-4 lg:space-x-6 text-muted-foreground font-medium', className)}
@@ -27,3 +29,5 @@ export function MainNav({ className, ...props }: React.HTMLAttributes<HTMLElemen
     </nav>
   )
 }
+
+export default Nav
