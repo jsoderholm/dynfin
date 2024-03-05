@@ -21,10 +21,13 @@ function signInUser({ auth, email, password }: AuthProps) {
   return signInWithEmailAndPassword(auth, email, password)
 }
 
+function signOutUser(auth: Auth) {
+  return auth.signOut()
+}
+
 function signInUserGoogle(auth: Auth) {
   const provider = new GoogleAuthProvider()
   auth.languageCode = 'en'
-
   return signInWithPopup(auth, provider)
 }
 
@@ -34,4 +37,4 @@ function signInUserGitHub(auth: Auth) {
   return signInWithPopup(auth, provider)
 }
 
-export { signInUser, createUser, signInUserGoogle, signInUserGitHub }
+export { signInUser, createUser, signOutUser, signInUserGoogle, signInUserGitHub }

@@ -6,7 +6,6 @@ import { useToast } from '@/components/ui/use-toast'
 
 const Authentication = () => {
   const { toast } = useToast()
-
   return (
     <>
       <div className='container relative hidden flex-1 flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0'>

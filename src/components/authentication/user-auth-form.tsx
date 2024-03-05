@@ -10,6 +10,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { useAuth } from '@/lib/firebase'
 import { useCreateUser } from '@/hooks/auth'
+import useAuthStore from '@/stores/auth-store'
+import { useNavigate } from '@tanstack/react-router'
 
 const schema = z.object({
   email: z.string().email(),
@@ -20,6 +22,7 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
   const auth = useAuth()
+  const navigate = useNavigate()
   const { mutate } = useCreateUser()
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -27,7 +30,15 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
 
   function onSubmit(values: z.infer<typeof schema>) {
     const { email, password } = values
-    mutate({ auth, email, password }, { onSuccess: () => console.log('success') })
+    mutate(
+      { auth, email, password },
+      {
+        onSuccess: (data) => {
+          useAuthStore.setState({ user: data.user })
+          navigate({ to: '/' })
+        },
+      },
+    )
   }
   return (
     <div className={cn('grid gap-6', className)} {...props}>
