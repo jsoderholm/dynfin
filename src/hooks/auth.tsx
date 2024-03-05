@@ -1,4 +1,4 @@
-import { createUser, signInUser, signInUserGitHub, signInUserGoogle } from '@/lib/auth'
+import { createUser, signInUser, signInUserGitHub, signInUserGoogle, signOutUser } from '@/lib/auth'
 import { useMutation } from '@tanstack/react-query'
 
 function useCreateUser() {
@@ -17,4 +17,8 @@ function useGitHubSignIn() {
   return useMutation({ mutationFn: signInUserGitHub })
 }
 
-export { useCreateUser, useSignInUser, useGoogleSignIn, useGitHubSignIn }
+function useSignOutUser() {
+  return useMutation({ mutationFn: signOutUser })
+}
+
+export { useCreateUser, useSignInUser, useSignOutUser, useGoogleSignIn, useGitHubSignIn }

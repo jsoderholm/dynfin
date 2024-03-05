@@ -10,6 +10,8 @@ import { useSignInUser } from '@/hooks/auth'
 import { useAuth } from '@/lib/firebase'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { useNavigate } from '@tanstack/react-router'
+import useAuthStore from '@/stores/auth-store'
 
 const schema = z.object({
   email: z.string().email(),
@@ -28,6 +30,7 @@ const useModalStore = create<UserLoginModalState>((set) => ({
 
 const UserAuthModal = () => {
   const { open, onOpenChange } = useModalStore()
+  const navigate = useNavigate()
 
   const auth = useAuth()
   const { mutate } = useSignInUser()
@@ -37,7 +40,15 @@ const UserAuthModal = () => {
 
   function onSubmit(values: z.infer<typeof schema>) {
     const { email, password } = values
-    mutate({ auth, email, password }, { onSuccess: () => console.log('success') })
+    mutate(
+      { auth, email, password },
+      {
+        onSuccess: (data) => {
+          useAuthStore.setState({ user: data.user })
+          navigate({ to: '/' })
+        },
+      },
+    )
   }
 
   return (
