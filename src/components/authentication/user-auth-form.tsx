@@ -3,13 +3,12 @@ import React from 'react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import GitHubButton from './github-button'
-import GoogleButton from './google-button'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { useAuth } from '@/lib/firebase'
-import { useCreateUser } from '@/hooks/auth'
+import { useCreateUser, useGitHubSignIn } from '@/hooks/auth'
 import useAuthStore from '@/stores/auth-store'
 import { useNavigate } from '@tanstack/react-router'
 
@@ -24,6 +23,8 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
   const auth = useAuth()
   const navigate = useNavigate()
   const { mutate } = useCreateUser()
+  const { mutate: mutateGitHub } = useGitHubSignIn()
+
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
   })
@@ -70,7 +71,9 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
               </FormItem>
             )}
           />
-          <Button type='submit'>Create Account</Button>
+          <Button type='submit' className='my-2'>
+            Create Account
+          </Button>
         </form>
       </Form>
       <div className='relative'>
@@ -81,10 +84,16 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
           <span className='bg-background px-2 text-muted-foreground'>Or continue with</span>
         </div>
       </div>
-      <div className='grid grid-cols-2 gap-x-6'>
-        <GitHubButton />
-        <GoogleButton />
-      </div>
+      <GitHubButton
+        onClick={() =>
+          mutateGitHub(auth, {
+            onSuccess: (data) => {
+              useAuthStore.setState({ user: data.user })
+              navigate({ to: '/' })
+            },
+          })
+        }
+      />
     </div>
   )
 }

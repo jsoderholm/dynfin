@@ -1,7 +1,6 @@
 import {
   Auth,
   GithubAuthProvider,
-  GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -25,16 +24,10 @@ function signOutUser(auth: Auth) {
   return auth.signOut()
 }
 
-function signInUserGoogle(auth: Auth) {
-  const provider = new GoogleAuthProvider()
-  auth.languageCode = 'en'
-  return signInWithPopup(auth, provider)
-}
-
 function signInUserGitHub(auth: Auth) {
   const provider = new GithubAuthProvider()
   auth.languageCode = 'en'
   return signInWithPopup(auth, provider)
 }
 
-export { signInUser, createUser, signOutUser, signInUserGoogle, signInUserGitHub }
+export { signInUser, createUser, signOutUser, signInUserGitHub }

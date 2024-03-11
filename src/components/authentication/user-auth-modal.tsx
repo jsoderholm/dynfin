@@ -1,12 +1,11 @@
 import { Button } from '../ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { Input } from '../ui/input'
-import GoogleButton from './google-button'
 import GitHubButton from './github-button'
 import { create } from 'zustand'
 import { useForm } from 'react-hook-form'
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '../ui/form'
-import { useSignInUser } from '@/hooks/auth'
+import { useGitHubSignIn, useSignInUser } from '@/hooks/auth'
 import { useAuth } from '@/lib/firebase'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -33,14 +32,16 @@ const UserAuthModal = () => {
   const navigate = useNavigate()
 
   const auth = useAuth()
-  const { mutate } = useSignInUser()
+  const { mutate: signInUser } = useSignInUser()
+  const { mutate: signInGitHub } = useGitHubSignIn()
+
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
   })
 
   function onSubmit(values: z.infer<typeof schema>) {
     const { email, password } = values
-    mutate(
+    signInUser(
       { auth, email, password },
       {
         onSuccess: (data) => {
@@ -65,18 +66,7 @@ const UserAuthModal = () => {
         <DialogHeader>
           <DialogTitle>Sign in to Dynfin</DialogTitle>
         </DialogHeader>
-        <div className='grid grid-cols-2 gap-x-6'>
-          <GitHubButton />
-          <GoogleButton />
-        </div>
-        <div className='relative'>
-          <div className='absolute inset-0 flex items-center'>
-            <span className='w-full border-t' />
-          </div>
-          <div className='relative flex justify-center text-xs uppercase'>
-            <span className='bg-background px-2 text-muted-foreground'>Or continue with</span>
-          </div>
-        </div>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='grid gap-2'>
             <FormField
@@ -105,9 +95,29 @@ const UserAuthModal = () => {
                 </FormItem>
               )}
             />
-            <Button type='submit'>Sign In</Button>
+            <Button type='submit' className='my-2'>
+              Sign In
+            </Button>
           </form>
         </Form>
+        <div className='relative'>
+          <div className='absolute inset-0 flex items-center'>
+            <span className='w-full border-t' />
+          </div>
+          <div className='relative flex justify-center text-xs uppercase'>
+            <span className='bg-background px-2 text-muted-foreground'>Or continue with</span>
+          </div>
+        </div>
+        <GitHubButton
+          onClick={() =>
+            signInGitHub(auth, {
+              onSuccess: (data) => {
+                useAuthStore.setState({ user: data.user })
+                navigate({ to: '/' })
+              },
+            })
+          }
+        />
       </DialogContent>
     </Dialog>
   )
