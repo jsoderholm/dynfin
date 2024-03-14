@@ -11,23 +11,12 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as SavedImport } from './routes/saved'
-import { Route as NewsImport } from './routes/news'
 import { Route as AuthenticationImport } from './routes/authentication'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AuthIndexImport } from './routes/_auth.index'
+import { Route as AuthSavedImport } from './routes/_auth.saved'
 
 // Create/Update Routes
-
-const SavedRoute = SavedImport.update({
-  path: '/saved',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const NewsRoute = NewsImport.update({
-  path: '/news',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const AuthenticationRoute = AuthenticationImport.update({
   path: '/authentication',
@@ -44,6 +33,11 @@ const AuthIndexRoute = AuthIndexImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
+const AuthSavedRoute = AuthSavedImport.update({
+  path: '/saved',
+  getParentRoute: () => AuthRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -56,13 +50,9 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticationImport
       parentRoute: typeof rootRoute
     }
-    '/news': {
-      preLoaderRoute: typeof NewsImport
-      parentRoute: typeof rootRoute
-    }
-    '/saved': {
-      preLoaderRoute: typeof SavedImport
-      parentRoute: typeof rootRoute
+    '/_auth/saved': {
+      preLoaderRoute: typeof AuthSavedImport
+      parentRoute: typeof AuthImport
     }
     '/_auth/': {
       preLoaderRoute: typeof AuthIndexImport
@@ -74,10 +64,8 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
-  AuthRoute.addChildren([AuthIndexRoute]),
+  AuthRoute.addChildren([AuthSavedRoute, AuthIndexRoute]),
   AuthenticationRoute,
-  NewsRoute,
-  SavedRoute,
 ])
 
 /* prettier-ignore-end */
