@@ -34,9 +34,10 @@ const UserAuthModal = () => {
     resolver: zodResolver(schema),
   })
 
-  function onSubmit(values: z.infer<typeof schema>) {
+  async function onSubmit(values: z.infer<typeof schema>) {
     const { email, password } = values
-    login({ email, password })
+    const success = await login({ email, password })
+    if (!success) return
     navigate({ to: '/' })
   }
 

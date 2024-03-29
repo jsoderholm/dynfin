@@ -36,6 +36,7 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
       })
       .catch((e) => console.log(e))
   }
+
   return (
     <div className={cn('grid gap-6', className)} {...props}>
       <Form {...form}>
