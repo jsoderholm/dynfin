@@ -1,4 +1,3 @@
-import React from 'react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import GitHubButton from './github-button'
@@ -11,9 +10,7 @@ export type UserAuthFormProps = {
   form: ReturnType<typeof useForm<z.infer<typeof schema>>>
   onRegister: (values: z.infer<typeof schema>) => Promise<void>
   onGitHub: () => Promise<void>
-  // onsubmit
-  // github
-} & React.HTMLAttributes<HTMLDivElement>
+}
 
 const UserAuthForm = ({ form, onRegister, onGitHub }: UserAuthFormProps) => {
   return (

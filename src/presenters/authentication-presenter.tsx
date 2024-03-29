@@ -7,15 +7,27 @@ import { useNavigate } from '@tanstack/react-router'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { create } from 'zustand'
 
 export const schema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 })
 
+interface UserLoginModalState {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
+
+const useModalStore = create<UserLoginModalState>((set) => ({
+  open: false,
+  onOpenChange: (open: boolean) => set({ open }),
+}))
+
 const AuthenticationPresenter = () => {
   const navigate = useNavigate()
   const login = useAuthStore((state) => state.login)
+  const { open, onOpenChange } = useModalStore()
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -48,7 +60,16 @@ const AuthenticationPresenter = () => {
     }
   }
 
-  return <AuthenticationView form={form} onLogin={onLogin} onRegister={onRegister} onGitHub={onGitHub} />
+  return (
+    <AuthenticationView
+      form={form}
+      onLogin={onLogin}
+      onRegister={onRegister}
+      onGitHub={onGitHub}
+      open={open}
+      onOpenChange={onOpenChange}
+    />
+  )
 }
 
 export default AuthenticationPresenter

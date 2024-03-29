@@ -2,31 +2,20 @@ import { Button } from '../ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { Input } from '../ui/input'
 import GitHubButton from './github-button'
-import { create } from 'zustand'
 import { useForm } from 'react-hook-form'
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '../ui/form'
 import { z } from 'zod'
 import { schema } from '@/presenters/authentication-presenter'
 
-interface UserLoginModalState {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-}
-
-const useModalStore = create<UserLoginModalState>((set) => ({
-  open: false,
-  onOpenChange: (open: boolean) => set({ open }),
-}))
-
 export type UserAuthModalProps = {
   form: ReturnType<typeof useForm<z.infer<typeof schema>>>
   onLogin: (values: z.infer<typeof schema>) => Promise<void>
   onGitHub: () => Promise<void>
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 
-const UserAuthModal = ({ form, onLogin, onGitHub }: UserAuthModalProps) => {
-  const { open, onOpenChange } = useModalStore()
-
+const UserAuthModal = ({ form, onLogin, onGitHub, open, onOpenChange }: UserAuthModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
@@ -79,7 +68,7 @@ const UserAuthModal = ({ form, onLogin, onGitHub }: UserAuthModalProps) => {
             <span className='bg-background px-2 text-muted-foreground'>Or continue with</span>
           </div>
         </div>
-        <GitHubButton onClick={onGitHub} />)
+        <GitHubButton onClick={onGitHub} />
       </DialogContent>
     </Dialog>
   )
