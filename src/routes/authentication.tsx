@@ -1,6 +1,6 @@
-import Authentication from '@/views/authentication'
+import AuthenticationPresenter from '@/presenters/authentication-presenter'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/authentication')({
-  component: Authentication,
+  component: AuthenticationPresenter,
 })

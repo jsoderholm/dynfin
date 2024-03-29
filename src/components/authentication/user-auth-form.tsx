@@ -1,46 +1,31 @@
-import { cn } from '@/lib/utils'
 import React from 'react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import GitHubButton from './github-button'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { auth } from '@/lib/firebase'
 import { useGitHubSignIn } from '@/hooks/auth'
 import useAuthStore from '@/stores/auth-store'
 import { useNavigate } from '@tanstack/react-router'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { schema } from '@/presenters/authentication-presenter'
 
-const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-})
+export type UserAuthFormProps = {
+  form: ReturnType<typeof useForm<z.infer<typeof schema>>>
+  onRegister: (values: z.infer<typeof schema>) => Promise<void>
+  // onsubmit
+  // github
+} & React.HTMLAttributes<HTMLDivElement>
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
+const UserAuthForm = ({ form, onRegister }: UserAuthFormProps) => {
   const navigate = useNavigate()
   const { mutate: mutateGitHub } = useGitHubSignIn()
 
-  const form = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
-  })
-
-  function onSubmit(values: z.infer<typeof schema>) {
-    const { email, password } = values
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        navigate({ to: '/' })
-      })
-      .catch((e) => console.log(e))
-  }
-
   return (
-    <div className={cn('grid gap-6', className)} {...props}>
+    <div className='grid gap-6'>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='grid gap-2'>
+        <form onSubmit={form.handleSubmit(onRegister)} className='grid gap-2'>
           <FormField
             control={form.control}
             name='email'

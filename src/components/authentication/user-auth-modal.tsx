@@ -5,15 +5,8 @@ import GitHubButton from './github-button'
 import { create } from 'zustand'
 import { useForm } from 'react-hook-form'
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '../ui/form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import useAuthStore from '@/stores/auth-store'
-import { useNavigate } from '@tanstack/react-router'
-
-const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-})
+import { schema } from '@/presenters/authentication-presenter'
 
 interface UserLoginModalState {
   open: boolean
@@ -25,21 +18,14 @@ const useModalStore = create<UserLoginModalState>((set) => ({
   onOpenChange: (open: boolean) => set({ open }),
 }))
 
-const UserAuthModal = () => {
+export type UserAuthModalProps = {
+  form: ReturnType<typeof useForm<z.infer<typeof schema>>>
+  onLogin: (values: z.infer<typeof schema>) => Promise<void>
+  // github
+}
+
+const UserAuthModal = ({ form, onLogin }: UserAuthModalProps) => {
   const { open, onOpenChange } = useModalStore()
-  const navigate = useNavigate()
-  const login = useAuthStore((state) => state.login)
-
-  const form = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
-  })
-
-  async function onSubmit(values: z.infer<typeof schema>) {
-    const { email, password } = values
-    const success = await login({ email, password })
-    if (!success) return
-    navigate({ to: '/' })
-  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -52,9 +38,8 @@ const UserAuthModal = () => {
         <DialogHeader>
           <DialogTitle>Sign in to Dynfin</DialogTitle>
         </DialogHeader>
-
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='grid gap-2'>
+          <form onSubmit={form.handleSubmit(onLogin)} className='grid gap-2'>
             <FormField
               control={form.control}
               name='email'
