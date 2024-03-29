@@ -5,12 +5,10 @@ import GitHubButton from './github-button'
 import { create } from 'zustand'
 import { useForm } from 'react-hook-form'
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '../ui/form'
-import { useGitHubSignIn, useSignInUser } from '@/hooks/auth'
-import { useAuth } from '@/lib/firebase'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { useNavigate } from '@tanstack/react-router'
 import useAuthStore from '@/stores/auth-store'
+import { useNavigate } from '@tanstack/react-router'
 
 const schema = z.object({
   email: z.string().email(),
@@ -30,10 +28,7 @@ const useModalStore = create<UserLoginModalState>((set) => ({
 const UserAuthModal = () => {
   const { open, onOpenChange } = useModalStore()
   const navigate = useNavigate()
-
-  const auth = useAuth()
-  const { mutate: signInUser } = useSignInUser()
-  const { mutate: signInGitHub } = useGitHubSignIn()
+  const login = useAuthStore((state) => state.login)
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -41,18 +36,8 @@ const UserAuthModal = () => {
 
   function onSubmit(values: z.infer<typeof schema>) {
     const { email, password } = values
-    signInUser(
-      { auth, email, password },
-      {
-        onSuccess: (data) => {
-          useAuthStore.setState({ user: data.user })
-          navigate({ to: '/' })
-        },
-        onError: (e) => {
-          console.log(e)
-        },
-      },
-    )
+    login({ email, password })
+    navigate({ to: '/' })
   }
 
   return (
@@ -109,14 +94,14 @@ const UserAuthModal = () => {
           </div>
         </div>
         <GitHubButton
-          onClick={() =>
-            signInGitHub(auth, {
-              onSuccess: (data) => {
-                useAuthStore.setState({ user: data.user })
-                navigate({ to: '/' })
-              },
-            })
-          }
+        // onClick={() =>
+        //   signInGitHub(auth, {
+        //     onSuccess: (data) => {
+        //       useAuthStore.setState({ user: data.user })
+        //       navigate({ to: '/' })
+        //     },
+        //   })
+        // }
         />
       </DialogContent>
     </Dialog>

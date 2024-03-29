@@ -7,10 +7,11 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { useAuth } from '@/lib/firebase'
-import { useCreateUser, useGitHubSignIn } from '@/hooks/auth'
+import { auth } from '@/lib/firebase'
+import { useGitHubSignIn } from '@/hooks/auth'
 import useAuthStore from '@/stores/auth-store'
 import { useNavigate } from '@tanstack/react-router'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
 
 const schema = z.object({
   email: z.string().email(),
@@ -20,9 +21,7 @@ const schema = z.object({
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
-  const auth = useAuth()
   const navigate = useNavigate()
-  const { mutate } = useCreateUser()
   const { mutate: mutateGitHub } = useGitHubSignIn()
 
   const form = useForm<z.infer<typeof schema>>({
@@ -31,15 +30,11 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
 
   function onSubmit(values: z.infer<typeof schema>) {
     const { email, password } = values
-    mutate(
-      { auth, email, password },
-      {
-        onSuccess: (data) => {
-          useAuthStore.setState({ user: data.user })
-          navigate({ to: '/' })
-        },
-      },
-    )
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        navigate({ to: '/' })
+      })
+      .catch((e) => console.log(e))
   }
   return (
     <div className={cn('grid gap-6', className)} {...props}>

@@ -10,8 +10,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
 import { Button } from './ui/button'
-import { useSignOutUser } from '@/hooks/auth'
-import { useAuth } from '@/lib/firebase'
+import { auth } from '@/lib/firebase'
 import Nav from './nav'
 import { useNavigate } from '@tanstack/react-router'
 
@@ -20,9 +19,7 @@ interface AppShellProps {
 }
 
 const AppShell = ({ children }: AppShellProps) => {
-  const auth = useAuth()
   const user = useAuthStore((state) => state.user)
-  const { mutate } = useSignOutUser()
   const navigate = useNavigate()
 
   return (
@@ -51,7 +48,7 @@ const AppShell = ({ children }: AppShellProps) => {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className='cursor-pointer'
-                    onClick={() => mutate(auth, { onSuccess: () => navigate({ to: '/authentication' }) })}
+                    onClick={() => auth.signOut().then(() => navigate({ to: '/' }))}
                   >
                     Log out
                   </DropdownMenuItem>
