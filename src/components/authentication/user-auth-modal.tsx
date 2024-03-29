@@ -2,59 +2,20 @@ import { Button } from '../ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { Input } from '../ui/input'
 import GitHubButton from './github-button'
-import { create } from 'zustand'
 import { useForm } from 'react-hook-form'
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '../ui/form'
-import { useGitHubSignIn, useSignInUser } from '@/hooks/auth'
-import { useAuth } from '@/lib/firebase'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { useNavigate } from '@tanstack/react-router'
-import useAuthStore from '@/stores/auth-store'
+import { schema } from '@/presenters/authentication-presenter'
 
-const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-})
-
-interface UserLoginModalState {
+export type UserAuthModalProps = {
+  form: ReturnType<typeof useForm<z.infer<typeof schema>>>
+  onLogin: (values: z.infer<typeof schema>) => Promise<void>
+  onGitHub: () => Promise<void>
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
-const useModalStore = create<UserLoginModalState>((set) => ({
-  open: false,
-  onOpenChange: (open: boolean) => set({ open }),
-}))
-
-const UserAuthModal = () => {
-  const { open, onOpenChange } = useModalStore()
-  const navigate = useNavigate()
-
-  const auth = useAuth()
-  const { mutate: signInUser } = useSignInUser()
-  const { mutate: signInGitHub } = useGitHubSignIn()
-
-  const form = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
-  })
-
-  function onSubmit(values: z.infer<typeof schema>) {
-    const { email, password } = values
-    signInUser(
-      { auth, email, password },
-      {
-        onSuccess: (data) => {
-          useAuthStore.setState({ user: data.user })
-          navigate({ to: '/' })
-        },
-        onError: (e) => {
-          console.log(e)
-        },
-      },
-    )
-  }
-
+const UserAuthModal = ({ form, onLogin, onGitHub, open, onOpenChange }: UserAuthModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
@@ -66,9 +27,8 @@ const UserAuthModal = () => {
         <DialogHeader>
           <DialogTitle>Sign in to Dynfin</DialogTitle>
         </DialogHeader>
-
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='grid gap-2'>
+          <form onSubmit={form.handleSubmit(onLogin)} className='grid gap-2'>
             <FormField
               control={form.control}
               name='email'
@@ -108,16 +68,7 @@ const UserAuthModal = () => {
             <span className='bg-background px-2 text-muted-foreground'>Or continue with</span>
           </div>
         </div>
-        <GitHubButton
-          onClick={() =>
-            signInGitHub(auth, {
-              onSuccess: (data) => {
-                useAuthStore.setState({ user: data.user })
-                navigate({ to: '/' })
-              },
-            })
-          }
-        />
+        <GitHubButton onClick={onGitHub} />
       </DialogContent>
     </Dialog>
   )

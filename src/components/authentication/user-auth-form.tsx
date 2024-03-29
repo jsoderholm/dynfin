@@ -1,50 +1,22 @@
-import { cn } from '@/lib/utils'
-import React from 'react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import GitHubButton from './github-button'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { useAuth } from '@/lib/firebase'
-import { useCreateUser, useGitHubSignIn } from '@/hooks/auth'
-import useAuthStore from '@/stores/auth-store'
-import { useNavigate } from '@tanstack/react-router'
+import { schema } from '@/presenters/authentication-presenter'
 
-const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-})
+export type UserAuthFormProps = {
+  form: ReturnType<typeof useForm<z.infer<typeof schema>>>
+  onRegister: (values: z.infer<typeof schema>) => Promise<void>
+  onGitHub: () => Promise<void>
+}
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
-  const auth = useAuth()
-  const navigate = useNavigate()
-  const { mutate } = useCreateUser()
-  const { mutate: mutateGitHub } = useGitHubSignIn()
-
-  const form = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
-  })
-
-  function onSubmit(values: z.infer<typeof schema>) {
-    const { email, password } = values
-    mutate(
-      { auth, email, password },
-      {
-        onSuccess: (data) => {
-          useAuthStore.setState({ user: data.user })
-          navigate({ to: '/' })
-        },
-      },
-    )
-  }
+const UserAuthForm = ({ form, onRegister, onGitHub }: UserAuthFormProps) => {
   return (
-    <div className={cn('grid gap-6', className)} {...props}>
+    <div className='grid gap-6'>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='grid gap-2'>
+        <form onSubmit={form.handleSubmit(onRegister)} className='grid gap-2'>
           <FormField
             control={form.control}
             name='email'
@@ -84,16 +56,7 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
           <span className='bg-background px-2 text-muted-foreground'>Or continue with</span>
         </div>
       </div>
-      <GitHubButton
-        onClick={() =>
-          mutateGitHub(auth, {
-            onSuccess: (data) => {
-              useAuthStore.setState({ user: data.user })
-              navigate({ to: '/' })
-            },
-          })
-        }
-      />
+      <GitHubButton onClick={onGitHub} />
     </div>
   )
 }

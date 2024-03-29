@@ -1,10 +1,11 @@
+import { auth } from '@/lib/firebase'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_auth')({
-  beforeLoad: async ({ context, location }) => {
-    await context.auth.authStateReady()
+  beforeLoad: async ({ location }) => {
+    await auth.authStateReady()
 
-    if (!context.auth.currentUser) {
+    if (!auth.currentUser) {
       throw redirect({
         to: '/authentication',
         search: {
