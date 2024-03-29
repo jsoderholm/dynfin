@@ -5,14 +5,6 @@ import { Toaster } from '@/components/ui/toaster'
 
 type AuthenticationViewProps = UserAuthFormProps & UserAuthModalProps
 
-// {
-// onRegister
-// onLogin
-// onGithubLogin
-// form
-// modal state
-// }
-
 const AuthenticationView = (props: AuthenticationViewProps) => {
   return (
     <div className='container relative flex-1 flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0'>
