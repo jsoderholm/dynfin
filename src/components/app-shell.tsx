@@ -1,4 +1,4 @@
-import useAuthStore from '@/stores/auth-store'
+import { AuthState } from '@/stores/auth-store'
 import React from 'react'
 import { Avatar, AvatarFallback } from './ui/avatar'
 import {
@@ -11,26 +11,14 @@ import {
 } from './ui/dropdown-menu'
 import { Button } from './ui/button'
 import Nav from './nav'
-import { useNavigate } from '@tanstack/react-router'
 
 interface AppShellProps {
   children: React.ReactNode
+  user: AuthState['user']
+  handleSignOut: () => void
 }
 
-const AppShell = ({ children }: AppShellProps) => {
-  const user = useAuthStore((state) => state.user)
-  const logout = useAuthStore((state) => state.logout)
-  const navigate = useNavigate()
-
-  async function handleSignOut() {
-    try {
-      await logout()
-      navigate({ to: '/authentication' })
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
+const AppShell = ({ children, user, handleSignOut }: AppShellProps) => {
   return (
     <div className='flex flex-col flex-1'>
       {user && (
