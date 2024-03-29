@@ -3,7 +3,7 @@ import GraphView from '@/views/graph-view'
 import InfoView from '@/views/info-view'
 import NewsListView from '@/views/news-list-view'
 import { getRouteApi } from '@tanstack/react-router'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 
 const route = getRouteApi('/_auth/details/$symbol')
 

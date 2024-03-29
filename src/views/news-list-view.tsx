@@ -1,4 +1,3 @@
-import React from 'react'
 import NewsView from './news-view'
 
 function NewsListView() {
