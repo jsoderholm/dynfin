@@ -2108,24 +2108,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/query-core@npm:5.24.1":
-  version: 5.24.1
-  resolution: "@tanstack/query-core@npm:5.24.1"
-  checksum: 652f9d92b4785b0a12f70ac8a86d42ee7f9d6f813ac51f2ab62ca0875525f0be65118484fb9b689bc9eb8c9909b11761955bdc5d37f446887868f04ad1cbe1d4
-  languageName: node
-  linkType: hard
-
-"@tanstack/react-query@npm:^5.24.1":
-  version: 5.24.1
-  resolution: "@tanstack/react-query@npm:5.24.1"
-  dependencies:
-    "@tanstack/query-core": 5.24.1
-  peerDependencies:
-    react: ^18.0.0
-  checksum: 0927c92eb280c3a86e0f8d541caf60be087dc14222da037614038137a88b06dd4910ea83fc05706d41531dea1c5e58d9515f9011c0961c5e7016cf054563db3f
-  languageName: node
-  linkType: hard
-
 "@tanstack/react-router@npm:1.18.3, @tanstack/react-router@npm:^1.18.3":
   version: 1.18.3
   resolution: "@tanstack/react-router@npm:1.18.3"
@@ -3957,7 +3939,6 @@ __metadata:
     "@radix-ui/react-navigation-menu": ^1.1.4
     "@radix-ui/react-slot": ^1.0.2
     "@radix-ui/react-toast": ^1.1.5
-    "@tanstack/react-query": ^5.24.1
     "@tanstack/react-router": ^1.18.3
     "@tanstack/router-devtools": ^1.18.3
     "@tanstack/router-vite-plugin": ^1.18.1

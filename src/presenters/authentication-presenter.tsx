@@ -1,3 +1,4 @@
+import { signInUserGitHub } from '@/lib/auth'
 import { auth } from '@/lib/firebase'
 import useAuthStore from '@/stores/auth-store'
 import AuthenticationView from '@/views/authentication-view'
@@ -38,7 +39,16 @@ const AuthenticationPresenter = () => {
     }
   }
 
-  return <AuthenticationView form={form} onLogin={onLogin} onRegister={onRegister} />
+  async function onGitHub() {
+    try {
+      await signInUserGitHub(auth)
+      navigate({ to: '/' })
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  return <AuthenticationView form={form} onLogin={onLogin} onRegister={onRegister} onGitHub={onGitHub} />
 }
 
 export default AuthenticationPresenter

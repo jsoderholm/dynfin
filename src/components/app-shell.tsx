@@ -10,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
 import { Button } from './ui/button'
-import { auth } from '@/lib/firebase'
 import Nav from './nav'
 import { useNavigate } from '@tanstack/react-router'
 
@@ -20,7 +19,17 @@ interface AppShellProps {
 
 const AppShell = ({ children }: AppShellProps) => {
   const user = useAuthStore((state) => state.user)
+  const logout = useAuthStore((state) => state.logout)
   const navigate = useNavigate()
+
+  async function handleSignOut() {
+    try {
+      await logout()
+      navigate({ to: '/authentication' })
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
   return (
     <div className='flex flex-col flex-1'>
@@ -46,10 +55,7 @@ const AppShell = ({ children }: AppShellProps) => {
                   </DropdownMenuLabel>
 
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    className='cursor-pointer'
-                    onClick={() => auth.signOut().then(() => navigate({ to: '/' }))}
-                  >
+                  <DropdownMenuItem className='cursor-pointer' onClick={handleSignOut}>
                     Log out
                   </DropdownMenuItem>
                 </DropdownMenuContent>

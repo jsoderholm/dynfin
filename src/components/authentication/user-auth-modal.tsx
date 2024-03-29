@@ -21,10 +21,10 @@ const useModalStore = create<UserLoginModalState>((set) => ({
 export type UserAuthModalProps = {
   form: ReturnType<typeof useForm<z.infer<typeof schema>>>
   onLogin: (values: z.infer<typeof schema>) => Promise<void>
-  // github
+  onGitHub: () => Promise<void>
 }
 
-const UserAuthModal = ({ form, onLogin }: UserAuthModalProps) => {
+const UserAuthModal = ({ form, onLogin, onGitHub }: UserAuthModalProps) => {
   const { open, onOpenChange } = useModalStore()
 
   return (
@@ -79,16 +79,7 @@ const UserAuthModal = ({ form, onLogin }: UserAuthModalProps) => {
             <span className='bg-background px-2 text-muted-foreground'>Or continue with</span>
           </div>
         </div>
-        <GitHubButton
-        // onClick={() =>
-        //   signInGitHub(auth, {
-        //     onSuccess: (data) => {
-        //       useAuthStore.setState({ user: data.user })
-        //       navigate({ to: '/' })
-        //     },
-        //   })
-        // }
-        />
+        <GitHubButton onClick={onGitHub} />)
       </DialogContent>
     </Dialog>
   )

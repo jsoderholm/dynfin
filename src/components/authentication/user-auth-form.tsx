@@ -5,23 +5,17 @@ import GitHubButton from './github-button'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { auth } from '@/lib/firebase'
-import { useGitHubSignIn } from '@/hooks/auth'
-import useAuthStore from '@/stores/auth-store'
-import { useNavigate } from '@tanstack/react-router'
 import { schema } from '@/presenters/authentication-presenter'
 
 export type UserAuthFormProps = {
   form: ReturnType<typeof useForm<z.infer<typeof schema>>>
   onRegister: (values: z.infer<typeof schema>) => Promise<void>
+  onGitHub: () => Promise<void>
   // onsubmit
   // github
 } & React.HTMLAttributes<HTMLDivElement>
 
-const UserAuthForm = ({ form, onRegister }: UserAuthFormProps) => {
-  const navigate = useNavigate()
-  const { mutate: mutateGitHub } = useGitHubSignIn()
-
+const UserAuthForm = ({ form, onRegister, onGitHub }: UserAuthFormProps) => {
   return (
     <div className='grid gap-6'>
       <Form {...form}>
@@ -65,16 +59,7 @@ const UserAuthForm = ({ form, onRegister }: UserAuthFormProps) => {
           <span className='bg-background px-2 text-muted-foreground'>Or continue with</span>
         </div>
       </div>
-      <GitHubButton
-        onClick={() =>
-          mutateGitHub(auth, {
-            onSuccess: (data) => {
-              useAuthStore.setState({ user: data.user })
-              navigate({ to: '/' })
-            },
-          })
-        }
-      />
+      <GitHubButton onClick={onGitHub} />
     </div>
   )
 }
