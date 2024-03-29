@@ -36,7 +36,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@radix-ui/react-navigation-menu", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:1.1.4"],\
             ["@radix-ui/react-slot", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:1.0.2"],\
             ["@radix-ui/react-toast", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:1.1.5"],\
-            ["@tanstack/react-query", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:5.24.1"],\
             ["@tanstack/react-router", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:1.18.3"],\
             ["@tanstack/router-devtools", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:1.18.3"],\
             ["@tanstack/router-vite-plugin", "npm:1.18.1"],\
@@ -3159,38 +3158,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["@tanstack/query-core", [\
-        ["npm:5.24.1", {\
-          "packageLocation": "./.yarn/cache/@tanstack-query-core-npm-5.24.1-3d46abb3a9-652f9d92b4.zip/node_modules/@tanstack/query-core/",\
-          "packageDependencies": [\
-            ["@tanstack/query-core", "npm:5.24.1"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["@tanstack/react-query", [\
-        ["npm:5.24.1", {\
-          "packageLocation": "./.yarn/cache/@tanstack-react-query-npm-5.24.1-729e2b7a11-0927c92eb2.zip/node_modules/@tanstack/react-query/",\
-          "packageDependencies": [\
-            ["@tanstack/react-query", "npm:5.24.1"]\
-          ],\
-          "linkType": "SOFT"\
-        }],\
-        ["virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:5.24.1", {\
-          "packageLocation": "./.yarn/__virtual__/@tanstack-react-query-virtual-c51beb67cf/0/cache/@tanstack-react-query-npm-5.24.1-729e2b7a11-0927c92eb2.zip/node_modules/@tanstack/react-query/",\
-          "packageDependencies": [\
-            ["@tanstack/react-query", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:5.24.1"],\
-            ["@tanstack/query-core", "npm:5.24.1"],\
-            ["@types/react", "npm:18.2.61"],\
-            ["react", "npm:18.2.0"]\
-          ],\
-          "packagePeers": [\
-            "@types/react",\
-            "react"\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
       ["@tanstack/react-router", [\
         ["npm:1.18.3", {\
           "packageLocation": "./.yarn/cache/@tanstack-react-router-npm-1.18.3-f0a1aaef8e-d477354ff8.zip/node_modules/@tanstack/react-router/",\
@@ -5446,7 +5413,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@radix-ui/react-navigation-menu", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:1.1.4"],\
             ["@radix-ui/react-slot", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:1.0.2"],\
             ["@radix-ui/react-toast", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:1.1.5"],\
-            ["@tanstack/react-query", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:5.24.1"],\
             ["@tanstack/react-router", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:1.18.3"],\
             ["@tanstack/router-devtools", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:1.18.3"],\
             ["@tanstack/router-vite-plugin", "npm:1.18.1"],\

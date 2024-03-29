@@ -9,6 +9,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import useAuthStore from '@/stores/auth-store'
 import { useNavigate } from '@tanstack/react-router'
+import { signInUserGitHub } from '@/lib/auth'
+import { auth } from '@/lib/firebase'
 
 const schema = z.object({
   email: z.string().email(),
@@ -41,6 +43,15 @@ const UserAuthModal = () => {
     navigate({ to: '/' })
   }
 
+  async function signInWithGitHub() {
+    try {
+      await signInUserGitHub(auth)
+      navigate({ to: '/' })
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
@@ -52,7 +63,6 @@ const UserAuthModal = () => {
         <DialogHeader>
           <DialogTitle>Sign in to Dynfin</DialogTitle>
         </DialogHeader>
-
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='grid gap-2'>
             <FormField
@@ -94,16 +104,7 @@ const UserAuthModal = () => {
             <span className='bg-background px-2 text-muted-foreground'>Or continue with</span>
           </div>
         </div>
-        <GitHubButton
-        // onClick={() =>
-        //   signInGitHub(auth, {
-        //     onSuccess: (data) => {
-        //       useAuthStore.setState({ user: data.user })
-        //       navigate({ to: '/' })
-        //     },
-        //   })
-        // }
-        />
+        <GitHubButton onClick={() => signInWithGitHub()} />)
       </DialogContent>
     </Dialog>
   )

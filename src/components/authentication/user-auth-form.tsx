@@ -8,10 +8,9 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { auth } from '@/lib/firebase'
-import { useGitHubSignIn } from '@/hooks/auth'
-import useAuthStore from '@/stores/auth-store'
 import { useNavigate } from '@tanstack/react-router'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { signInUserGitHub } from '@/lib/auth'
 
 const schema = z.object({
   email: z.string().email(),
@@ -22,7 +21,6 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
   const navigate = useNavigate()
-  const { mutate: mutateGitHub } = useGitHubSignIn()
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -35,6 +33,15 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
         navigate({ to: '/' })
       })
       .catch((e) => console.log(e))
+  }
+
+  async function signInWithGitHub() {
+    try {
+      await signInUserGitHub(auth)
+      navigate({ to: '/' })
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   return (
@@ -80,16 +87,7 @@ const UserAuthForm = ({ className, ...props }: UserAuthFormProps) => {
           <span className='bg-background px-2 text-muted-foreground'>Or continue with</span>
         </div>
       </div>
-      <GitHubButton
-        onClick={() =>
-          mutateGitHub(auth, {
-            onSuccess: (data) => {
-              useAuthStore.setState({ user: data.user })
-              navigate({ to: '/' })
-            },
-          })
-        }
-      />
+      <GitHubButton onClick={() => signInWithGitHub()} />
     </div>
   )
 }
