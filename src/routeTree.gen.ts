@@ -15,6 +15,7 @@ import { Route as AuthenticationImport } from './routes/authentication'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as AuthIndexImport } from './routes/_auth.index'
 import { Route as AuthSavedImport } from './routes/_auth.saved'
+import { Route as AuthDetailsSymbolImport } from './routes/_auth.details.$symbol'
 
 // Create/Update Routes
 
@@ -38,6 +39,11 @@ const AuthSavedRoute = AuthSavedImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
+const AuthDetailsSymbolRoute = AuthDetailsSymbolImport.update({
+  path: '/details/$symbol',
+  getParentRoute: () => AuthRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -58,13 +64,17 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthIndexImport
       parentRoute: typeof AuthImport
     }
+    '/_auth/details/$symbol': {
+      preLoaderRoute: typeof AuthDetailsSymbolImport
+      parentRoute: typeof AuthImport
+    }
   }
 }
 
 // Create and export the route tree
 
 export const routeTree = rootRoute.addChildren([
-  AuthRoute.addChildren([AuthSavedRoute, AuthIndexRoute]),
+  AuthRoute.addChildren([AuthSavedRoute, AuthIndexRoute, AuthDetailsSymbolRoute]),
   AuthenticationRoute,
 ])
 
