@@ -1,13 +1,13 @@
-import { GeneralInfo, GraphInfo } from '@/lib/api/finage'
+import { CompanyProfile, GraphInfo } from '@/lib/api/finage'
 import { NewsInfo } from '@/lib/api/market-aux'
 import { create } from 'zustand'
 
 interface DetailsState {
   symbol: string | null
   setSymbol: (symbol: string) => void
-  generalInfo: GeneralInfo | null
-  setGeneralInfo: () => Promise<void>
-  generalInfoLoading: boolean
+  companyProfile: CompanyProfile | null
+  setCompanyProfile: () => Promise<void>
+  companyProfileLoading: boolean
 
   graphInfo: GraphInfo | null
   setGraphInfo: () => Promise<void>
@@ -21,20 +21,20 @@ interface DetailsState {
 const useDetailsStore = create<DetailsState>((set) => ({
   symbol: null,
   setSymbol: (symbol) => set({ symbol }),
-  generalInfo: null,
-  setGeneralInfo: async () => {
-    set({ generalInfoLoading: true })
+  companyProfile: null,
+  setCompanyProfile: async () => {
+    set({ companyProfileLoading: true })
     try {
       const response = await fetch('/general.json')
-      const generalInfo = await response.json()
-      set({ generalInfo })
+      const companyProfile = await response.json()
+      set({ companyProfile })
     } catch (error) {
-      console.error('Failed to fetch general info:', error)
+      console.error('Failed to fetch company profile:', error)
     } finally {
-      set({ generalInfoLoading: false })
+      set({ companyProfileLoading: false })
     }
   },
-  generalInfoLoading: false,
+  companyProfileLoading: false,
 
   graphInfo: null,
   setGraphInfo: async () => {
