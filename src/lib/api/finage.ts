@@ -1,4 +1,4 @@
-export type GeneralInfo = {
+export type CompanyProfile = {
   symbol: string
   logo: string
   name: string
@@ -28,6 +28,16 @@ export type GraphInfo = {
   }[]
 }
 
+const BASE_URL = 'https://api.finage.co.uk'
+
+export async function getCompanyProfile(symbol: string): Promise<CompanyProfile> {
+  // https://api.finage.co.uk/detail/stock/{ symbol }?apikey=YOUR_API_KEY
+  const params = new URLSearchParams({ apikey: import.meta.env.VITE_FINAGE_API_KEY })
+
+  const url = `${BASE_URL}/detail/stock/${symbol}?${params}`
+
+  return fetch(url).then((res) => res.json())
+}
 // {
 // 	"symbol":"AAPL",
 // 	"totalResults":3,
