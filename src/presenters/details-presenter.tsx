@@ -42,7 +42,7 @@ function DetailsPresenter() {
   }
 
   return (
-    <div>
+    <div className='container'>
       <CompanyProfileView info={companyProfile} />
       <NewsListView />
       <GraphView />

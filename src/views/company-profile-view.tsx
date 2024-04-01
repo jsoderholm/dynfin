@@ -9,33 +9,36 @@ function CompanyProfileView({ info }: CompanyProfileProps) {
   const { name, description, address, exchange, industry, sector, employees, ceo, marketcap, state } = info
 
   return (
-    <div className='grid grid-cols-3 gap-x-6'>
-      <Card className='rounded-none border-none shadow-none col-span-1'>
-        <CardHeader>
-          <CardTitle>{name}</CardTitle>
-        </CardHeader>
-        <CardContent className='grid grid-cols-2 gap-x-8 gap-y-4 '>
-          <div className='col-span-2'>
-            <p className='font-medium text-lg'>{address}</p>
-          </div>
-          <InfoLabel label='CEO' value={ceo} />
-          <InfoLabel label='Marketcap' value={marketcap.toString()} />
-          <InfoLabel label='Address' value={address} />
-          <InfoLabel label='State' value={state} />
-          <InfoLabel label='Exchange' value={exchange} />
-          <InfoLabel label='Industry' value={industry} />
-          <InfoLabel label='Sector' value={sector} />
-          <InfoLabel label='Employees' value={employees.toString()} />
-        </CardContent>
-      </Card>
-      <Card className='rounded-none shadow-none border-none col-span-2'>
-        <CardHeader>
-          <CardTitle>Description</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p>{description}</p>
-        </CardContent>
-      </Card>
+    <div className='py-10'>
+      <h2 className='text-3xl font-semibold pb-6'>Company Profile</h2>
+      <div className='grid grid-cols-1 lg:grid-cols-3 gap-x-6'>
+        <Card className='rounded-sm border-none col-span-1 bg-slate-50'>
+          <CardHeader>
+            <CardTitle>{name}</CardTitle>
+          </CardHeader>
+          <CardContent className='grid grid-cols-2 gap-x-8 gap-y-4 '>
+            <div className='col-span-2'>
+              <p className='font-medium text-lg'>{address}</p>
+            </div>
+            <InfoLabel label='CEO' value={ceo} />
+            <InfoLabel label='Marketcap' value={marketcap.toString()} />
+            <InfoLabel label='Address' value={address} />
+            <InfoLabel label='State' value={state} />
+            <InfoLabel label='Exchange' value={exchange} />
+            <InfoLabel label='Industry' value={industry} />
+            <InfoLabel label='Sector' value={sector} />
+            <InfoLabel label='Employees' value={employees.toString()} />
+          </CardContent>
+        </Card>
+        <Card className='rounded-none shadow-none border-none col-span-2'>
+          <CardHeader>
+            <CardTitle>Description</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>{description}</p>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }
