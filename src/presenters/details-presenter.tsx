@@ -1,33 +1,49 @@
+import { getCompanyProfileFromFinage } from '@/lib/api/finage'
+import { getCompanyProfileFromFirestore, saveCompanyProfileToFirestore } from '@/lib/db'
+import useDetailsStore from '@/stores/details-store'
 import CompanyProfileView from '@/views/company-profile-view'
 import GraphView from '@/views/graph-view'
 import NewsListView from '@/views/news-list-view'
 import { getRouteApi } from '@tanstack/react-router'
+import { useEffect } from 'react'
 
 const route = getRouteApi('/_auth/details/$symbol')
 
 function DetailsPresenter() {
   const { symbol } = route.useParams()
+  const companyProfile = useDetailsStore((state) => state.companyProfile)
 
-  const info = {
-    symbol,
-    logo: 'https://finage.s3.eu-west-2.amazonaws.com/stock/logo/AAPL.png',
-    name: 'Apple Inc.',
-    url: 'http://www.apple.com',
-    description:
-      'Apple Inc is designs, manufactures and markets mobile communication and media devices and personal computers, and sells a variety of related software, services, accessories, networking solutions and third-party digital content and applications.',
-    exchange: 'US Stock',
-    ceo: 'Timothy D. Cook',
-    industry: 'Computer Hardware',
-    state: 'CA',
-    address: '1 Infinite Loop Cupertino CA, 95014',
-    employees: 123000,
-    sector: 'Technology',
-    marketcap: 908316631180,
+  useEffect(() => {
+    /**
+     * 1. Fetch company profile data from Firestore using the symbol.
+     * 1.1. If the data is not found, fetch the data from the Finage API and save it to Firestore.
+     */
+    async function getCompanyProfile() {
+      useDetailsStore.setState({ companyProfileLoading: true })
+      const snapshot = await getCompanyProfileFromFirestore(symbol.toUpperCase())
+
+      if (snapshot.exists()) {
+        useDetailsStore.setState({ companyProfile: snapshot.data(), companyProfileLoading: false })
+        return
+      }
+      // Fetch the data from the Finage API
+      const data = await getCompanyProfileFromFinage(symbol)
+      // Save the data to Firestore
+      await saveCompanyProfileToFirestore(symbol, data)
+      // Set the data to the store
+      useDetailsStore.setState({ companyProfile: data, companyProfileLoading: false })
+    }
+
+    getCompanyProfile()
+  }, [symbol])
+
+  if (!companyProfile) {
+    return <div>Loading...</div>
   }
 
   return (
     <div>
-      <CompanyProfileView info={info} />
+      <CompanyProfileView info={companyProfile} />
       <NewsListView />
       <GraphView />
     </div>
