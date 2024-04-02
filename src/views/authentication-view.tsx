@@ -1,13 +1,12 @@
 import UserAuthForm, { UserAuthFormProps } from '@/components/authentication/user-auth-form'
 import UserAuthModal, { UserAuthModalProps } from '@/components/authentication/user-auth-modal'
 import { Button } from '@/components/ui/button'
-import { Toaster } from '@/components/ui/toaster'
 
 type AuthenticationViewProps = UserAuthFormProps & UserAuthModalProps
 
 const AuthenticationView = (props: AuthenticationViewProps) => {
   return (
-    <div className='container relative flex-1 flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0'>
+    <div className='container h-screen flex-1 flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0 bg-white'>
       <UserAuthModal {...props} />
       <div className='relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r'>
         <div className='absolute inset-0 bg-primary' />
@@ -30,17 +29,16 @@ const AuthenticationView = (props: AuthenticationViewProps) => {
           </div>
           <UserAuthForm {...props} />
           <p className='px-8 text-center text-sm text-muted-foreground'>
-            By clicking continue, you agree to our{' '}
+            By clicking continue, you agree to our&nbsp;
             <Button variant='link' className='text-gray px-0 hover:no-underline hover:text-primary'>
-              Terms of Service
-            </Button>{' '}
-            and{' '}
+              Terms of Service&nbsp;
+            </Button>
+            and&nbsp;
             <Button variant='link' className='text-gray px-0 hover:no-underline hover:text-primary'>
               Privacy Policy
             </Button>
             .
           </p>
-          <Toaster />
         </div>
       </div>
     </div>

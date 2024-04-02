@@ -6,7 +6,7 @@ export const Route = createRootRoute({
   component: () => (
     <>
       <AppShellPresenter />
-      <TanStackRouterDevtools />
+      <TanStackRouterDevtools position='bottom-right' />
     </>
   ),
 })
