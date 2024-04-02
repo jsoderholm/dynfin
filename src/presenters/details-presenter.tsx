@@ -44,7 +44,7 @@ function DetailsPresenter() {
 
   return (
     <>
-      <div className='container'>
+      <div className='container space-y-10 py-10'>
         <CompanyProfileView info={companyProfile} />
         <NewsListView />
         <GraphView />
@@ -57,10 +57,9 @@ const Loading = () => {
   return (
     <div className='container py-10'>
       <Skeleton className='mb-6 h-10 w-1/4' />
-      <div className='grid grid-cols-2 gap-10 h-64 mb-10'>
-        {Array.from({ length: 2 }).map((_, i) => (
-          <Skeleton key={i} className='h-64' />
-        ))}
+      <div className='grid grid-cols-1 lg:grid-cols-3 gap-10 h-96 mb-10'>
+        <Skeleton className='h-full col-span-1' />
+        <Skeleton className='h-full col-span-2' />
       </div>
       <Skeleton className='mb-6 h-10 w-1/4' />
       <div className='grid grid-cols-4 gap-10 mb-10'>

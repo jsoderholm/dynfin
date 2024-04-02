@@ -9,10 +9,10 @@ function CompanyProfileView({ info }: CompanyProfileProps) {
   const { name, description, address, exchange, industry, sector, employees, ceo, marketcap, state } = info
 
   return (
-    <div className='py-10'>
+    <div>
       <h2 className='text-3xl font-semibold pb-6'>Company Profile</h2>
-      <div className='grid grid-cols-1 lg:grid-cols-3 gap-x-6'>
-        <Card className='rounded-sm border-none col-span-1 bg-slate-50'>
+      <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
+        <Card className='col-span-1 '>
           <CardHeader>
             <CardTitle>{name}</CardTitle>
           </CardHeader>
@@ -30,7 +30,7 @@ function CompanyProfileView({ info }: CompanyProfileProps) {
             <InfoLabel label='Employees' value={employees.toString()} />
           </CardContent>
         </Card>
-        <Card className='rounded-none shadow-none border-none col-span-2'>
+        <Card className='col-span-2'>
           <CardHeader>
             <CardTitle>Description</CardTitle>
           </CardHeader>
