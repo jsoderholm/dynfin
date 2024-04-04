@@ -1,18 +1,18 @@
-import { AuthState } from '@/stores/auth-store'
-import React from 'react'
-import Sidebar from './sidebar'
+import Sidebar, { SidebarProps } from './sidebar'
+import MobileMenu, { MobileMenuProps } from './mobile-menu'
 
-interface AppShellProps {
-  children: React.ReactNode
-  user: AuthState['user']
-  handleSignOut: () => void
-}
+type AppShellProps = SidebarProps & MobileMenuProps
 
-const AppShell = ({ children, user, handleSignOut }: AppShellProps) => {
+const AppShell = (props: AppShellProps) => {
+  const { user, children } = props
+
   return (
     <div className='flex'>
-      {user && <Sidebar handleSignOut={handleSignOut} />}
-      <div className='flex-1 bg-muted/40'>{children}</div>
+      {user && <Sidebar {...props} className='hidden md:block' />}
+      <div className='flex-1 bg-muted/40'>
+        {user && <MobileMenu {...props} className='md:hidden' />}
+        {children}
+      </div>
     </div>
   )
 }

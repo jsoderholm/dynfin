@@ -8,14 +8,14 @@ import { z } from 'zod'
 import { schema } from '@/presenters/authentication-presenter'
 
 export type UserAuthModalProps = {
-  form: ReturnType<typeof useForm<z.infer<typeof schema>>>
+  loginForm: ReturnType<typeof useForm<z.infer<typeof schema>>>
   onLogin: (values: z.infer<typeof schema>) => Promise<void>
   onGitHub: () => Promise<void>
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
-const UserAuthModal = ({ form, onLogin, onGitHub, open, onOpenChange }: UserAuthModalProps) => {
+const UserAuthModal = ({ loginForm, onLogin, onGitHub, open, onOpenChange }: UserAuthModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
@@ -27,10 +27,10 @@ const UserAuthModal = ({ form, onLogin, onGitHub, open, onOpenChange }: UserAuth
         <DialogHeader>
           <DialogTitle>Sign in to Dynfin</DialogTitle>
         </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onLogin)} className='grid gap-2'>
+        <Form {...loginForm}>
+          <form onSubmit={loginForm.handleSubmit(onLogin)} className='grid gap-2'>
             <FormField
-              control={form.control}
+              control={loginForm.control}
               name='email'
               render={({ field }) => (
                 <FormItem>
@@ -43,7 +43,7 @@ const UserAuthModal = ({ form, onLogin, onGitHub, open, onOpenChange }: UserAuth
               )}
             />
             <FormField
-              control={form.control}
+              control={loginForm.control}
               name='password'
               render={({ field }) => (
                 <FormItem>

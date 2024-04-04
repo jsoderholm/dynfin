@@ -29,7 +29,11 @@ const AuthenticationPresenter = () => {
   const login = useAuthStore((state) => state.login)
   const { open, onOpenChange } = useModalStore()
 
-  const form = useForm<z.infer<typeof schema>>({
+  const registerForm = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+  })
+
+  const loginForm = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
   })
 
@@ -62,7 +66,8 @@ const AuthenticationPresenter = () => {
 
   return (
     <AuthenticationView
-      form={form}
+      registerForm={registerForm}
+      loginForm={loginForm}
       onLogin={onLogin}
       onRegister={onRegister}
       onGitHub={onGitHub}
