@@ -3,8 +3,6 @@ import { NewsInfo } from '@/lib/api/market-aux'
 import { create } from 'zustand'
 
 interface DetailsState {
-  symbol: string | null
-  setSymbol: (symbol: string) => void
   companyProfile: CompanyProfile | null
   setCompanyProfile: () => Promise<void>
   companyProfileLoading: boolean
@@ -19,8 +17,6 @@ interface DetailsState {
 }
 
 const useDetailsStore = create<DetailsState>((set) => ({
-  symbol: null,
-  setSymbol: (symbol) => set({ symbol }),
   companyProfile: null,
   setCompanyProfile: async () => {
     set({ companyProfileLoading: true })
