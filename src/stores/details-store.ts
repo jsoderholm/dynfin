@@ -1,29 +1,37 @@
-import { CompanyProfile, GraphInfo } from '@/lib/api/finage'
+import { CompanyProfile, GraphInfo, getCompanyProfileFromFinage } from '@/lib/api/finage'
 import { NewsInfo } from '@/lib/api/market-aux'
+import { getCompanyProfileFromFirestore, saveCompanyProfileToFirestore } from '@/lib/db'
 import { create } from 'zustand'
 
 interface DetailsState {
   companyProfile: CompanyProfile | null
-  setCompanyProfile: () => Promise<void>
+  setCompanyProfile: (symbol: string) => Promise<void>
   companyProfileLoading: boolean
 
   graphInfo: GraphInfo | null
-  setGraphInfo: () => Promise<void>
+  setGraphInfo: (symbol: string) => Promise<void>
   graphInfoLoading: boolean
 
   newsListInfo: NewsInfo[] | null
-  setNewsListInfo: () => Promise<void>
+  setNewsListInfo: (string: string) => Promise<void>
   newsListLoading: boolean
 }
 
 const useDetailsStore = create<DetailsState>((set) => ({
   companyProfile: null,
-  setCompanyProfile: async () => {
+  setCompanyProfile: async (symbol: string) => {
     set({ companyProfileLoading: true })
     try {
-      const response = await fetch('/general.json')
-      const companyProfile = await response.json()
-      set({ companyProfile })
+      const snapshot = await getCompanyProfileFromFirestore(symbol.toUpperCase())
+
+      if (snapshot.exists()) {
+        useDetailsStore.setState({ companyProfile: snapshot.data(), companyProfileLoading: false })
+        return
+      }
+      // Fetch the data from the Finage API
+      const data = await getCompanyProfileFromFinage(symbol)
+      // Save the data to Firestore
+      await saveCompanyProfileToFirestore(symbol, data)
     } catch (error) {
       console.error('Failed to fetch company profile:', error)
     } finally {
