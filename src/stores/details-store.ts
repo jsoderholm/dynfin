@@ -22,7 +22,7 @@ const useDetailsStore = create<DetailsState>((set) => ({
   setCompanyProfile: async (symbol: string) => {
     set({ companyProfileLoading: true })
     try {
-      const snapshot = await getCompanyProfileFromFirestore(symbol.toUpperCase())
+      const snapshot = await getCompanyProfileFromFirestore(symbol)
 
       if (snapshot.exists()) {
         useDetailsStore.setState({ companyProfile: snapshot.data(), companyProfileLoading: false })
