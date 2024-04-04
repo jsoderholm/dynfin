@@ -9,7 +9,7 @@ const AppShell = (props: AppShellProps) => {
   return (
     <div className='flex'>
       {user && <Sidebar {...props} className='hidden md:block' />}
-      <div className='flex-1 h-screen bg-muted/40'>
+      <div className='flex-1 bg-muted/40'>
         {user && <MobileMenu {...props} className='md:hidden' />}
         {children}
       </div>
