@@ -7,18 +7,18 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { schema } from '@/presenters/authentication-presenter'
 
 export type UserAuthFormProps = {
-  form: ReturnType<typeof useForm<z.infer<typeof schema>>>
+  registerForm: ReturnType<typeof useForm<z.infer<typeof schema>>>
   onRegister: (values: z.infer<typeof schema>) => Promise<void>
   onGitHub: () => Promise<void>
 }
 
-const UserAuthForm = ({ form, onRegister, onGitHub }: UserAuthFormProps) => {
+const UserAuthForm = ({ registerForm, onRegister, onGitHub }: UserAuthFormProps) => {
   return (
     <div className='grid gap-6'>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onRegister)} className='grid gap-2'>
+      <Form {...registerForm}>
+        <form onSubmit={registerForm.handleSubmit(onRegister)} className='grid gap-2'>
           <FormField
-            control={form.control}
+            control={registerForm.control}
             name='email'
             render={({ field }) => (
               <FormItem>
@@ -31,7 +31,7 @@ const UserAuthForm = ({ form, onRegister, onGitHub }: UserAuthFormProps) => {
             )}
           />
           <FormField
-            control={form.control}
+            control={registerForm.control}
             name='password'
             render={({ field }) => (
               <FormItem>

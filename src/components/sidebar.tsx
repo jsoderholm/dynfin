@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils'
 import { Link } from '@tanstack/react-router'
 
 import React from 'react'
-import { IconHeart, IconLogout, IconNews } from '@tabler/icons-react'
+import { IconArrowLeft, IconHeart, IconLogout, IconNews } from '@tabler/icons-react'
 import { Button } from './ui/button'
 
 interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
@@ -40,10 +40,14 @@ const Sidebar = ({ className, handleSignOut }: SidebarProps) => {
             </Link>
           </li>
         </ul>
-        <div className='flex items-center mt-auto'>
-          <Button className='flex-1' variant='ghost' onClick={handleSignOut}>
+        <div className='flex flex-col items-center space-y-2 mt-auto'>
+          <Button className='w-full' variant='ghost'>
+            <IconArrowLeft className='h-5 w-5 mr-3' />
+            <span className='whitespace-nowrap'>Collapse</span>
+          </Button>
+          <Button className='w-full' variant='ghost' onClick={handleSignOut}>
             <IconLogout className='h-5 w-5 mr-3' />
-            <span className=' whitespace-nowrap'>Logout</span>
+            <span className='whitespace-nowrap'>Logout</span>
           </Button>
         </div>
       </div>

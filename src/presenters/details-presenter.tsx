@@ -44,7 +44,7 @@ function DetailsPresenter() {
         useDetailsStore.setState({ companyProfile: data, companyProfileLoading: false })
       } catch (e) {
         useDetailsStore.setState({ companyProfile: null, companyProfileLoading: false })
-        throw new Error('Failed to fetch company profile from Finage')
+        console.error(e)
       }
     }
 

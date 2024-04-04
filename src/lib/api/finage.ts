@@ -43,6 +43,6 @@ export async function getCompanyProfileFromFinage(symbol: string): Promise<Compa
     }
     return data
   } catch (e) {
-    throw new Error('Failed to fetch company profile from Finage')
+    throw new Error(`Failed to fetch company profile from Finage: ${e}`)
   }
 }
