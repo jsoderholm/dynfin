@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Link } from '@tanstack/react-router'
 
-const symbols = ['AAPL', 'GOOGL', 'TSLA', 'AMZN', 'MSFT', 'FB']
+const symbols = ['AAPL', 'GOOGL', 'TSLA', 'AMZN', 'MSFT', 'PLTR']
 
 function BrowseView() {
   return (
