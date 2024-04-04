@@ -12,7 +12,14 @@ const route = getRouteApi('/_auth/details/$symbol')
 
 function DetailsPresenter() {
   const { symbol } = route.useParams()
+  const { newsListLoading, companyProfileLoading, graphInfoLoading } = useDetailsStore((state) => ({
+    newsListLoading: state.newsListLoading,
+    companyProfileLoading: state.companyProfileLoading,
+    graphInfoLoading: state.graphInfoLoading,
+  }))
   const companyProfile = useDetailsStore((state) => state.companyProfile)
+
+  const loading = newsListLoading || companyProfileLoading || graphInfoLoading
 
   useEffect(() => {
     /**
@@ -27,29 +34,39 @@ function DetailsPresenter() {
         useDetailsStore.setState({ companyProfile: snapshot.data(), companyProfileLoading: false })
         return
       }
-      // Fetch the data from the Finage API
-      const data = await getCompanyProfileFromFinage(symbol)
-      // Save the data to Firestore
-      await saveCompanyProfileToFirestore(symbol, data)
-      // Set the data to the store
-      useDetailsStore.setState({ companyProfile: data, companyProfileLoading: false })
+
+      try {
+        // Fetch the data from the Finage API
+        const data = await getCompanyProfileFromFinage(symbol)
+        // Save the data to Firestore
+        await saveCompanyProfileToFirestore(symbol, data)
+        // Set the data to the store
+        useDetailsStore.setState({ companyProfile: data, companyProfileLoading: false })
+      } catch (e) {
+        useDetailsStore.setState({ companyProfile: null, companyProfileLoading: false })
+        console.error(e)
+      }
     }
 
     getCompanyProfile()
   }, [symbol])
 
-  if (!companyProfile) {
+  if (loading) {
     return <Loading />
   }
 
   return (
-    <>
-      <div className='container space-y-10 py-10'>
+    <div className='container space-y-10 py-10'>
+      {companyProfile ? (
         <CompanyProfileView info={companyProfile} />
-        <NewsListView />
-        <GraphView />
-      </div>
-    </>
+      ) : (
+        <div className='text-destructive'>
+          <h2 className='text-3xl font-semibold pb-6'>Failed to fetch company profile</h2>
+        </div>
+      )}
+      <NewsListView />
+      <GraphView />
+    </div>
   )
 }
 

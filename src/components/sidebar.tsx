@@ -2,21 +2,27 @@ import { cn } from '@/lib/utils'
 import { Link } from '@tanstack/react-router'
 
 import React from 'react'
-import { IconHeart, IconLogout, IconNews } from '@tabler/icons-react'
+import { IconArrowRight, IconHeart, IconHexagonLetterD, IconLogout, IconNews } from '@tabler/icons-react'
 import { Button } from './ui/button'
+import { SidebarState } from '@/presenters/app-shell-presenter'
 
-interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
+export interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   className?: string
   handleSignOut: () => void
+  collapsed: SidebarState['collapsed']
+  setCollapsed: SidebarState['setCollapsed']
 }
 
-const Sidebar = ({ className, handleSignOut }: SidebarProps) => {
+const Sidebar = ({ className, handleSignOut, collapsed, setCollapsed }: SidebarProps) => {
   return (
-    <aside className={cn('h-screen sticky top-0 w-48 transition-transform', className)}>
-      <div className='flex h-full flex-col overflow-y-auto border-r border-slate-200 bg-white px-3 py-4'>
-        <div className='mb-10 flex items-center rounded-lg px-3 py-2 '>
-          <span className='text-lg font-medium'>dynfin</span>
-        </div>
+    <aside className={cn('h-screen sticky top-0 w-48 transition-all duration-200', collapsed && 'w-28', className)}>
+      <div className='flex h-full flex-col overflow-y-auto border-r px-3 py-4'>
+        <Link to='/' className='mb-10 flex items-center mx-auto px-3 py-2'>
+          <IconHexagonLetterD className='h-12 w-12' />
+          <span className={cn('ml-3 text-xl font-medium transition-transform duration-100', collapsed && 'hidden')}>
+            dynfin
+          </span>
+        </Link>
         <ul className='space-y-2 text-sm font-medium'>
           <li>
             <Link
@@ -24,8 +30,8 @@ const Sidebar = ({ className, handleSignOut }: SidebarProps) => {
               className='flex items-center rounded-md px-3 py-2 hover:bg-accent'
               activeProps={{ className: 'bg-accent' }}
             >
-              <IconNews className='h-5 w-5 mr-3' />
-              <span className='flex-1 whitespace-nowrap'>Browse</span>
+              <IconNews className='h-6 w-6 mx-auto' />
+              <span className={cn('flex-1 ml-3 whitespace-nowrap', collapsed && 'hidden')}>Browse</span>
             </Link>
           </li>
 
@@ -35,15 +41,19 @@ const Sidebar = ({ className, handleSignOut }: SidebarProps) => {
               className='flex items-center rounded-md px-3 py-2 hover:bg-accent'
               activeProps={{ className: 'bg-accent' }}
             >
-              <IconHeart className='h-5 w-5 mr-3' />
-              <span className='flex-1 whitespace-nowrap'>Saved</span>
+              <IconHeart className='h-6 w-6 mx-auto' />
+              <span className={cn('flex-1 ml-3 whitespace-nowrap', collapsed && 'hidden')}>Saved</span>
             </Link>
           </li>
         </ul>
-        <div className='flex items-center mt-auto'>
-          <Button className='flex-1' variant='ghost' onClick={handleSignOut}>
-            <IconLogout className='h-5 w-5 mr-3' />
-            <span className=' whitespace-nowrap'>Logout</span>
+        <div className='flex flex-col items-center space-y-2 mt-auto'>
+          <Button className='w-full' variant='ghost' onClick={() => setCollapsed(!collapsed)}>
+            <IconArrowRight className={cn('h-6 w-6', collapsed ? 'rotate-0' : 'rotate-180')} />
+            <span className={cn('ml-3 whitespace-nowrap', collapsed && 'hidden')}>Collapse</span>
+          </Button>
+          <Button className='w-full' variant='ghost' onClick={handleSignOut}>
+            <IconLogout className='h-6 w-6 ' />
+            <span className={cn('ml-3 whitespace-nowrap', collapsed && 'hidden')}>Logout</span>
           </Button>
         </div>
       </div>
