@@ -59,7 +59,7 @@ const MobileMenu = ({ className, user, handleSignOut }: MobileMenuProps) => {
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Avatar>
-              <AvatarImage src='/public/avatar.png' alt='avatar' />
+              <AvatarImage src='/avatar.png' alt='avatar' />
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent className='w-56 mx-4 my-5'>
