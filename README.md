@@ -22,7 +22,7 @@ Lastly we have also ran a user evaluation on a mockup that has given us some gre
 
 ## File structure
 
-In our project directory structure, we organize our files into different directories to maintain clarity and organization. We have our views directory, presenters directory and stores directory. 
+In our project directory structure, we organize our files into different directories to maintain clarity and organization. We have our views directory, presenters directory and stores directory.
 
 The views directory contains files for all the views of our web application. These views represent different pages or screens that users interact with, such as the homepage, company details page, or news browsing page.
 
