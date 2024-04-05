@@ -20,7 +20,7 @@ const userConverter: FirestoreDataConverter<UserData> = {
   fromFirestore: (snap: QueryDocumentSnapshot) => snap.data() as UserData,
 }
 
-export const firestore = {
+const firestore = {
   companies: collection(db, 'companies').withConverter(companyProfileConverter),
   users: collection(db, 'users').withConverter(userConverter),
 }
