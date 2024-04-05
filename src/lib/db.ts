@@ -37,5 +37,11 @@ export async function saveCompanyProfileToFirestore(symbol: string, data: Compan
 
 export async function createUserInFirestore(credentials: UserCredential, data: UserData) {
   const docRef = doc(firestore.users, credentials.user.uid)
+  const docSnap = await getDoc(docRef)
+
+  if (docSnap.exists()) {
+    return
+  }
+
   await setDoc(docRef, data)
 }
