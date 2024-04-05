@@ -1,4 +1,5 @@
 import { signInUserGitHub } from '@/lib/auth'
+import { createUserInFirestore } from '@/lib/db'
 import { auth } from '@/lib/firebase'
 import useAuthStore from '@/stores/auth-store'
 import AuthenticationView from '@/views/authentication-view'
@@ -48,7 +49,9 @@ const AuthenticationPresenter = () => {
     const { email, password } = values
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password)
+      await createUserWithEmailAndPassword(auth, email, password).then((credentials) =>
+        createUserInFirestore(credentials, { uid: credentials.user.uid, saved: [] }),
+      )
       navigate({ to: '/' })
     } catch (e) {
       console.error(e)
