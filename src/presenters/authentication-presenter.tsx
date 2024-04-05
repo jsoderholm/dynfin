@@ -60,7 +60,9 @@ const AuthenticationPresenter = () => {
 
   async function onGitHub() {
     try {
-      await signInUserGitHub(auth)
+      await signInUserGitHub(auth).then((credentials) =>
+        createUserInFirestore(credentials, { uid: credentials.user.uid, saved: [] }),
+      )
       navigate({ to: '/' })
     } catch (e) {
       console.error(e)
