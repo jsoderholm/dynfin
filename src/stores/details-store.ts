@@ -25,13 +25,14 @@ const useDetailsStore = create<DetailsState>((set) => ({
       const snapshot = await getCompanyProfileFromFirestore(symbol)
 
       if (snapshot.exists()) {
-        useDetailsStore.setState({ companyProfile: snapshot.data(), companyProfileLoading: false })
+        set({ companyProfile: snapshot.data() })
         return
       }
       // Fetch the data from the Finage API
       const data = await getCompanyProfileFromFinage(symbol)
       // Save the data to Firestore
       await saveCompanyProfileToFirestore(symbol, data)
+      set({ companyProfile: data })
     } catch (error) {
       console.error('Failed to fetch company profile:', error)
     } finally {

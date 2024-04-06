@@ -23,6 +23,7 @@ function DetailsPresenter() {
 
   useEffect(() => {
     setCompanyProfile(symbol)
+    console.log(symbol)
   }, [symbol, setCompanyProfile])
 
   if (loading) {
