@@ -1,6 +1,11 @@
-import { CompanyProfile, GraphInfo, getCompanyProfileFromFinage } from '@/lib/api/finage'
+import { CompanyProfile, GraphInfo, getCompanyProfileFromFinage, getGraphInfoFromFinage } from '@/lib/api/finage'
 import { NewsInfo } from '@/lib/api/market-aux'
-import { getCompanyProfileFromFirestore, saveCompanyProfileToFirestore } from '@/lib/db'
+import {
+  getCompanyProfileFromFirestore,
+  getGraphInfoFromFirestore,
+  saveCompanyProfileToFirestore,
+  saveGraphInfoToFirestore,
+} from '@/lib/db'
 import { create } from 'zustand'
 
 interface DetailsState {
@@ -9,7 +14,7 @@ interface DetailsState {
   companyProfileLoading: boolean
 
   graphInfo: GraphInfo | null
-  setGraphInfo: (symbol: string) => Promise<void>
+  setGraphInfo: (symbol: string, refresh?: boolean) => Promise<void>
   graphInfoLoading: boolean
 
   newsListInfo: NewsInfo[] | null
@@ -33,8 +38,8 @@ const useDetailsStore = create<DetailsState>((set) => ({
       // Save the data to Firestore
       await saveCompanyProfileToFirestore(symbol, data)
       set({ companyProfile: data })
-    } catch (error) {
-      console.error('Failed to fetch company profile:', error)
+    } catch (e) {
+      console.error('Failed to fetch company profile:', e)
     } finally {
       set({ companyProfileLoading: false })
     }
@@ -42,14 +47,25 @@ const useDetailsStore = create<DetailsState>((set) => ({
   companyProfileLoading: false,
 
   graphInfo: null,
-  setGraphInfo: async () => {
+  setGraphInfo: async (symbol: string, refresh: boolean = false) => {
     set({ graphInfoLoading: true })
     try {
-      const response = await fetch('/graph.json')
-      const graphInfo = await response.json()
-      set({ graphInfo })
-    } catch (error) {
-      console.error('Failed to fetch graph info:', error)
+      if (!refresh) {
+        const snapshot = await getGraphInfoFromFirestore(symbol)
+        console.log('from firestore: ', snapshot.data())
+
+        if (snapshot.exists()) {
+          set({ graphInfo: snapshot.data() })
+          return
+        }
+      }
+      // Fetch the data from the Finage API
+      const data = await getGraphInfoFromFinage(symbol)
+      // Save the data to Firestore
+      await saveGraphInfoToFirestore(data)
+      set({ graphInfo: data })
+    } catch (e) {
+      console.error('Failed to fetch graph info:', e)
     } finally {
       set({ graphInfoLoading: false })
     }
