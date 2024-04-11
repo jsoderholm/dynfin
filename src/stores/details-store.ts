@@ -52,7 +52,6 @@ const useDetailsStore = create<DetailsState>((set) => ({
     try {
       if (!refresh) {
         const snapshot = await getGraphInfoFromFirestore(symbol)
-        console.log('from firestore: ', snapshot.data())
 
         if (snapshot.exists()) {
           set({ graphInfo: snapshot.data() })
