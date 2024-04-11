@@ -18,13 +18,15 @@ function DetailsPresenter() {
   }))
   const companyProfile = useDetailsStore((state) => state.companyProfile)
   const setCompanyProfile = useDetailsStore((state) => state.setCompanyProfile)
+  const setGraphInfo = useDetailsStore((state) => state.setGraphInfo)
+  const graphInfo = useDetailsStore((state) => state.graphInfo)
 
   const loading = newsListLoading || companyProfileLoading || graphInfoLoading
 
   useEffect(() => {
     setCompanyProfile(symbol)
-    console.log(symbol)
-  }, [symbol, setCompanyProfile])
+    setGraphInfo(symbol)
+  }, [symbol, setCompanyProfile, setGraphInfo])
 
   if (loading) {
     return <Loading />
@@ -37,7 +39,7 @@ function DetailsPresenter() {
           <IconArrowLeft />
         </Link>
       </div>
-      <div className='space-y-10 pb-10'>
+      <div className='space-y-10 pb-10 '>
         {companyProfile ? (
           <CompanyProfileView info={companyProfile} />
         ) : (
@@ -46,7 +48,13 @@ function DetailsPresenter() {
           </div>
         )}
         <NewsListView />
-        <GraphView />
+        {graphInfo ? (
+          <GraphView info={graphInfo} onRefresh={() => setGraphInfo(symbol, true)} />
+        ) : (
+          <div className='text-destructive'>
+            <h2 className='text-3xl font-semibold pb-6'>Failed to fetch graph info</h2>
+          </div>
+        )}
       </div>
     </div>
   )
