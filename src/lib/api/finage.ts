@@ -19,7 +19,6 @@ export type CompanyProfile = {
   marketcap: number
 }
 
-// https://finage.co.uk/docs/api/us-stocks#stock-market-aggregates-api
 export type GraphInfo = {
   symbol: string
   results: GraphResult[]
@@ -40,7 +39,7 @@ export async function getGraphInfoFromFinage(symbol: string): Promise<GraphInfo>
   const multiply = 1
   const time = ['day']
   const to = getFormattedDate()
-  const from = getFormattedDate(-8)
+  const from = getFormattedDate(-14)
 
   const url = `${BASE_URL}/agg/stock/${symbol}/${multiply}/${time}/${from}/${to}?${params}`
 
@@ -54,7 +53,6 @@ export async function getGraphInfoFromFinage(symbol: string): Promise<GraphInfo>
         return { ...result, name }
       }),
     }
-    console.log(data)
     return data
   } catch (e) {
     throw new Error(`Failed to fetch graph info from Finage: ${e}`)
