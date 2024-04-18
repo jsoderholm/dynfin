@@ -35,13 +35,13 @@ export type NewsInfo = {
   similar: NewsInfo[]
 }
 
-export async function getNewsEntityFromMarketaux(amount: number, language: string): Promise<NewsEntity> {
+export async function getNewsEntityFromMarketaux(language: string): Promise<NewsInfo> {
   const params = new URLSearchParams({ api_token: import.meta.env.VITE_MARKETAUX_API_KEY, language: language })
   const url = `${BASE_URL}/all?${params}`
 
   try {
     const response = await axios.get(url)
-    const data: NewsEntity = {
+    const data: NewsInfo = {
       ...response.data,
     }
     return data
