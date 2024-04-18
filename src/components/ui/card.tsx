@@ -21,6 +21,21 @@ const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HT
 )
 CardTitle.displayName = 'CardTitle'
 
+const CardFavorite = React.forwardRef<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement> & { favorited: boolean }
+>(({ className, favorited, ...props }, ref) => (
+  <button
+    ref={ref}
+    className={cn('focus:outline-none', favorited ? 'text-red-500' : 'text-gray-400', className)}
+    {...props}
+  >
+    {favorited ? '♥' : '♡'} {/* Simple icons for demonstration */}
+  </button>
+))
+
+CardFavorite.displayName = 'CardFavorite'
+
 const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
     <p ref={ref} className={cn('text-sm text-muted-foreground', className)} {...props} />
