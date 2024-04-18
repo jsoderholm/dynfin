@@ -24,8 +24,11 @@ interface BrowseItemProps {
 const BrowseItem = ({ i }: BrowseItemProps) => {
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>{`News Item ${i + 1}: ${symbols[i]}`}</CardTitle>
+      <CardHeader className='flex justify-between items-center'>
+        <div className='flex-grow'>
+          <CardTitle>{`News Item ${i + 1}: ${symbols[i]}`}</CardTitle>
+        </div>
+        <Button variant='favorite' className='ml-auto'>Favorite</Button>
       </CardHeader>
       <CardContent>
         <p className='text-muted-foreground'>
