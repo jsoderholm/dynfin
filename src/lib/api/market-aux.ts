@@ -1,3 +1,7 @@
+import axios from 'axios'
+
+const BASE_URL = 'https://api.marketaux.com/v1/news/'
+
 type NewsEntity = {
   symbol: string
   name: string
@@ -29,6 +33,21 @@ export type NewsInfo = {
   relevance_score: number | null
   entities: NewsEntity[]
   similar: NewsInfo[]
+}
+
+export async function getNewsEntityFromMarketaux(amount: number, language: string): Promise<NewsEntity> {
+  const params = new URLSearchParams({ api_token: import.meta.env.VITE_MARKETAUX_API_KEY, language: language })
+  const url = `${BASE_URL}/all?${params}`
+
+  try {
+    const response = await axios.get(url)
+    const data: NewsEntity = {
+      ...response.data,
+    }
+    return data
+  } catch (e) {
+    throw new Error(`Failed to fetch company profile from Marketaux: ${e}`)
+  }
 }
 
 // {
