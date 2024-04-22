@@ -1,11 +1,17 @@
-import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFavorite, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Link } from '@tanstack/react-router'
 import useFavoritesStore from '@/stores/favorited-store'
 
 const symbols = ['AAPL', 'GOOGL', 'TSLA', 'AMZN', 'MSFT', 'PLTR']
-const names = ['Apple Inc.', 'Alphabet Inc. Class A Common Stock', 'Tesla, Inc. Common Stock', 'Amazon.Com Inc', 'Microsoft Corp', 'Palantir Technologies Inc. Class A Common Stock']
+const names = [
+  'Apple Inc.',
+  'Alphabet Inc. Class A Common Stock',
+  'Tesla, Inc. Common Stock',
+  'Amazon.Com Inc',
+  'Microsoft Corp',
+  'Palantir Technologies Inc. Class A Common Stock',
+]
 
 function BrowseView() {
   return (
@@ -25,7 +31,7 @@ interface BrowseItemProps {
 }
 
 const BrowseItem = ({ i }: BrowseItemProps) => {
-  const symbol = symbols[i];
+  const symbol = symbols[i]
   const { toggleFavorite, isFavorited } = useFavoritesStore((state) => ({
     toggleFavorite: state.toggleFavorite,
     isFavorited: state.isFavorited(symbol),
@@ -36,7 +42,11 @@ const BrowseItem = ({ i }: BrowseItemProps) => {
         <div className='flex-grow'>
           <CardTitle>{`News Item ${i + 1}: ${symbols[i]}`}</CardTitle>
         </div>
-      <CardFavorite favorited={isFavorited} onClick={() => toggleFavorite(symbols[i], names[i])} aria-label='Favorite Toggler' />
+        <CardFavorite
+          favorited={isFavorited}
+          onClick={() => toggleFavorite(symbols[i], names[i])}
+          aria-label='Favorite Toggler'
+        />
       </CardHeader>
       <CardContent>
         <p className='text-muted-foreground'>
