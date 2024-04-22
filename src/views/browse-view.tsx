@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFavorite, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Link } from '@tanstack/react-router'
-import useFavoritesStore from '@/stores/favorited-store';
+import useFavoritesStore from '@/stores/favorited-store'
 
 const symbols = ['AAPL', 'GOOGL', 'TSLA', 'AMZN', 'MSFT', 'PLTR']
 
@@ -24,11 +24,11 @@ interface BrowseItemProps {
 }
 
 const BrowseItem = ({ i }: BrowseItemProps) => {
-  const symbol = symbols[i];
-  const { toggleFavorite, isFavorited } = useFavoritesStore(state => ({
+  const symbol = symbols[i]
+  const { toggleFavorite, isFavorited } = useFavoritesStore((state) => ({
     toggleFavorite: state.toggleFavorite,
-    isFavorited: state.isFavorited(symbol)
-  }));
+    isFavorited: state.isFavorited(symbol),
+  }))
   return (
     <Card>
       <CardHeader className='flex justify-between items-center'>

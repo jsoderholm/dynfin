@@ -11,12 +11,14 @@ interface SavedState {
 
 const useSavedStore = create<SavedState>((set) => ({
   saved: [],
-  addSaved: (item) => set((state) => ({
-    saved: [...state.saved, item]
-  })),
-  removeSaved: (symbol) => set((state) => ({
-    saved: state.saved.filter(s => s.symbol !== symbol)
-  })),
+  addSaved: (item) =>
+    set((state) => ({
+      saved: [...state.saved, item],
+    })),
+  removeSaved: (symbol) =>
+    set((state) => ({
+      saved: state.saved.filter((s) => s.symbol !== symbol),
+    })),
   setSaved: async () => {
     set({ savedLoading: true })
     try {
