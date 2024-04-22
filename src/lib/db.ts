@@ -2,6 +2,7 @@ import { QueryDocumentSnapshot, collection, doc, getDoc, setDoc } from 'firebase
 import { db } from './firebase'
 import { FirestoreDataConverter } from 'firebase/firestore'
 import { CompanyProfile, GraphInfo } from './api/finage'
+import { NewsInfo } from './api/market-aux'
 import { AuthState } from '@/stores/auth-store'
 import { UserCredential } from 'firebase/auth'
 
@@ -25,10 +26,16 @@ const graphConverter: FirestoreDataConverter<GraphInfo> = {
   fromFirestore: (snap: QueryDocumentSnapshot) => snap.data() as GraphInfo,
 }
 
+const newsInfoConverter: FirestoreDataConverter<NewsInfo> = {
+  toFirestore: (data: NewsInfo) => data,
+  fromFirestore: (snap: QueryDocumentSnapshot) => snap.data() as NewsInfo,
+}
+
 const firestore = {
   companies: collection(db, 'companies').withConverter(companyProfileConverter),
   graphs: collection(db, 'graphs').withConverter(graphConverter),
   users: collection(db, 'users').withConverter(userConverter),
+  news: collection(db, 'news').withConverter(newsInfoConverter),
 }
 
 export async function getCompanyProfileFromFirestore(symbol: string) {
@@ -61,4 +68,15 @@ export async function createUserInFirestore(credentials: UserCredential, data: U
   }
 
   await setDoc(docRef, data)
+}
+
+export async function getNewsInfoFromFirestore(uuid: string) {
+  const docRef = doc(firestore.news, uuid)
+  return await getDoc(docRef)
+}
+
+export async function saveNewsInfoToFirestore(data: NewsInfo) {
+  const { uuid } = data
+  const docRef = doc(firestore.news, uuid)
+  await setDoc(docRef, { ...data })
 }

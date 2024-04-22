@@ -35,16 +35,28 @@ export type NewsInfo = {
   similar: NewsInfo[]
 }
 
-export async function getNewsEntityFromMarketaux(language: string): Promise<NewsInfo> {
+export type meta = {
+  found: number
+  returned: number
+  limit: number
+  page: number
+}
+
+export type apiResponse = {
+  meta: meta
+  data: NewsInfo[]
+}
+
+export async function getNewsInfoFromMarketaux(language: string): Promise<NewsInfo[]> {
   const params = new URLSearchParams({ api_token: import.meta.env.VITE_MARKETAUX_API_KEY, language: language })
   const url = `${BASE_URL}/all?${params}`
 
   try {
     const response = await axios.get(url)
-    const data: NewsInfo = {
+    const data: apiResponse = {
       ...response.data,
     }
-    return data
+    return data.data
   } catch (e) {
     throw new Error(`Failed to fetch company profile from Marketaux: ${e}`)
   }
