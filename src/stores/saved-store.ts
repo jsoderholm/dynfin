@@ -6,19 +6,13 @@ interface SavedState {
     name: string
   }[]
   setSaved: (symbols: string[]) => Promise<void>
+  addSaved: (item: { symbol: string; name: string }) => void
+  removeSaved: (symbol: string) => void
   savedLoading: boolean
 }
 
 const useSavedStore = create<SavedState>((set) => ({
   saved: [],
-  addSaved: (item) =>
-    set((state) => ({
-      saved: [...state.saved, item],
-    })),
-  removeSaved: (symbol) =>
-    set((state) => ({
-      saved: state.saved.filter((s) => s.symbol !== symbol),
-    })),
   setSaved: async () => {
     set({ savedLoading: true })
     try {
@@ -31,6 +25,8 @@ const useSavedStore = create<SavedState>((set) => ({
       set({ savedLoading: false })
     }
   },
+  addSaved: (item) => set((state) => ({ saved: [...state.saved, item] })),
+  removeSaved: (symbol) => set((state) => ({ saved: state.saved.filter((s) => s.symbol !== symbol) })),
   savedLoading: false,
 }))
 

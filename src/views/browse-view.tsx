@@ -29,6 +29,7 @@ const BrowseItem = ({ i }: BrowseItemProps) => {
     toggleFavorite: state.toggleFavorite,
     isFavorited: state.isFavorited(symbol),
   }))
+
   return (
     <Card>
       <CardHeader className='flex justify-between items-center'>

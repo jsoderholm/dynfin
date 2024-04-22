@@ -2,22 +2,22 @@ import create from 'zustand'
 import useSavedStore from '@/stores/saved-store.ts'
 
 interface FavoriteState {
-  favorites: Set<string>
+  favorites: Map<string, strings>
   toggleFavorite: (symbol: string, name: string) => void
   isFavorited: (symbol: string) => boolean
 }
 
 const useFavoritesStore = create<FavoriteState>((set, get) => ({
-  favorites: new Set(),
+  favorites: new Map<string, string>(),
 
-  toggleFavorite: (symbol, name) =>
+  toggleFavorite: (symbol: string, name: string) =>
     set((state) => {
-      const newFavorites = new Set(state.favorites)
+      const newFavorites = new Map(state.favorites)
       if (newFavorites.has(symbol)) {
         newFavorites.delete(symbol)
         useSavedStore.getState().removeSaved(symbol)
       } else {
-        newFavorites.add(symbol)
+        newFavorites.set(symbol, name)
         useSavedStore.getState().addSaved({ symbol, name })
       }
       return { favorites: newFavorites }
