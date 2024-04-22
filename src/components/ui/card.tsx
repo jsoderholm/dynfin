@@ -1,5 +1,5 @@
 import * as React from 'react'
-
+import { IconHeartFilled, IconHeart } from '@tabler/icons-react'
 import { cn } from '@/lib/utils'
 
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
@@ -27,10 +27,10 @@ const CardFavorite = React.forwardRef<
 >(({ className, favorited, ...props }, ref) => (
   <button
     ref={ref}
-    className={cn('focus:outline-none', favorited ? 'text-red-500' : 'text-gray-400', className)}
+    className={`focus:outline-none ${favorited ? 'text-red-500' : 'text-gray-400'} ${className}`}
     {...props}
   >
-    {favorited ? '♥' : '♡'} {/* Simple icons for demonstration */}
+    {favorited ? <IconHeartFilled size={24} /> : <IconHeart size={24} />} {/* Render icons as React components */}
   </button>
 ))
 
@@ -55,4 +55,4 @@ const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
 )
 CardFooter.displayName = 'CardFooter'
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+export { Card, CardHeader, CardFooter, CardTitle, CardFavorite, CardDescription, CardContent }

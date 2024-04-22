@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardFavorite, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Link } from '@tanstack/react-router'
 
 const symbols = ['AAPL', 'GOOGL', 'TSLA', 'AMZN', 'MSFT', 'PLTR']
@@ -22,15 +22,15 @@ interface BrowseItemProps {
 }
 
 const BrowseItem = ({ i }: BrowseItemProps) => {
+  const [isFavorited, setFavorited] = React.useState(false)
+  const favoriteToggle = () => setFavorited(!isFavorited)
   return (
     <Card>
       <CardHeader className='flex justify-between items-center'>
         <div className='flex-grow'>
           <CardTitle>{`News Item ${i + 1}: ${symbols[i]}`}</CardTitle>
         </div>
-        <Button variant='favorite' className='ml-auto'>
-          Favorite
-        </Button>
+        <CardFavorite favorited={isFavorited} onClick={favoriteToggle} aria-label='Favorite Toggler' />
       </CardHeader>
       <CardContent>
         <p className='text-muted-foreground'>
