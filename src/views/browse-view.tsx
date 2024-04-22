@@ -1,16 +1,11 @@
+import React from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFavorite, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Link } from '@tanstack/react-router'
 import useFavoritesStore from '@/stores/favorited-store'
 
-const companies = [
-  { symbol: 'AAPL', name: 'Apple Inc.' },
-  { symbol: 'GOOGL', name: 'Alphabet Inc.' },
-  { symbol: 'TSLA', name: 'Tesla Inc.' },
-  { symbol: 'AMZN', name: 'Amazon.com Inc.' },
-  { symbol: 'MSFT', name: 'Microsoft Corp.' },
-  { symbol: 'PLTR', name: 'Palantir Technologies' },
-]
+const symbols = ['AAPL', 'GOOGL', 'TSLA', 'AMZN', 'MSFT', 'PLTR']
+const names = ['Apple Inc.', 'Alphabet Inc. Class A Common Stock', 'Tesla, Inc. Common Stock', 'Amazon.Com Inc', 'Microsoft Corp', 'Palantir Technologies Inc. Class A Common Stock']
 
 function BrowseView() {
   return (
@@ -30,24 +25,18 @@ interface BrowseItemProps {
 }
 
 const BrowseItem = ({ i }: BrowseItemProps) => {
-  const company = companies[i]
-
+  const symbol = symbols[i];
   const { toggleFavorite, isFavorited } = useFavoritesStore((state) => ({
     toggleFavorite: state.toggleFavorite,
-    isFavorited: state.isFavorited(company.symbol),
+    isFavorited: state.isFavorited(symbol),
   }))
-
   return (
     <Card>
       <CardHeader className='flex justify-between items-center'>
         <div className='flex-grow'>
-          <CardTitle>{`News Item ${i + 1}: ${company.name}`}</CardTitle>
+          <CardTitle>{`News Item ${i + 1}: ${symbols[i]}`}</CardTitle>
         </div>
-        <CardFavorite
-          favorited={isFavorited}
-          onClick={() => toggleFavorite(company.symbol, company.name)}
-          aria-label='Favorite Toggler'
-        />
+      <CardFavorite favorited={isFavorited} onClick={() => toggleFavorite(symbols[i], names[i])} aria-label='Favorite Toggler' />
       </CardHeader>
       <CardContent>
         <p className='text-muted-foreground'>
@@ -56,8 +45,8 @@ const BrowseItem = ({ i }: BrowseItemProps) => {
         </p>
       </CardContent>
       <CardFooter className='flex items-center justify-center'>
-        <Link to={'/details/${company.symbol}'}>
-          <Button variant='ghost'>{`View Company Profile for ${company.name}`}</Button>
+        <Link to='/details/$symbol' params={{ symbol: symbols[i] }}>
+          <Button variant='ghost'>{`View Company Profile for ${symbols[i]}`}</Button>
         </Link>
       </CardFooter>
     </Card>

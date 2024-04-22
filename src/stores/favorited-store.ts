@@ -19,6 +19,7 @@ const useFavoritesStore = create<FavoriteState>((set, get) => ({
       } else {
         newFavorites.set(symbol, name)
         useSavedStore.getState().addSaved({ symbol, name })
+        console.log('saved item')
       }
       return { favorites: newFavorites }
     }),
