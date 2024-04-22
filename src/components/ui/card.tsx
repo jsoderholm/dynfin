@@ -27,7 +27,7 @@ const CardFavorite = React.forwardRef<
 >(({ className, favorited, ...props }, ref) => (
   <button
     ref={ref}
-    className={`focus:outline-none ${favorited ? 'text-red-500' : 'text-gray-400'} ${className}`}
+    className={`focus:outline-none ${favorited ? 'text-black-000' : 'text-gray-400'} ${className}`}
     {...props}
   >
     {favorited ? <IconHeartFilled size={24} /> : <IconHeart size={24} />} {/* Render icons as React components */}
