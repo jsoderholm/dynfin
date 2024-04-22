@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFavorite, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Link } from '@tanstack/react-router'
@@ -57,7 +56,7 @@ const BrowseItem = ({ i }: BrowseItemProps) => {
         </p>
       </CardContent>
       <CardFooter className='flex items-center justify-center'>
-        <Link to='/details/${company.symbol}' params={{ symbol: company.symbol }}>
+        <Link to={'/details/${company.symbol}'}>
           <Button variant='ghost'>{`View Company Profile for ${company.name}`}</Button>
         </Link>
       </CardFooter>
