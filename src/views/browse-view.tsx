@@ -1,10 +1,17 @@
-import React from 'react'
+import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFavorite, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Link } from '@tanstack/react-router'
 import useFavoritesStore from '@/stores/favorited-store'
 
-const symbols = ['AAPL', 'GOOGL', 'TSLA', 'AMZN', 'MSFT', 'PLTR']
+const companies = [
+  { symbol: 'AAPL', name: 'Apple Inc.' },
+  { symbol: 'GOOGL', name: 'Alphabet Inc.' },
+  { symbol: 'TSLA', name: 'Tesla Inc.' },
+  { symbol: 'AMZN', name: 'Amazon.com Inc.' },
+  { symbol: 'MSFT', name: 'Microsoft Corp.' },
+  { symbol: 'PLTR', name: 'Palantir Technologies' },
+]
 
 function BrowseView() {
   return (
@@ -24,19 +31,24 @@ interface BrowseItemProps {
 }
 
 const BrowseItem = ({ i }: BrowseItemProps) => {
-  const symbol = symbols[i]
+  const company = companies[i]
+
   const { toggleFavorite, isFavorited } = useFavoritesStore((state) => ({
     toggleFavorite: state.toggleFavorite,
-    isFavorited: state.isFavorited(symbol),
+    isFavorited: state.isFavorited(company.symbol),
   }))
 
   return (
     <Card>
       <CardHeader className='flex justify-between items-center'>
         <div className='flex-grow'>
-          <CardTitle>{`News Item ${i + 1}: ${symbols[i]}`}</CardTitle>
+          <CardTitle>{`News Item ${i + 1}: ${company.name}`}</CardTitle>
         </div>
-        <CardFavorite favorited={isFavorited} onClick={() => toggleFavorite(symbol)} aria-label='Favorite Toggler' />
+        <CardFavorite
+          favorited={isFavorited}
+          onClick={() => toggleFavorite(company.symbol, company.name)}
+          aria-label='Favorite Toggler'
+        />
       </CardHeader>
       <CardContent>
         <p className='text-muted-foreground'>
@@ -45,8 +57,8 @@ const BrowseItem = ({ i }: BrowseItemProps) => {
         </p>
       </CardContent>
       <CardFooter className='flex items-center justify-center'>
-        <Link to='/details/$symbol' params={{ symbol: symbols[i] }}>
-          <Button variant='ghost'>{`View Company Profile for ${symbols[i]}`}</Button>
+        <Link to='/details/${company.symbol}' params={{ symbol: company.symbol }}>
+          <Button variant='ghost'>{`View Company Profile for ${company.name}`}</Button>
         </Link>
       </CardFooter>
     </Card>

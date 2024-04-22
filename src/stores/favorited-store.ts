@@ -2,7 +2,7 @@ import create from 'zustand'
 import useSavedStore from '@/stores/saved-store.ts'
 
 interface FavoriteState {
-  favorites: Map<string, strings>
+  favorites: Map<string, string>
   toggleFavorite: (symbol: string, name: string) => void
   isFavorited: (symbol: string) => boolean
 }
