@@ -14,7 +14,8 @@ interface SavedState {
 
 const useSavedStore = create<SavedState>((set, get) => ({
   saved: [],
-  setSaved: async (userId: string) => {
+  setSaved: async (userIds: string[]) => {
+    for (const userId of userIds) {
     set({ savedLoading: true })
     try {
       const saved = await fetchSavedCompanies(userId)
@@ -24,12 +25,12 @@ const useSavedStore = create<SavedState>((set, get) => ({
     } finally {
       set({ savedLoading: false })
     }
+  }
   },
   savedLoading: false,
 
   addSaved: async (userId: string, item: { symbol: string; name: string }) => {
-    const { symbol } = item
-    await addCompanyToSaved(userId, symbol)
+    await addCompanyToSaved(userId, item.symbol)
     await get().setSaved(userId) // Refresh the saved items from Firebase
   },
   removeSaved: async (userId: string, symbol: string) => {
