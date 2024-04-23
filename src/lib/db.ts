@@ -90,10 +90,11 @@ export async function removeCompanyFromSaved(uid: string, companySymbol: string)
 }
 
 export const fetchSavedCompanies = async (uid: string) => {
-  const userRef = doc(firestore, 'users', uid)
+  const userRef = doc(firestore.users, uid)
   const docSnap = await getDoc(userRef)
   if (docSnap.exists() && docSnap.data().saved) {
-    return docSnap.data().saved
+    const userData = docSnap.data() as UserData // Type assertion for better type safety
+    return userData.saved || []
   } else {
     console.error('No such user or no saved data found')
     return []

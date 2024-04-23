@@ -27,8 +27,9 @@ const useSavedStore = create<SavedState>((set, get) => ({
   },
   savedLoading: false,
 
-  addSaved: async (userId: string, item) => {
-    await addCompanyToSaved(userId, item)
+  addSaved: async (userId: string, item: { symbol: string; name: string }) => {
+    const { symbol } = item
+    await addCompanyToSaved(userId, symbol)
     await get().setSaved(userId) // Refresh the saved items from Firebase
   },
   removeSaved: async (userId: string, symbol: string) => {
