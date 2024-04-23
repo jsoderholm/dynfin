@@ -6,7 +6,7 @@ interface SavedState {
     symbol: string
     name: string
   }[]
-  setSaved: (symbols: string[]) => Promise<void>
+  setSaved: (userID: string) => Promise<void>
   addSaved: (userID: string, item: { symbol: string; name: string }) => Promise<void>
   removeSaved: (userID: string, symbol: string) => Promise<void>
   savedLoading: boolean
@@ -14,8 +14,7 @@ interface SavedState {
 
 const useSavedStore = create<SavedState>((set, get) => ({
   saved: [],
-  setSaved: async (userIds: string[]) => {
-    for (const userId of userIds) {
+  setSaved: async (userId: string) => {
     set({ savedLoading: true })
     try {
       const saved = await fetchSavedCompanies(userId)
@@ -25,7 +24,6 @@ const useSavedStore = create<SavedState>((set, get) => ({
     } finally {
       set({ savedLoading: false })
     }
-  }
   },
   savedLoading: false,
 
