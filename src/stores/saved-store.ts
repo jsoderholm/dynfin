@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { addCompanyToSaved, removeCompanyFromSaved, fetchSavedCompanies } from '@/lib/db.ts'
 
 interface SavedState {
   saved: {
@@ -6,18 +7,17 @@ interface SavedState {
     name: string
   }[]
   setSaved: (symbols: string[]) => Promise<void>
-  addSaved: (item: { symbol: string; name: string }) => void
-  removeSaved: (symbol: string) => void
+  addSaved: (userID: string, item: { symbol: string; name: string }) => Promise<void>
+  removeSaved: (userID: string, symbol: string) => Promise<void>
   savedLoading: boolean
 }
 
-const useSavedStore = create<SavedState>((set) => ({
+const useSavedStore = create<SavedState>((set, get) => ({
   saved: [],
-  setSaved: async () => {
+  setSaved: async (userId: string) => {
     set({ savedLoading: true })
     try {
-      const response = await fetch('/saved.json')
-      const saved = await response.json()
+      const saved = await fetchSavedCompanies(userId)
       set({ saved })
     } catch (error) {
       console.error('Failed to fetch saved list:', error)
@@ -27,14 +27,14 @@ const useSavedStore = create<SavedState>((set) => ({
   },
   savedLoading: false,
 
-  addSaved: (item) =>
-    set((state) => ({
-      saved: [...state.saved, item],
-    })),
-  removeSaved: (symbol) =>
-    set((state) => ({
-      saved: state.saved.filter((s) => s.symbol !== symbol),
-    })),
+  addSaved: async (userId: string, item) => {
+    await addCompanyToSaved(userId, item)
+    await get().setSaved(userId) // Refresh the saved items from Firebase
+  },
+  removeSaved: async (userId: string, symbol: string) => {
+    await removeCompanyFromSaved(userId, symbol)
+    await get().setSaved(userId) // Refresh the saved items from Firebase
+  },
 }))
 
 export default useSavedStore

@@ -62,3 +62,40 @@ export async function createUserInFirestore(credentials: UserCredential, data: U
 
   await setDoc(docRef, data)
 }
+
+export async function addCompanyToSaved(uid: string, companySymbol: string) {
+  const userRef = doc(firestore.users, uid)
+  const docSnap = await getDoc(userRef)
+
+  if (docSnap.exists()) {
+    const userData: UserData = docSnap.data() as UserData
+    const updatedSaved = [...userData.saved, companySymbol]
+    await setDoc(userRef, { ...userData, saved: updatedSaved }, { merge: true })
+  } else {
+    console.log('User not found, cannot add saved company.')
+  }
+}
+
+export async function removeCompanyFromSaved(uid: string, companySymbol: string) {
+  const userRef = doc(firestore.users, uid)
+  const docSnap = await getDoc(userRef)
+
+  if (docSnap.exists()) {
+    const userData: UserData = docSnap.data() as UserData
+    const updatedSaved = userData.saved.filter((sym) => sym !== companySymbol) // Filter out the symbol
+    await setDoc(userRef, { ...userData, saved: updatedSaved }, { merge: true })
+  } else {
+    console.log('User not found, cannot remove saved company.')
+  }
+}
+
+export const fetchSavedCompanies = async (uid: string) => {
+  const userRef = doc(firestore, 'users', uid)
+  const docSnap = await getDoc(userRef)
+  if (docSnap.exists() && docSnap.data().saved) {
+    return docSnap.data().saved
+  } else {
+    console.error('No such user or no saved data found')
+    return []
+  }
+}

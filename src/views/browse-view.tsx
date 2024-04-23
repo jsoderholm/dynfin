@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFavorite, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Link } from '@tanstack/react-router'
 import useFavoritesStore from '@/stores/favorited-store'
+import useAuthStore from '@/stores/auth-store.ts'
 
 const symbols = ['AAPL', 'GOOGL', 'TSLA', 'AMZN', 'MSFT', 'PLTR']
 const names = [
@@ -31,22 +32,29 @@ interface BrowseItemProps {
 }
 
 const BrowseItem = ({ i }: BrowseItemProps) => {
+  const { user } = useAuthStore() // Extract user from auth store
   const symbol = symbols[i]
   const { toggleFavorite, isFavorited } = useFavoritesStore((state) => ({
     toggleFavorite: state.toggleFavorite,
     isFavorited: state.isFavorited(symbol),
   }))
+
+  // Ensure user is logged in before allowing toggle
+  if (!user) {
+    return <p>Please log in to manage favorites.</p>
+  }
+
+  const handleToggleFavorite = () => {
+    toggleFavorite(user.uid, symbols[i], names[i])
+  }
+
   return (
     <Card>
       <CardHeader className='flex justify-between items-center'>
         <div className='flex-grow'>
           <CardTitle>{`News Item ${i + 1}: ${symbols[i]}`}</CardTitle>
         </div>
-        <CardFavorite
-          favorited={isFavorited}
-          onClick={() => toggleFavorite(symbols[i], names[i])}
-          aria-label='Favorite Toggler'
-        />
+        <CardFavorite favorited={isFavorited} onClick={handleToggleFavorite} aria-label='Favorite Toggler' />
       </CardHeader>
       <CardContent>
         <p className='text-muted-foreground'>
