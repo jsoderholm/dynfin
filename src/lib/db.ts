@@ -94,7 +94,11 @@ export const fetchSavedCompanies = async (uid: string) => {
   const docSnap = await getDoc(userRef)
   if (docSnap.exists() && docSnap.data().saved) {
     const userData = docSnap.data() as UserData // Type assertion for better type safety
-    return userData.saved || []
+    const savedData: { symbol: string; name: string }[] = userData.saved.map((symbol: string) => ({
+      symbol,
+      name: '',
+    }))
+    return savedData
   } else {
     console.error('No such user or no saved data found')
     return []
