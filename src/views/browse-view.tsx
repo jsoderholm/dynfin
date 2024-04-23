@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { NewsInfo } from '@/lib/api/market-aux'
+import { NewsInfo } from '@/lib/api/stock-news'
 import { Link } from '@tanstack/react-router'
 
 interface NewsInfoProps {
@@ -26,18 +26,18 @@ interface BrowseItemProps {
 }
 
 const BrowseItem = ({ info }: BrowseItemProps) => {
-  const { title, description } = info
+  const { title, text, tickers } = info
   return (
     <Card>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className='text-muted-foreground'>{description}</p>
+        <p className='text-muted-foreground'>{text}</p>
       </CardContent>
       <CardFooter className='flex items-center justify-center'>
-        <Link to='/details/$symbol' params={{ symbol: 'AAPL' }}>
-          <Button variant='ghost'>{`View Company Profile for ${'AAPL'}`}</Button>
+        <Link to='/details/$symbol' params={{ symbol: tickers[0] }}>
+          <Button variant='ghost'>{`View Company Profile for ${tickers[0]}`}</Button>
         </Link>
       </CardFooter>
     </Card>

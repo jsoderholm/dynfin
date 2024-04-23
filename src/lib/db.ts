@@ -2,7 +2,7 @@ import { QueryDocumentSnapshot, collection, doc, getDoc, setDoc } from 'firebase
 import { db } from './firebase'
 import { FirestoreDataConverter } from 'firebase/firestore'
 import { CompanyProfile, GraphInfo } from './api/finage'
-import { NewsInfo } from './api/market-aux'
+import { NewsInfo } from './api/stock-news'
 import { AuthState } from '@/stores/auth-store'
 import { UserCredential } from 'firebase/auth'
 
@@ -68,15 +68,4 @@ export async function createUserInFirestore(credentials: UserCredential, data: U
   }
 
   await setDoc(docRef, data)
-}
-
-export async function getNewsInfoFromFirestore(uuid: string) {
-  const docRef = doc(firestore.news, uuid)
-  return await getDoc(docRef)
-}
-
-export async function saveNewsInfoToFirestore(data: NewsInfo) {
-  const { uuid } = data
-  const docRef = doc(firestore.news, uuid)
-  await setDoc(docRef, { ...data })
 }

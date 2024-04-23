@@ -1,64 +1,40 @@
 import axios from 'axios'
 
-const BASE_URL = 'https://api.marketaux.com/v1/news/'
+const BASE_URL = 'https://stocknewsapi.com/api/v1/'
 
-type NewsEntity = {
-  symbol: string
-  name: string
-  exchange: string | null
-  exchange_long: string | null
-  country: string
-  type: string
-  industry: string
-  match_score: number
-  sentiment_score: number
-  highlights: {
-    highlight: string
-    sentiment: number
-    highlighted_in: string
-  }[]
-}
-
-export type NewsInfo = {
-  uuid: string
-  title: string
-  description: string
-  keywords: string
-  snippet: string
-  url: string
-  image_url: string
-  language: string
-  published_at: string
-  source: string
-  relevance_score: number | null
-  entities: NewsEntity[]
-  similar: NewsInfo[]
-}
-
-export type meta = {
-  found: number
-  returned: number
-  limit: number
-  page: number
-}
-
-export type apiResponse = {
-  meta: meta
+type Meta = {
   data: NewsInfo[]
 }
 
-export async function getNewsInfoFromMarketaux(language: string): Promise<NewsInfo[]> {
-  const params = new URLSearchParams({ api_token: import.meta.env.VITE_MARKETAUX_API_KEY, language: language })
-  const url = `${BASE_URL}/all?${params}`
+export type NewsInfo = {
+  news_url: string
+  image_url: string
+  title: string
+  text: string
+  source_name: string
+  date: Date
+  topics: string[]
+  sentiment: string
+  type: string
+  tickers: string[]
+}
+
+export async function getNewsInfoFromMarketaux(): Promise<NewsInfo[]> {
+  const params = new URLSearchParams({
+    token: import.meta.env.VITE_STOCKNEWS_API_KEY,
+    section: 'alltickers',
+    items: '3',
+  })
+  const url = `${BASE_URL}category?${params}`
 
   try {
     const response = await axios.get(url)
-    const data: apiResponse = {
+    const response_data: Meta = {
       ...response.data,
     }
-    return data.data
+    return response_data.data
   } catch (e) {
-    throw new Error(`Failed to fetch company profile from Marketaux: ${e}`)
+    throw new Error(`Failed to fetch company profile from Stocknewsapi: ${e}`)
   }
 }
 
