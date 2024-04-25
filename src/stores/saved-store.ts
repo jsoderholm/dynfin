@@ -48,7 +48,7 @@ const useSavedStore = create<SavedState>((set, get) => ({
 
   toggleFavorite: (userId: string, symbol: string, name: string) =>
     set((state) => {
-      let newSaved = new Set([...state.saved])
+      const newSaved = new Set([...state.saved])
       const itemExists = [...newSaved].find((item) => item.symbol === symbol)
 
       if (itemExists) {
