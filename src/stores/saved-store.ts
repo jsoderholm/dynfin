@@ -52,7 +52,7 @@ const useSavedStore = create<SavedState>((set, get) => ({
       const itemExists = [...newSaved].find((item) => item.symbol === symbol)
 
       if (itemExists) {
-        newSaved.delete(symbol)
+        newSaved.delete(itemExists)
         removeCompanyFromSaved(userId, symbol)
       } else {
         newSaved.add({ symbol, name })

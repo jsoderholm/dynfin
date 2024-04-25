@@ -31,7 +31,7 @@ const BrowseItem = ({ info }: BrowseItemProps) => {
   const { user } = useAuthStore() // Extract user from auth store
   const { toggleFavorite, isFavorited } = useSavedStore((state) => ({
     toggleFavorite: state.toggleFavorite,
-    isFavorited: state.isFavorited(tickers),
+    isFavorited: state.isFavorited(tickers[0]),
   }))
 
   // Ensure user is logged in before allowing toggle
