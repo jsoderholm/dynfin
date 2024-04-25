@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFavorite, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Link } from '@tanstack/react-router'
-import useFavoritesStore from '@/stores/favorited-store'
+import useSavedStore from '@/stores/saved-store'
 import useAuthStore from '@/stores/auth-store.ts'
 
 const symbols = ['AAPL', 'GOOGL', 'TSLA', 'AMZN', 'MSFT', 'PLTR']
@@ -34,7 +34,7 @@ interface BrowseItemProps {
 const BrowseItem = ({ i }: BrowseItemProps) => {
   const { user } = useAuthStore() // Extract user from auth store
   const symbol = symbols[i]
-  const { toggleFavorite, isFavorited } = useFavoritesStore((state) => ({
+  const { toggleFavorite, isFavorited } = useSavedStore((state) => ({
     toggleFavorite: state.toggleFavorite,
     isFavorited: state.isFavorited(symbol),
   }))
