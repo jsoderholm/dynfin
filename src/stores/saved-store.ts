@@ -22,7 +22,12 @@ const useSavedStore = create<SavedState>((set, get) => ({
     set({ savedLoading: true })
     try {
       const savedCompanies = await fetchSavedCompanies(userId)
-      const savedSet = new Set(savedCompanies.map((company) => ({ symbol: company.symbol, name: company.name })))
+      const savedSet = new Set(
+        savedCompanies.map((company) => ({
+          symbol: company.symbol,
+          name: company.name,
+        })),
+      )
       set({ saved: savedSet })
     } catch (error) {
       console.error('Failed to fetch saved list:', error)
@@ -43,18 +48,23 @@ const useSavedStore = create<SavedState>((set, get) => ({
 
   toggleFavorite: (userId: string, symbol: string, name: string) =>
     set((state) => {
-      const newSaved = new Map(state.saved)
-      if (newSaved.has(symbol)) {
+      let newSaved = new Set([...state.saved])
+      const itemExists = [...newSaved].find((item) => item.symbol === symbol)
+
+      if (itemExists) {
         newSaved.delete(symbol)
         removeCompanyFromSaved(userId, symbol)
       } else {
-        newSaved.set(symbol, name)
+        newSaved.add({ symbol, name })
         addCompanyToSaved(userId, symbol)
       }
       return { saved: newSaved }
     }),
 
-  isFavorited: (symbol: string) => get().favorites.has(symbol),
+  isFavorited: (symbol: string) => {
+    const saved = get().saved
+    return Array.from(saved).some((item) => item.symbol === symbol)
+  },
 }))
 
 export default useSavedStore

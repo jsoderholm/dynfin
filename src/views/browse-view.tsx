@@ -5,7 +5,6 @@ import { Link } from '@tanstack/react-router'
 import useSavedStore from '@/stores/saved-store'
 import useAuthStore from '@/stores/auth-store.ts'
 
-
 interface NewsInfoProps {
   data: NewsInfo[]
 }
@@ -26,7 +25,6 @@ function BrowseView({ data }: NewsInfoProps) {
 interface BrowseItemProps {
   info: NewsInfo
 }
-
 
 const BrowseItem = ({ info }: BrowseItemProps) => {
   const { title, text, tickers } = info
