@@ -6,6 +6,7 @@ import useSavedStore from '@/stores/saved-store'
 import useAuthStore from '@/stores/auth-store.ts'
 import { useEffect } from 'react'
 
+
 interface NewsInfoProps {
   data: NewsInfo[]
 }
@@ -46,6 +47,7 @@ const BrowseItem = ({ info }: BrowseItemProps) => {
   if (!user) {
     return <p>Please log in to manage favorites.</p>
   }
+
 
   const favorited = isFavorited(tickers[0])
 
