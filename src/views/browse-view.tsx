@@ -8,7 +8,6 @@ interface NewsInfoProps {
 }
 
 function BrowseView({ data }: NewsInfoProps) {
-  console.log(data)
   return (
     <div className='container py-10'>
       <h2 className='text-3xl font-semibold pb-6'>Browse</h2>
