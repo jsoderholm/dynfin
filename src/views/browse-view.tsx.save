@@ -6,6 +6,7 @@ import useSavedStore from '@/stores/saved-store'
 import useAuthStore from '@/stores/auth-store.ts'
 import { useEffect } from 'react'
 
+
 interface NewsInfoProps {
   data: NewsInfo[]
 }
@@ -47,6 +48,7 @@ const BrowseItem = ({ info }: BrowseItemProps) => {
     return <p>Please log in to manage favorites.</p>
   }
 
+
   const handleToggleFavorite = () => {
     toggleFavorite(user.uid, tickers[0], title)
   }
@@ -70,3 +72,4 @@ const BrowseItem = ({ info }: BrowseItemProps) => {
 }
 
 export default BrowseView
+
