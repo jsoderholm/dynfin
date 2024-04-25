@@ -1,7 +1,9 @@
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardFavorite, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { NewsInfo } from '@/lib/api/stock-news'
 import { Link } from '@tanstack/react-router'
+import useSavedStore from '@/stores/saved-store'
+import useAuthStore from '@/stores/auth-store.ts'
 
 interface NewsInfoProps {
   data: NewsInfo[]
@@ -26,10 +28,26 @@ interface BrowseItemProps {
 
 const BrowseItem = ({ info }: BrowseItemProps) => {
   const { title, text, tickers } = info
+  const { user } = useAuthStore() // Extract user from auth store
+  const { toggleFavorite, isFavorited } = useSavedStore((state) => ({
+    toggleFavorite: state.toggleFavorite,
+    isFavorited: state.isFavorited(tickers[0]),
+  }))
+
+  // Ensure user is logged in before allowing toggle
+  if (!user) {
+    return <p>Please log in to manage favorites.</p>
+  }
+
+  const handleToggleFavorite = () => {
+    toggleFavorite(user.uid, tickers[0], title)
+  }
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
+        <CardFavorite favorited={isFavorited} onClick={handleToggleFavorite} aria-label='Favorite Toggler' />
       </CardHeader>
       <CardContent>
         <p className='text-muted-foreground'>{text}</p>
