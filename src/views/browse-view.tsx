@@ -4,6 +4,7 @@ import { NewsInfo } from '@/lib/api/stock-news'
 import { Link } from '@tanstack/react-router'
 import useSavedStore from '@/stores/saved-store'
 import useAuthStore from '@/stores/auth-store.ts'
+import { useEffect } from 'react'
 
 interface NewsInfoProps {
   data: NewsInfo[]
@@ -29,15 +30,24 @@ interface BrowseItemProps {
 const BrowseItem = ({ info }: BrowseItemProps) => {
   const { title, text, tickers } = info
   const { user } = useAuthStore() // Extract user from auth store
-  const { toggleFavorite, isFavorited } = useSavedStore((state) => ({
+  const { toggleFavorite, isFavorited, setSaved } = useSavedStore((state) => ({
     toggleFavorite: state.toggleFavorite,
     isFavorited: state.isFavorited(tickers[0]),
+    setSaved: state.setSaved,
   }))
+
+  useEffect(() => {
+    if (user) {
+      setSaved(user.uid)
+    }
+  }, [user, setSaved])
 
   // Ensure user is logged in before allowing toggle
   if (!user) {
     return <p>Please log in to manage favorites.</p>
   }
+
+  const favorited = isFavorited(tickers[0])
 
   const handleToggleFavorite = () => {
     toggleFavorite(user.uid, tickers[0], title)
