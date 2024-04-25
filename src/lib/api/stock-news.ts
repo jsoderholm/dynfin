@@ -38,7 +38,6 @@ export async function getNewsInfoFromStockNews(): Promise<NewsInfo[]> {
   }
 }
 
-// {
 //     "uuid": "090839fb-5cd9-49d8-a8bd-c8e178bf2909",
 //     "title": "UN adopts first global artificial intelligence resolution By Reuters",
 //     "description": "UN adopts first global artificial intelligence resolution",
