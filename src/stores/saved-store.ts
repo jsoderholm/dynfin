@@ -2,11 +2,10 @@ import { create } from 'zustand'
 import { addCompanyToSaved, removeCompanyFromSaved, fetchSavedCompanies } from '@/lib/db.ts'
 
 interface SavedState {
-  saved: {
+  saved: Set<{
     symbol: string
     name: string
-  }[]
-  favorites: Map<string, string>
+  }>
   savedLoading: boolean
   setSaved: (userID: string) => Promise<void>
   addSaved: (userID: string, item: { symbol: string; name: string }) => Promise<void>
@@ -16,15 +15,15 @@ interface SavedState {
 }
 
 const useSavedStore = create<SavedState>((set, get) => ({
-  saved: [],
-  favorites: new Map<string, string>(),
+  saved: new Set(),
   savedLoading: false,
 
   setSaved: async (userId: string) => {
     set({ savedLoading: true })
     try {
-      const saved = await fetchSavedCompanies(userId)
-      set({ saved })
+      const savedCompanies = await fetchSavedCompanies(userId)
+      const savedSet = new Set(savedCompanies.map((company) => ({ symbol: company.symbol, name: company.name })))
+      set({ saved: savedSet })
     } catch (error) {
       console.error('Failed to fetch saved list:', error)
     } finally {
@@ -44,15 +43,15 @@ const useSavedStore = create<SavedState>((set, get) => ({
 
   toggleFavorite: (userId: string, symbol: string, name: string) =>
     set((state) => {
-      const newFavorites = new Map(state.favorites)
-      if (newFavorites.has(symbol)) {
-        newFavorites.delete(symbol)
+      const newSaved = new Map(state.saved)
+      if (newSaved.has(symbol)) {
+        newSaved.delete(symbol)
         removeCompanyFromSaved(userId, symbol)
       } else {
-        newFavorites.set(symbol, name)
+        newSaved.set(symbol, name)
         addCompanyToSaved(userId, symbol)
       }
-      return { favorites: newFavorites }
+      return { saved: newSaved }
     }),
 
   isFavorited: (symbol: string) => get().favorites.has(symbol),
