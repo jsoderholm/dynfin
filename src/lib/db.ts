@@ -2,6 +2,7 @@ import { QueryDocumentSnapshot, collection, doc, getDoc, setDoc } from 'firebase
 import { db } from './firebase'
 import { FirestoreDataConverter } from 'firebase/firestore'
 import { CompanyProfile, GraphInfo } from './api/finage'
+import { NewsInfo } from './api/stock-news'
 import { AuthState } from '@/stores/auth-store'
 import { UserCredential } from 'firebase/auth'
 
@@ -25,10 +26,16 @@ const graphConverter: FirestoreDataConverter<GraphInfo> = {
   fromFirestore: (snap: QueryDocumentSnapshot) => snap.data() as GraphInfo,
 }
 
+const newsInfoConverter: FirestoreDataConverter<NewsInfo> = {
+  toFirestore: (data: NewsInfo) => data,
+  fromFirestore: (snap: QueryDocumentSnapshot) => snap.data() as NewsInfo,
+}
+
 const firestore = {
   companies: collection(db, 'companies').withConverter(companyProfileConverter),
   graphs: collection(db, 'graphs').withConverter(graphConverter),
   users: collection(db, 'users').withConverter(userConverter),
+  news: collection(db, 'news').withConverter(newsInfoConverter),
 }
 
 export async function getCompanyProfileFromFirestore(symbol: string) {
