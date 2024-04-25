@@ -1,37 +1,43 @@
-type NewsEntity = {
-  symbol: string
-  name: string
-  exchange: string | null
-  exchange_long: string | null
-  country: string
-  type: string
-  industry: string
-  match_score: number
-  sentiment_score: number
-  highlights: {
-    highlight: string
-    sentiment: number
-    highlighted_in: string
-  }[]
+import axios from 'axios'
+
+const BASE_URL = 'https://stocknewsapi.com/api/v1/'
+
+type Meta = {
+  data: NewsInfo[]
 }
 
 export type NewsInfo = {
-  uuid: string
-  title: string
-  description: string
-  keywords: string
-  snippet: string
-  url: string
+  news_url: string
   image_url: string
-  language: string
-  published_at: string
-  source: string
-  relevance_score: number | null
-  entities: NewsEntity[]
-  similar: NewsInfo[]
+  title: string
+  text: string
+  source_name: string
+  date: Date
+  topics: string[]
+  sentiment: string
+  type: string
+  tickers: string[]
 }
 
-// {
+export async function getNewsInfoFromStockNews(): Promise<NewsInfo[]> {
+  const params = new URLSearchParams({
+    token: import.meta.env.VITE_STOCKNEWS_API_KEY,
+    section: 'alltickers',
+    items: '3',
+  })
+  const url = `${BASE_URL}category?${params}`
+
+  try {
+    const response = await axios.get(url)
+    const response_data: Meta = {
+      ...response.data,
+    }
+    return response_data.data
+  } catch (e) {
+    throw new Error(`Failed to fetch company profile from Stocknewsapi: ${e}`)
+  }
+}
+
 //     "uuid": "090839fb-5cd9-49d8-a8bd-c8e178bf2909",
 //     "title": "UN adopts first global artificial intelligence resolution By Reuters",
 //     "description": "UN adopts first global artificial intelligence resolution",

@@ -1,5 +1,5 @@
 import { CompanyProfile, GraphInfo, getCompanyProfileFromFinage, getGraphInfoFromFinage } from '@/lib/api/finage'
-import { NewsInfo } from '@/lib/api/market-aux'
+import { NewsInfo } from '@/lib/api/stock-news'
 import {
   getCompanyProfileFromFirestore,
   getGraphInfoFromFirestore,
