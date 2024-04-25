@@ -47,8 +47,6 @@ const BrowseItem = ({ info }: BrowseItemProps) => {
     return <p>Please log in to manage favorites.</p>
   }
 
-  const favorited = isFavorited(tickers[0])
-
   const handleToggleFavorite = () => {
     toggleFavorite(user.uid, tickers[0], title)
   }
