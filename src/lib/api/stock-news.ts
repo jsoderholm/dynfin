@@ -19,7 +19,7 @@ export type NewsInfo = {
   tickers: string[]
 }
 
-export async function getNewsInfoFromMarketaux(): Promise<NewsInfo[]> {
+export async function getNewsInfoFromStockNews(): Promise<NewsInfo[]> {
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCKNEWS_API_KEY,
     section: 'alltickers',
