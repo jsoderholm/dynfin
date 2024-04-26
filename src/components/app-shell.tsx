@@ -1,7 +1,7 @@
 import Sidebar, { SidebarProps } from './sidebar'
-import MobileMenu, { MobileMenuProps } from './mobile-menu'
+import Header, { HeaderProps } from './header'
 
-type AppShellProps = SidebarProps & MobileMenuProps
+type AppShellProps = SidebarProps & HeaderProps
 
 const AppShell = (props: AppShellProps) => {
   const { user, children } = props
@@ -10,7 +10,7 @@ const AppShell = (props: AppShellProps) => {
     <div className='flex'>
       {user && <Sidebar {...props} className='hidden md:block' />}
       <div className='flex-1 bg-muted/40'>
-        {user && <MobileMenu {...props} className='md:hidden' />}
+        {user && <Header {...props} />}
         {children}
       </div>
     </div>
