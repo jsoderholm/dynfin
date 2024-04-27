@@ -13,7 +13,8 @@ function BrowsePresenter() {
     setSaved: state.setSaved,
     savedLoading: state.savedLoading,
   }))
-  const loading = useBrowseStore((state) => state.browseLoading)
+  const browseLoading = useBrowseStore((state) => state.browseLoading)
+  const loading = browseLoading || savedLoading
   const browse = useBrowseStore((state) => state.browse)
   const setBrowse = useBrowseStore((state) => state.setBrowse)
 
