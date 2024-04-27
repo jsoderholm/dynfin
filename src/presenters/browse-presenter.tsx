@@ -26,7 +26,7 @@ function BrowsePresenter() {
     setBrowse()
   }, [setBrowse])
 
-  const handleToggleFavorite = (ticker, title) => {
+  const handleToggleFavorite = (ticker: string, title: string) => {
     if (user) {
       toggleFavorite(user.uid, ticker, title)
     } else {
