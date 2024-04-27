@@ -13,9 +13,17 @@ function BrowsePresenter() {
     setSaved: state.setSaved,
     savedLoading: state.savedLoading,
   }))
-  const loading = useBrowseStore((state) => state.browseLoading)
+
   const browse = useBrowseStore((state) => state.browse)
   const setBrowse = useBrowseStore((state) => state.setBrowse)
+  const browseLoading = useBrowseStore((state) => state.browseLoading)
+  const loading = browseLoading || savedLoading
+
+  useEffect(() => {
+    if (user) {
+      setSaved(user.uid)
+    }
+  }, [user, setSaved])
 
   useEffect(() => {
     if (user) {
@@ -28,18 +36,19 @@ function BrowsePresenter() {
   }, [setBrowse])
 
   const handleToggleFavorite = (ticker: string, title: string) => {
-    if (user) {
-      toggleFavorite(user.uid, ticker, title)
-    } else {
-      alert('Please log in to manage favorites.')
+
+    if (!user) {
+      return
     }
+    toggleFavorite(user.uid, ticker, title)
   }
 
   const handleRetry = () => {
     setBrowse()
   }
 
-  if (loading || savedLoading) {
+
+  if (loading) {
     return <Loading />
   }
 
