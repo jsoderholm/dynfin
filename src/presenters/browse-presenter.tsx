@@ -39,7 +39,7 @@ function BrowsePresenter() {
     setBrowse()
   }
 
-  if (loading || savedLoading) {
+  if (loading) {
     return <Loading />
   }
 
