@@ -7,10 +7,11 @@ import useSavedStore from '@/stores/saved-store'
 
 function BrowsePresenter() {
   const { user } = useAuthStore()
-  const { toggleFavorite, isFavorited, setSaved } = useSavedStore((state) => ({
+  const { toggleFavorite, isFavorited, setSaved, savedLoading } = useSavedStore((state) => ({
     toggleFavorite: state.toggleFavorite,
     isFavorited: state.isFavorited,
     setSaved: state.setSaved,
+    savedLoading: state.savedLoading,
   }))
   const loading = useBrowseStore((state) => state.browseLoading)
   const browse = useBrowseStore((state) => state.browse)
@@ -38,7 +39,7 @@ function BrowsePresenter() {
     setBrowse()
   }
 
-  if (loading) {
+  if (loading || savedLoading) {
     return <Loading />
   }
 
