@@ -36,7 +36,6 @@ function BrowsePresenter() {
   }, [setBrowse])
 
   const handleToggleFavorite = (ticker: string, title: string) => {
-
     if (!user) {
       return
     }
@@ -47,13 +46,12 @@ function BrowsePresenter() {
     setBrowse()
   }
 
-
   if (loading) {
     return <Loading />
   }
 
   return browse ? (
-    <BrowseView data={browse} isFavorited={isFavorited} onToggleFavorite={handleToggleFavorite} userLoggedIn={!!user} />
+    <BrowseView data={browse} isFavorited={isFavorited} onToggleFavorite={handleToggleFavorite} />
   ) : (
     <div className='text-destructive'>
       <h2 className='text-3xl font-semibold pb-6'>Failed to fetch news items</h2>

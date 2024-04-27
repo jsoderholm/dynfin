@@ -6,25 +6,19 @@ import { Link } from '@tanstack/react-router'
 interface FavoriteItemProps {
   isFavorited: (ticker: string) => boolean
   onToggleFavorite: (ticker: string, title: string) => void
-  userLoggedIn: boolean
 }
 
 interface NewsInfoProps extends FavoriteItemProps {
   data: NewsInfo[]
 }
 
-function BrowseView({ data, isFavorited, onToggleFavorite, userLoggedIn }: NewsInfoProps) {
+function BrowseView({ data, isFavorited, onToggleFavorite }: NewsInfoProps) {
   return (
     <div className='container py-10'>
       <h2 className='text-3xl font-semibold pb-6'>Browse</h2>
       <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
         {Array.from(data).map((item) => (
-          <BrowseItem
-            info={item}
-            isFavorited={isFavorited}
-            onToggleFavorite={onToggleFavorite}
-            userLoggedIn={userLoggedIn}
-          />
+          <BrowseItem info={item} isFavorited={isFavorited} onToggleFavorite={onToggleFavorite} />
         ))}
       </div>
     </div>
@@ -35,7 +29,7 @@ interface BrowseItemProps extends FavoriteItemProps {
   info: NewsInfo
 }
 
-const BrowseItem = ({ info, isFavorited, onToggleFavorite, userLoggedIn }: BrowseItemProps) => {
+const BrowseItem = ({ info, isFavorited, onToggleFavorite }: BrowseItemProps) => {
   const { title, text, tickers } = info
 
   const favorited = isFavorited(tickers[0])
