@@ -38,11 +38,6 @@ interface BrowseItemProps extends FavoriteItemProps {
 const BrowseItem = ({ info, isFavorited, onToggleFavorite, userLoggedIn }: BrowseItemProps) => {
   const { title, text, tickers } = info
 
-  // Ensure user is logged in before allowing toggle
-  if (!userLoggedIn) {
-    return <p>Please log in to manage favorites.</p>
-  }
-
   const favorited = isFavorited(tickers[0])
 
   const handleToggleFavorite = () => {
