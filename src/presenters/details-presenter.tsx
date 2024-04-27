@@ -3,8 +3,7 @@ import useDetailsStore from '@/stores/details-store'
 import CompanyProfileView from '@/views/company-profile-view'
 import GraphView from '@/views/graph-view'
 import NewsListView from '@/views/news-list-view'
-import { IconArrowLeft } from '@tabler/icons-react'
-import { Link, getRouteApi } from '@tanstack/react-router'
+import { getRouteApi } from '@tanstack/react-router'
 import { useEffect } from 'react'
 
 const route = getRouteApi('/_auth/details/$symbol')
@@ -34,12 +33,7 @@ function DetailsPresenter() {
 
   return (
     <div className='container'>
-      <div className='my-6'>
-        <Link to='/'>
-          <IconArrowLeft />
-        </Link>
-      </div>
-      <div className='space-y-10 pb-10 '>
+      <div className='space-y-10 py-10 '>
         {companyProfile ? (
           <CompanyProfileView info={companyProfile} />
         ) : (
