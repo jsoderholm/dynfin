@@ -29,11 +29,10 @@ function BrowsePresenter() {
   }, [setBrowse])
 
   const handleToggleFavorite = (ticker: string, title: string) => {
-    if (user) {
-      toggleFavorite(user.uid, ticker, title)
-    } else {
-      alert('Please log in to manage favorites.')
+    if (!user) {
+      return
     }
+    toggleFavorite(user.uid, ticker, title)
   }
 
   const handleRetry = () => {
