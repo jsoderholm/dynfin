@@ -2,60 +2,58 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFavorite, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { NewsInfo } from '@/lib/api/stock-news'
 import { Link } from '@tanstack/react-router'
-import useSavedStore from '@/stores/saved-store'
-import useAuthStore from '@/stores/auth-store.ts'
-import { useEffect } from 'react'
 
-interface NewsInfoProps {
+interface FavoriteItemProps {
+  isFavorited: (ticker: string) => boolean
+  onToggleFavorite: (ticker: string, title: string) => void
+  userLoggedIn: boolean
+}
+
+interface NewsInfoProps extends FavoriteItemProps {
   data: NewsInfo[]
 }
 
-function BrowseView({ data }: NewsInfoProps) {
+function BrowseView({ data, isFavorited, onToggleFavorite, userLoggedIn }: NewsInfoProps) {
   return (
     <div className='container py-10'>
       <h2 className='text-3xl font-semibold pb-6'>Browse</h2>
       <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
         {Array.from(data).map((item) => (
-          <BrowseItem info={item} />
+          <BrowseItem
+            info={item}
+            isFavorited={isFavorited}
+            onToggleFavorite={onToggleFavorite}
+            userLoggedIn={userLoggedIn}
+          />
         ))}
       </div>
     </div>
   )
 }
 
-interface BrowseItemProps {
+interface BrowseItemProps extends FavoriteItemProps {
   info: NewsInfo
 }
 
-const BrowseItem = ({ info }: BrowseItemProps) => {
+const BrowseItem = ({ info, isFavorited, onToggleFavorite, userLoggedIn }: BrowseItemProps) => {
   const { title, text, tickers } = info
-  const { user } = useAuthStore() // Extract user from auth store
-  const { toggleFavorite, isFavorited, setSaved } = useSavedStore((state) => ({
-    toggleFavorite: state.toggleFavorite,
-    isFavorited: state.isFavorited(tickers[0]),
-    setSaved: state.setSaved,
-  }))
-
-  useEffect(() => {
-    if (user) {
-      setSaved(user.uid)
-    }
-  }, [user, setSaved])
 
   // Ensure user is logged in before allowing toggle
-  if (!user) {
+  if (!userLoggedIn) {
     return <p>Please log in to manage favorites.</p>
   }
 
+  const favorited = isFavorited(tickers[0])
+
   const handleToggleFavorite = () => {
-    toggleFavorite(user.uid, tickers[0], title)
+    onToggleFavorite(tickers[0], title)
   }
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        <CardFavorite favorited={isFavorited} onClick={handleToggleFavorite} aria-label='Favorite Toggler' />
+        <CardFavorite favorited={favorited} onClick={handleToggleFavorite} aria-label='Favorite Toggler' />
       </CardHeader>
       <CardContent>
         <p className='text-muted-foreground'>{text}</p>

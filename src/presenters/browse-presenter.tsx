@@ -2,25 +2,52 @@ import useBrowseStore from '@/stores/browse-store'
 import BrowseView from '@/views/browse-view'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useEffect } from 'react'
+import useAuthStore from '@/stores/auth-store'
+import useSavedStore from '@/stores/saved-store'
 
 function BrowsePresenter() {
+  const { user } = useAuthStore()
+  const { toggleFavorite, isFavorited, setSaved } = useSavedStore((state) => ({
+    toggleFavorite: state.toggleFavorite,
+    isFavorited: state.isFavorited,
+    setSaved: state.setSaved,
+  }))
   const loading = useBrowseStore((state) => state.browseLoading)
   const browse = useBrowseStore((state) => state.browse)
   const setBrowse = useBrowseStore((state) => state.setBrowse)
 
   useEffect(() => {
+    if (user) {
+      setSaved(user.uid)
+    }
+  }, [user, setSaved])
+
+  useEffect(() => {
     setBrowse()
   }, [setBrowse])
+
+  const handleToggleFavorite = (ticker, title) => {
+    if (user) {
+      toggleFavorite(user.uid, ticker, title)
+    } else {
+      alert('Please log in to manage favorites.')
+    }
+  }
+
+  const handleRetry = () => {
+    setBrowse()
+  }
 
   if (loading) {
     return <Loading />
   }
 
   return browse ? (
-    <BrowseView data={browse} />
+    <BrowseView data={browse} isFavorited={isFavorited} onToggleFavorite={handleToggleFavorite} userLoggedIn={!!user} />
   ) : (
     <div className='text-destructive'>
       <h2 className='text-3xl font-semibold pb-6'>Failed to fetch news items</h2>
+      <button onClick={handleRetry}>Retry</button>
     </div>
   )
 }
