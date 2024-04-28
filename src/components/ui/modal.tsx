@@ -10,6 +10,8 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({ isOpen, children, onClose }) => {
   if (!isOpen) return null
 
+  const modalRoot = document.getElementById('modal-root') // Ensure this element exists in your HTML
+
   return ReactDOM.createPortal(
     <div style={styles.overlay}>
       <div style={styles.modal}>
@@ -19,11 +21,15 @@ const Modal: React.FC<ModalProps> = ({ isOpen, children, onClose }) => {
         {children}
       </div>
     </div>,
-    document.getElementById('modal-root'),
+    modalRoot,
   )
 }
 
-const styles = {
+const styles: {
+  overlay: React.CSSProperties
+  modal: React.CSSProperties
+  closeButton: React.CSSProperties
+} = {
   overlay: {
     position: 'fixed',
     top: 0,
