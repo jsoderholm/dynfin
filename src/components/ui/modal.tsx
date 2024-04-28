@@ -10,7 +10,11 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({ isOpen, children, onClose }) => {
   if (!isOpen) return null
 
-  const modalRoot = document.getElementById('modal-root') // Ensure this element exists in your HTML
+  const modalRoot = document.getElementById('modal-root')
+  if (!modalRoot) {
+    console.error('Modal root element not found in the document.')
+    return
+  }
 
   return ReactDOM.createPortal(
     <div style={styles.overlay}>
