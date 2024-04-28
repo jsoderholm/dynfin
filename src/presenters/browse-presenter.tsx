@@ -26,12 +26,6 @@ function BrowsePresenter() {
   }, [user, setSaved])
 
   useEffect(() => {
-    if (user) {
-      setSaved(user.uid)
-    }
-  }, [user, setSaved])
-
-  useEffect(() => {
     setBrowse()
   }, [setBrowse])
 
