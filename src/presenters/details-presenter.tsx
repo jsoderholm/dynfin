@@ -19,62 +19,68 @@ function DetailsPresenter() {
   const setCompanyProfile = useDetailsStore((state) => state.setCompanyProfile)
   const setGraphInfo = useDetailsStore((state) => state.setGraphInfo)
   const graphInfo = useDetailsStore((state) => state.graphInfo)
-
-  const loading = newsListLoading || companyProfileLoading || graphInfoLoading
+  const newsListInfo = useDetailsStore((state) => state.newsListInfo)
 
   useEffect(() => {
     setCompanyProfile(symbol)
     setGraphInfo(symbol)
   }, [symbol, setCompanyProfile, setGraphInfo])
 
-  if (loading) {
-    return <Loading />
-  }
-
   return (
     <div className='container'>
       <div className='space-y-10 py-10 '>
-        {companyProfile ? (
+        {companyProfileLoading ? (
+          <>
+            <Skeleton className='mb-6 h-10 w-1/4' />
+            <div className='grid grid-cols-1 lg:grid-cols-3 gap-10 h-96 mb-10'>
+              <Skeleton className='h-full col-span-1' />
+              <Skeleton className='h-full col-span-2' />
+            </div>
+          </>
+        ) : companyProfile ? (
           <CompanyProfileView info={companyProfile} />
         ) : (
-          <div className='text-destructive'>
-            <h2 className='text-3xl font-semibold pb-6'>Failed to fetch company profile</h2>
-          </div>
+          <ErrorMessage message='Failed to fetch company profile' />
         )}
-        <NewsListView />
-        {graphInfo ? (
+        {newsListLoading ? (
+          <>
+            <Skeleton className='mb-6 h-10 w-1/4' />
+            <div className='grid grid-cols-4 gap-10 mb-10'>
+              {Array.from({ length: 8 }).map((_, i) => (
+                <Skeleton key={i} className='h-48' />
+              ))}
+            </div>
+          </>
+        ) : newsListInfo ? (
+          <NewsListView />
+        ) : (
+          <ErrorMessage message='Failed to fetch news list' />
+        )}
+        {graphInfoLoading ? (
+          <>
+            <Skeleton className='mb-6 h-10 w-1/4' />
+            <div>
+              <Skeleton className='h-96' />
+            </div>
+          </>
+        ) : graphInfo ? (
           <GraphView info={graphInfo} onRefresh={() => setGraphInfo(symbol, true)} />
         ) : (
-          <div className='text-destructive'>
-            <h2 className='text-3xl font-semibold pb-6'>Failed to fetch graph info</h2>
-          </div>
+          <ErrorMessage message='Failed to fetch graph info' />
         )}
       </div>
     </div>
   )
 }
 
-const Loading = () => {
+interface ErrorMessageProps {
+  message: string
+}
+
+const ErrorMessage = ({ message }: ErrorMessageProps) => {
   return (
-    <div className='container'>
-      <div className='my-6'>
-        <Skeleton className='h-8 w-8' />
-      </div>
-      <Skeleton className='mb-6 h-10 w-1/4' />
-      <div className='grid grid-cols-1 lg:grid-cols-3 gap-10 h-96 mb-10'>
-        <Skeleton className='h-full col-span-1' />
-        <Skeleton className='h-full col-span-2' />
-      </div>
-      <Skeleton className='mb-6 h-10 w-1/4' />
-      <div className='grid grid-cols-4 gap-10 mb-10'>
-        {Array.from({ length: 8 }).map((_, i) => (
-          <Skeleton key={i} className='h-48' />
-        ))}
-      </div>
-      <Skeleton className='mb-6 h-10 w-1/4' />
-      <div>
-        <Skeleton className='h-96' />
-      </div>
+    <div className='text-destructive'>
+      <h2 className='text-3xl font-semibold'>{message}</h2>
     </div>
   )
 }
