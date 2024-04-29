@@ -1,7 +1,16 @@
 import { Button } from '@/components/ui/button'
+import { IconHeartFilled, IconHeart, IconDots } from '@tabler/icons-react'
 import { Card, CardContent, CardFavorite, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { NewsInfo } from '@/lib/api/stock-news'
 import { Link } from '@tanstack/react-router'
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from '@/components/ui/dialog'
 
 interface FavoriteItemProps {
   isFavorited: (ticker: string) => boolean
@@ -51,7 +60,36 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite }: BrowseItemProps) =>
         <Link to='/details/$symbol' params={{ symbol: tickers[0] }}>
           <Button variant='ghost'>{`View Company Profile for ${tickers[0]}`}</Button>
         </Link>
+        <button onClick={toggleModal} className='absolute bottom-0 right-0 p-2 m-2'>
+          Open Modal
+        </button>
       </CardFooter>
+      <Dialog>
+        <DialogTrigger asChild>
+          <button className='absolute bottom-0 right-0 p-2 m-2'>Show Tickers</button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Tickers in the News</DialogTitle>
+          <table>
+            <tbody>
+              {tickers.map((ticker, index) => (
+                <tr key={index}>
+                  <td>{ticker}</td>
+                  <td
+                    onClick={() => toggleFavorite(userID, ticker, `Company Name for ${ticker}`)}
+                    className='cursor-pointer'
+                  >
+                    {isFavorited(ticker) ? <IconHeartFilled /> : <IconHeart />}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <DialogClose asChild>
+            <button className='button'>Close</button>
+          </DialogClose>
+        </DialogContent>
+      </Dialog>
     </Card>
   )
 }
