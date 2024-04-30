@@ -1,7 +1,7 @@
 import useBrowseStore from '@/stores/browse-store'
 import BrowseView from '@/views/browse-view'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import useAuthStore from '@/stores/auth-store'
 import useSavedStore from '@/stores/saved-store'
 
@@ -13,6 +13,8 @@ function BrowsePresenter() {
     setSaved: state.setSaved,
     savedLoading: state.savedLoading,
   }))
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedTicker, setSelectedTicker] = useState(null)
 
   const browse = useBrowseStore((state) => state.browse)
   const setBrowse = useBrowseStore((state) => state.setBrowse)
@@ -36,6 +38,16 @@ function BrowsePresenter() {
     toggleFavorite(user.uid, ticker, title)
   }
 
+  const handleOpenModal = (ticker) => {
+    setSelectedTicker(ticker)
+    setIsModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+    setSelectedTicker(null)
+  }
+
   const handleRetry = () => {
     setBrowse()
   }
@@ -44,16 +56,35 @@ function BrowsePresenter() {
     return <Loading />
   }
 
-  return browse ? (
-    <BrowseView data={browse} isFavorited={isFavorited} onToggleFavorite={handleToggleFavorite} />
-  ) : (
-    <div className='text-destructive'>
-      <h2 className='text-3xl font-semibold pb-6'>Failed to fetch news items</h2>
-      <button onClick={handleRetry}>Retry</button>
-    </div>
+  return (
+    <>
+      {isModalOpen && (
+        <Modal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          tickers={currentTickers}
+          onToggleFavorite={handleToggleFavorite}
+          isFavorited={isFavorited}
+        />
+      )}
+      {loading ? (
+        <Loading />
+      ) : browse ? (
+        <BrowseView
+          data={browse}
+          onOpenModal={handleOpenModal}
+          isFavorited={isFavorited}
+          onToggleFavorite={handleToggleFavorite}
+        />
+      ) : (
+        <div className='text-destructive'>
+          <h2 className='text-3xl font-semibold pb-6'>Failed to fetch news items</h2>
+          <button onClick={() => setBrowse()}>Retry</button>
+        </div>
+      )}
+    </>
   )
 }
-
 const Loading = () => {
   return (
     <div className='container'>
