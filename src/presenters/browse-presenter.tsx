@@ -38,51 +38,22 @@ function BrowsePresenter() {
     toggleFavorite(user.uid, ticker, title)
   }
 
-  const handleOpenModal = (ticker) => {
-    setSelectedTicker(ticker)
-    setIsModalOpen(true)
-  }
-
   const handleCloseModal = () => {
     setIsModalOpen(false)
     setSelectedTicker(null)
-  }
-
-  const handleRetry = () => {
-    setBrowse()
   }
 
   if (loading) {
     return <Loading />
   }
 
-  return (
-    <>
-      {isModalOpen && (
-        <Modal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          tickers={currentTickers}
-          onToggleFavorite={handleToggleFavorite}
-          isFavorited={isFavorited}
-        />
-      )}
-      {loading ? (
-        <Loading />
-      ) : browse ? (
-        <BrowseView
-          data={browse}
-          onOpenModal={handleOpenModal}
-          isFavorited={isFavorited}
-          onToggleFavorite={handleToggleFavorite}
-        />
-      ) : (
-        <div className='text-destructive'>
-          <h2 className='text-3xl font-semibold pb-6'>Failed to fetch news items</h2>
-          <button onClick={() => setBrowse()}>Retry</button>
-        </div>
-      )}
-    </>
+  return browse ? (
+    <BrowseView data={browse} isFavorited={isFavorited} onToggleFavorite={handleToggleFavorite} />
+  ) : (
+    <div className='text-destructive'>
+      <h2 className='text-3xl font-semibold pb-6'>Failed to fetch news items</h2>
+      <button onClick={handleRetry}>Retry</button>
+    </div>
   )
 }
 const Loading = () => {

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { IconHeartFilled, IconHeart, IconDots } from '@tabler/icons-react'
+import { IconHeartFilled, IconHeart } from '@tabler/icons-react'
 import { cn } from '@/lib/utils'
 
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
