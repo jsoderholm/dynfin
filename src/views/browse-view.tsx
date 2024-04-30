@@ -50,15 +50,11 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite }: BrowseItemProps) =>
         <p className='text-muted-foreground'>{text}</p>
       </CardContent>
       <CardFooter className='flex items-center justify-center'>
-        <Link to='/details/$symbol' params={{ symbol: tickers[0] }}>
-          <Button variant='ghost'>{`View Company Profile for ${tickers[0]}`}</Button>
-        </Link>
         <Dialog>
           <DialogTrigger asChild>
-            <button className='absolute bottom-0 right-0 p-2 m-2'>
-              {' '}
-              <IconDots />{' '}
-            </button>
+            <Button variant='ghost'>
+              <IconDots />
+            </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogTitle>Tickers in the News</DialogTitle>
@@ -79,6 +75,9 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite }: BrowseItemProps) =>
             </DialogClose>
           </DialogContent>
         </Dialog>{' '}
+        <Link to='/details/$symbol' params={{ symbol: tickers[0] }}>
+          <Button variant='ghost'>{`View Company Profile for ${tickers[0]}`}</Button>
+        </Link>
       </CardFooter>
     </Card>
   )
