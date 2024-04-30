@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
-import { IconHeartFilled, IconHeart, IconDots } from '@tabler/icons-react'
-import { Card, CardContent, CardFavorite, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { IconHeartFilled, IconHeart } from '@tabler/icons-react'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { NewsInfo } from '@/lib/api/stock-news'
 import { Link } from '@tanstack/react-router'
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogClose } from '@/components/ui/dialog'
@@ -44,7 +44,6 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite }: BrowseItemProps) =>
     <Card>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        <CardFavorite favorited={favorited} onClick={handleToggleFavorite} aria-label='Favorite Toggler' />
       </CardHeader>
       <CardContent>
         <p className='text-muted-foreground'>{text}</p>
