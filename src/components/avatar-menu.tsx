@@ -1,7 +1,7 @@
-import { IconSettings, IconLogout } from '@tabler/icons-react'
+import { IconSettings, IconLogout, IconUser } from '@tabler/icons-react'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
 import { AuthState } from '@/stores/auth-store'
-import { Avatar, AvatarImage } from './ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,7 +34,10 @@ const AvatarMenu = ({ user, handleSignOut, onSave, settingsForm, modalOpen, onOp
       <DropdownMenu>
         <DropdownMenuTrigger>
           <Avatar>
-            <AvatarImage src={user?.photoURL ?? ''} alt='avatar' />
+            <AvatarImage src={`/${user?.photoURL}` ?? ''} alt='avatar' />
+            <AvatarFallback>
+              <IconUser color='gray' />
+            </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent className='mx-4  my-5'>
@@ -123,7 +126,7 @@ const AvatarFormItem = ({ avatar }: AvatarFormItemProps) => {
           <RadioGroupItem value={avatar} className='sr-only' />
         </FormControl>
         <div className='rounded-full border-2 border-muted hover:border-primary cursor-pointer'>
-          <img src={avatar} className='rounded-full p-1' />
+          <img src={`/${avatar}`} className='rounded-full p-1' />
         </div>
       </FormLabel>
     </FormItem>
