@@ -20,18 +20,20 @@ function DetailsPresenter() {
   const setGraphInfo = useDetailsStore((state) => state.setGraphInfo)
   const graphInfo = useDetailsStore((state) => state.graphInfo)
   const newsListInfo = useDetailsStore((state) => state.newsListInfo)
+  const setNewsListInfo = useDetailsStore((state) => state.setNewsListInfo)
 
   useEffect(() => {
     setCompanyProfile(symbol)
     setGraphInfo(symbol)
-  }, [symbol, setCompanyProfile, setGraphInfo])
+    setNewsListInfo(symbol)
+  }, [symbol, setCompanyProfile, setGraphInfo, setNewsListInfo])
 
   return (
     <div className='container'>
       <div className='space-y-10 py-10 '>
         {companyProfileLoading ? (
           <>
-            <Skeleton className='mb-6 h-10 w-1/4' />
+            <h2 className='text-3xl font-semibold pb-6'>Company Profile</h2>
             <div className='grid grid-cols-1 lg:grid-cols-3 gap-10 h-96 mb-10'>
               <Skeleton className='h-full col-span-1' />
               <Skeleton className='h-full col-span-2' />
@@ -43,22 +45,22 @@ function DetailsPresenter() {
           <ErrorMessage message='Failed to fetch company profile' />
         )}
         {newsListLoading ? (
-          <>
-            <Skeleton className='mb-6 h-10 w-1/4' />
-            <div className='grid grid-cols-4 gap-10 mb-10'>
-              {Array.from({ length: 8 }).map((_, i) => (
-                <Skeleton key={i} className='h-48' />
+          <div>
+            <h2 className='text-3xl font-semibold pb-6'>News</h2>
+            <div className='grid grid-cols-3 gap-10 mb-10'>
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} className='h-72' />
               ))}
             </div>
-          </>
+          </div>
         ) : newsListInfo ? (
-          <NewsListView />
+          <NewsListView data={newsListInfo} />
         ) : (
           <ErrorMessage message='Failed to fetch news list' />
         )}
         {graphInfoLoading ? (
           <>
-            <Skeleton className='mb-6 h-10 w-1/4' />
+            <h2 className='text-3xl font-semibold pb-6'>Graph</h2>
             <div>
               <Skeleton className='h-96' />
             </div>
