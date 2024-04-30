@@ -1,6 +1,5 @@
-import { QueryDocumentSnapshot, collection, doc, getDoc, setDoc } from 'firebase/firestore'
+import { QueryDocumentSnapshot, collection, doc, getDoc, setDoc, FirestoreDataConverter } from 'firebase/firestore'
 import { db } from './firebase'
-import { FirestoreDataConverter } from 'firebase/firestore'
 import { CompanyProfile, GraphInfo } from './api/finage'
 import { NewsInfo } from './api/stock-news'
 import { AuthState } from '@/stores/auth-store'

@@ -5,16 +5,19 @@ import { SheetTrigger, SheetContent, SheetHeader, SheetTitle, Sheet } from './ui
 import { Link } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
-import AvatarMenu from './avatar-menu'
+import AvatarMenu, { AvatarMenuProps } from './avatar-menu'
 
-export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
+export type HeaderProps = {
   className?: string
   user: AuthState['user']
   hideBackButton: boolean
   handleSignOut: () => void
-}
+} & React.HTMLAttributes<HTMLElement> &
+  AvatarMenuProps
 
-const Header = ({ className, user, handleSignOut, hideBackButton }: HeaderProps) => {
+const Header = (props: HeaderProps) => {
+  const { className, hideBackButton } = props
+
   return (
     <header className={cn('sticky flex top-0 bg-white z-10 border-b h-16', className)}>
       <div className={cn('flex items-center flex-1 justify-between h-full px-4', hideBackButton && 'md:justify-end')}>
@@ -56,7 +59,7 @@ const Header = ({ className, user, handleSignOut, hideBackButton }: HeaderProps)
             <IconArrowLeft />
           </Button>
         </Link>
-        <AvatarMenu user={user} handleSignOut={handleSignOut} />
+        <AvatarMenu {...props} />
       </div>
     </header>
   )
