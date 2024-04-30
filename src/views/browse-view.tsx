@@ -3,7 +3,7 @@ import { IconHeartFilled, IconHeart } from '@tabler/icons-react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { NewsInfo } from '@/lib/api/stock-news'
 import { Link } from '@tanstack/react-router'
-import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogClose } from '@/components/ui/dialog'
+import { Dialog, DialogTrigger, DialogContent, DialogTitle } from '@/components/ui/dialog'
 
 interface FavoriteItemProps {
   isFavorited: (ticker: string) => boolean
@@ -39,11 +39,11 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite }: BrowseItemProps) =>
   }
 
   return (
-    <Card className="flex flex-col">
+    <Card className='flex flex-col'>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
-      <CardContent className="flex-grow">
+      <CardContent className='flex-grow'>
         <p className='text-muted-foreground'>{text}</p>
       </CardContent>
       <CardFooter className='flex items-center justify-center'>
