@@ -13,8 +13,6 @@ function BrowsePresenter() {
     setSaved: state.setSaved,
     savedLoading: state.savedLoading,
   }))
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [selectedTicker, setSelectedTicker] = useState(null)
 
   const browse = useBrowseStore((state) => state.browse)
   const setBrowse = useBrowseStore((state) => state.setBrowse)
@@ -38,9 +36,8 @@ function BrowsePresenter() {
     toggleFavorite(user.uid, ticker, title)
   }
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false)
-    setSelectedTicker(null)
+  const handleRetry = () => {
+    setBrowse()
   }
 
   if (loading) {
