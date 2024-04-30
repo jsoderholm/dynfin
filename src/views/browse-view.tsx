@@ -34,8 +34,6 @@ interface BrowseItemProps extends FavoriteItemProps {
 const BrowseItem = ({ info, isFavorited, onToggleFavorite }: BrowseItemProps) => {
   const { title, text, tickers } = info
 
-  const favorited = isFavorited(tickers[0])
-
   const handleToggleFavorite = () => {
     onToggleFavorite(tickers[0], title)
   }
