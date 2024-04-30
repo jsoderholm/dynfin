@@ -43,7 +43,7 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite }: BrowseItemProps) =>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-grow">
         <p className='text-muted-foreground'>{text}</p>
       </CardContent>
       <CardFooter className='flex items-center justify-center'>
