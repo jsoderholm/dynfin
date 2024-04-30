@@ -1,5 +1,5 @@
 import { CompanyProfile, GraphInfo, getCompanyProfileFromFinage, getGraphInfoFromFinage } from '@/lib/api/finage'
-import { NewsInfo } from '@/lib/api/stock-news'
+import { NewsInfo, getNewsInfoBySymbolFromStockNews } from '@/lib/api/stock-news'
 import {
   getCompanyProfileFromFirestore,
   getGraphInfoFromFirestore,
@@ -72,12 +72,12 @@ const useDetailsStore = create<DetailsState>((set) => ({
   graphInfoLoading: false,
 
   newsListInfo: null,
-  setNewsListInfo: async () => {
+
+  setNewsListInfo: async (symbol: string) => {
     set({ newsListLoading: true })
     try {
-      const response = await fetch('/news.json')
-      const newsListInfo = await response.json()
-      set({ newsListInfo })
+      const data = await getNewsInfoBySymbolFromStockNews(symbol)
+      set({ newsListInfo: data })
     } catch (error) {
       console.error('Failed to fetch news list:', error)
     } finally {
