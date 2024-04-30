@@ -65,9 +65,6 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite }: BrowseItemProps) =>
                 ))}
               </tbody>
             </table>
-            <DialogClose asChild>
-              <button className='button'>X</button>
-            </DialogClose>
           </DialogContent>
         </Dialog>
         <Link to='/details/$symbol' params={{ symbol: tickers[0] }}>
