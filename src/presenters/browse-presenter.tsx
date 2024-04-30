@@ -1,7 +1,7 @@
 import useBrowseStore from '@/stores/browse-store'
 import BrowseView from '@/views/browse-view'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import useAuthStore from '@/stores/auth-store'
 import useSavedStore from '@/stores/saved-store'
 

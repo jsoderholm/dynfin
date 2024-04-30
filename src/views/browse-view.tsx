@@ -67,10 +67,7 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite }: BrowseItemProps) =>
                 {tickers.map((ticker, index) => (
                   <tr key={index}>
                     <td>{ticker}</td>
-                    <td
-                      onClick={() => onToggleFavorite(userID, ticker, `Company Name for ${ticker}`)}
-                      className='cursor-pointer'
-                    >
+                    <td onClick={() => handleToggleFavorite} className='cursor-pointer'>
                       {isFavorited(ticker) ? <IconHeartFilled /> : <IconHeart />}
                     </td>
                   </tr>
