@@ -69,7 +69,7 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite }: BrowseItemProps) =>
               <button className='button'>X</button>
             </DialogClose>
           </DialogContent>
-        </Dialog>{' '}
+        </Dialog>
         <Link to='/details/$symbol' params={{ symbol: tickers[0] }}>
           <Button variant='ghost'>{`View Company Profile for ${tickers[0]}`}</Button>
         </Link>
