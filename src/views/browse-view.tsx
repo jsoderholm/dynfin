@@ -68,7 +68,7 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite }: BrowseItemProps) =>
               </tbody>
             </table>
             <DialogClose asChild>
-              <button className='button'>Close</button>
+              <button className='button'>X</button>
             </DialogClose>
           </DialogContent>
         </Dialog>{' '}
