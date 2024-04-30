@@ -52,9 +52,7 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite }: BrowseItemProps) =>
       <CardFooter className='flex items-center justify-center'>
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant='ghost'>
-              <IconDots />
-            </Button>
+            <Button variant='ghost'>Show tickers</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogTitle>Tickers in the News</DialogTitle>
