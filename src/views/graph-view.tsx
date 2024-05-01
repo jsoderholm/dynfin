@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { GraphInfo } from '@/lib/api/finage'
 import { IconRefresh } from '@tabler/icons-react'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
@@ -14,18 +14,15 @@ function GraphView({ info, onRefresh }: GraphViewProps) {
 
   return (
     <div>
-      <h2 className='text-3xl font-semibold pb-6'>Graph</h2>
+      <div className='flex justify-between'>
+        <h2 className='text-3xl font-semibold pb-6'>Performance</h2>
+        <Button onClick={onRefresh} size='icon' variant='secondary'>
+          <IconRefresh />
+        </Button>
+      </div>
       <div>
         <Card>
-          <CardHeader>
-            <div className='flex items-center justify-between'>
-              <CardTitle>Performance</CardTitle>
-              <Button onClick={onRefresh} variant='ghost'>
-                <IconRefresh className='stroke-muted-foreground' />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
+          <CardContent className='py-12'>
             <ResponsiveContainer width='100%' height={500}>
               <AreaChart width={500} height={400} data={results}>
                 <defs>
