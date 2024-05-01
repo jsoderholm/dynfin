@@ -7,8 +7,26 @@ import GraphView from '@/views/graph-view'
 import NewsListView from '@/views/news-list-view'
 import { getRouteApi } from '@tanstack/react-router'
 import { useEffect } from 'react'
+import { create } from 'zustand'
 
 const route = getRouteApi('/_auth/details/$symbol')
+
+interface GraphFilterStateProps {
+  interval: string
+  setInterval: (value: string) => void
+  checked: string[]
+  setChecked: (value: string) => void
+}
+
+const useGraphFilter = create<GraphFilterStateProps>((set, get) => ({
+  interval: '14',
+  setInterval: (value) => set({ interval: value }),
+  checked: ['h', 'l', 'c'],
+  setChecked: (value) =>
+    get().checked.includes(value)
+      ? set({ checked: get().checked.filter((item) => item !== value) })
+      : set({ checked: [...get().checked, value] }),
+}))
 
 function DetailsPresenter() {
   const { symbol } = route.useParams()
@@ -26,6 +44,7 @@ function DetailsPresenter() {
 
   const { user } = useAuthStore()
   const { toggleFavorite, saved, setSaved } = useSavedStore()
+  const { interval, setInterval, checked, setChecked } = useGraphFilter()
 
   useEffect(() => {
     if (!user) {
@@ -67,7 +86,14 @@ function DetailsPresenter() {
             </div>
           </>
         ) : graphInfo ? (
-          <GraphView info={graphInfo} onRefresh={() => setGraphInfo(symbol, true)} />
+          <GraphView
+            info={graphInfo}
+            onRefresh={() => setGraphInfo(symbol, true)}
+            interval={interval}
+            setInterval={setInterval}
+            checked={checked}
+            setChecked={setChecked}
+          />
         ) : (
           <ErrorMessage message='Failed to fetch graph info' />
         )}
