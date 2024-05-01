@@ -10,9 +10,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { TooltipProvider, TooltipTrigger, Tooltip, TooltipContent } from '@/components/ui/tooltip'
 import { GraphInfo } from '@/lib/api/finage'
 import { IconFilter, IconRefresh } from '@tabler/icons-react'
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip as GraphTooltip } from 'recharts'
 
 interface GraphViewProps {
   info: GraphInfo
@@ -32,9 +33,18 @@ function GraphView({ info, onRefresh, interval, setInterval, checked, setChecked
     <div>
       <div className='flex justify-between'>
         <h2 className='text-3xl font-semibold pb-6'>Performance</h2>
-        <Button onClick={onRefresh} size='icon' variant='secondary'>
-          <IconRefresh />
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button onClick={onRefresh} size='icon' variant='secondary'>
+                <IconRefresh />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Refresh</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
       <div>
         <Card>
@@ -104,7 +114,7 @@ function GraphView({ info, onRefresh, interval, setInterval, checked, setChecked
                 <CartesianGrid strokeDasharray='3 3' />
                 <XAxis dataKey='name' />
                 <YAxis domain={['dataMin', 'dataMax']} />
-                <Tooltip />
+                <GraphTooltip />
                 {checked.includes('h') && (
                   <Area type='monotone' dataKey='h' stroke='hsl(var(--primary))' fillOpacity={1} fill='url(#colorH)' />
                 )}
