@@ -38,6 +38,23 @@ export async function getNewsInfoFromStockNews(): Promise<NewsInfo[]> {
   }
 }
 
+export async function getTrendingNewsInfoFromStockNews(): Promise<NewsInfo[]> {
+  const params = new URLSearchParams({
+    token: import.meta.env.VITE_STOCKNEWS_API_KEY,
+  })
+  const url = `${BASE_URL}trending-headlines?${params}`
+
+  try {
+    const response = await axios.get(url)
+    const response_data: Meta = {
+      ...response.data,
+    }
+    return response_data.data
+  } catch (e) {
+    throw new Error(`Failed to fetch company profile from Stocknewsapi: ${e}`)
+  }
+}
+
 //     "uuid": "090839fb-5cd9-49d8-a8bd-c8e178bf2909",
 //     "title": "UN adopts first global artificial intelligence resolution By Reuters",
 //     "description": "UN adopts first global artificial intelligence resolution",

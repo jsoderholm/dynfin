@@ -59,9 +59,11 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite, userLoggedIn }: Brows
       <CardFooter className='flex items-center justify-center'>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant='ghost'>Tickers</Button>
+            <Button className='outline-none' variant='ghost'>
+              Tickers
+            </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className='w-10'>
+          <DropdownMenuContent>
             {tickers.map((ticker, index) => (
               <DropdownMenuItem key={index} className='justify-between'>
                 <Link to='/details/$symbol' params={{ symbol: ticker }}>
