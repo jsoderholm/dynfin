@@ -67,7 +67,7 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite }: BrowseItemProps) =>
                 <span
                   onClick={(e) => {
                     e.stopPropagation()
-                    handleToggleFavorite
+                    handleToggleFavorite()
                   }}
                 >
                   {isFavorited(ticker) ? <IconHeartFilled /> : <IconHeart />}
