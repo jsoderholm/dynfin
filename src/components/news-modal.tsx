@@ -16,9 +16,6 @@ const NewsModal: React.FC<NewsModalProps> = ({ title, content }) => {
       <DialogContent>
         <DialogTitle>{title}</DialogTitle>
         <p>{content}</p>
-        <DialogClose asChild>
-          <button variant='ghost'>x</button>
-        </DialogClose>
       </DialogContent>
     </Dialog>
   )
