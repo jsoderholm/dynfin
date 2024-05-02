@@ -1,6 +1,6 @@
 import React from 'react'
 import { Dialog, DialogContent, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog'
-import { Button } from '@/ui/button'
+import { Button } from './ui/button'
 
 interface NewsModalProps {
   title: string
@@ -17,7 +17,7 @@ const NewsModal: React.FC<NewsModalProps> = ({ title, content }) => {
         <DialogTitle>{title}</DialogTitle>
         <p>{content}</p>
         <DialogClose asChild>
-          <button variant='ghost'>{'x'}</button>
+          <button variant='ghost'>x</button>
         </DialogClose>
       </DialogContent>
     </Dialog>
