@@ -3,7 +3,6 @@ import { Card, CardContent, CardFavorite, CardFooter, CardHeader, CardTitle } fr
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { NewsInfo } from '@/lib/api/stock-news'
 import { Link } from '@tanstack/react-router'
-
 interface FavoriteItemProps {
   isFavorited: (ticker: string) => boolean
   onToggleFavorite: (ticker: string, title: string) => void
