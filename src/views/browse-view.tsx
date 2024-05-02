@@ -1,44 +1,66 @@
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardFavorite, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { NewsInfo } from '@/lib/api/stock-news'
 import { Link } from '@tanstack/react-router'
 
-const symbols = ['AAPL', 'GOOGL', 'TSLA', 'AMZN', 'MSFT', 'PLTR']
+interface FavoriteItemProps {
+  isFavorited: (ticker: string) => boolean
+  onToggleFavorite: (ticker: string, title: string) => void
+  userLoggedIn: boolean
+}
 
-function BrowseView() {
+interface NewsInfoProps extends FavoriteItemProps {
+  data: NewsInfo[]
+}
+
+function BrowseView({ data, isFavorited, onToggleFavorite, userLoggedIn }: NewsInfoProps) {
   return (
     <div className='container py-10'>
       <h2 className='text-3xl font-semibold pb-6'>Browse</h2>
       <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
-        {Array.from({ length: 6 }).map((_, i) => (
-          <BrowseItem key={i} i={i} />
+        {Array.from(data).map((item) => (
+          <BrowseItem
+            info={item}
+            isFavorited={isFavorited}
+            onToggleFavorite={onToggleFavorite}
+            userLoggedIn={userLoggedIn}
+          />
         ))}
       </div>
     </div>
   )
 }
 
-interface BrowseItemProps {
-  i: number
+interface BrowseItemProps extends FavoriteItemProps {
+  info: NewsInfo
 }
 
-const BrowseItem = ({ i }: BrowseItemProps) => {
+const BrowseItem = ({ info, isFavorited, onToggleFavorite, userLoggedIn }: BrowseItemProps) => {
+  const { title, text, tickers } = info
+
+  // Ensure user is logged in before allowing toggle
+  if (!userLoggedIn) {
+    return <p>Please log in to manage favorites.</p>
+  }
+
+  const favorited = isFavorited(tickers[0])
+
+  const handleToggleFavorite = () => {
+    onToggleFavorite(tickers[0], title)
+  }
+
   return (
     <Card>
-      <CardHeader className='flex justify-between items-center'>
-        <div className='flex-grow'>
-          <CardTitle>{`News Item ${i + 1}: ${symbols[i]}`}</CardTitle>
-        </div>
-        <Button variant='favorite' className='ml-auto'>Favorite</Button>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+        <CardFavorite favorited={favorited} onClick={handleToggleFavorite} aria-label='Favorite Toggler' />
       </CardHeader>
       <CardContent>
-        <p className='text-muted-foreground'>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore
-          magna aliqua.
-        </p>
+        <p className='text-muted-foreground'>{text}</p>
       </CardContent>
       <CardFooter className='flex items-center justify-center'>
-        <Link to='/details/$symbol' params={{ symbol: symbols[i] }}>
-          <Button variant='ghost'>{`View Company Profile for ${symbols[i]}`}</Button>
+        <Link to='/details/$symbol' params={{ symbol: tickers[0] }}>
+          <Button variant='ghost'>{`View Company Profile for ${tickers[0]}`}</Button>
         </Link>
       </CardFooter>
     </Card>

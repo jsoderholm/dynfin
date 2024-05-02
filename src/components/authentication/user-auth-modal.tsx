@@ -5,11 +5,11 @@ import GitHubButton from './github-button'
 import { useForm } from 'react-hook-form'
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '../ui/form'
 import { z } from 'zod'
-import { schema } from '@/presenters/authentication-presenter'
+import { AuthFormSchema } from '@/presenters/authentication-presenter'
 
 export type UserAuthModalProps = {
-  loginForm: ReturnType<typeof useForm<z.infer<typeof schema>>>
-  onLogin: (values: z.infer<typeof schema>) => Promise<void>
+  loginForm: ReturnType<typeof useForm<z.infer<typeof AuthFormSchema>>>
+  onLogin: (values: z.infer<typeof AuthFormSchema>) => Promise<void>
   onGitHub: () => Promise<void>
   open: boolean
   onOpenChange: (open: boolean) => void

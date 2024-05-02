@@ -1,5 +1,5 @@
 import * as React from 'react'
-
+import { IconHeartFilled, IconHeart } from '@tabler/icons-react'
 import { cn } from '@/lib/utils'
 
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
@@ -13,6 +13,21 @@ const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
   ),
 )
 CardHeader.displayName = 'CardHeader'
+
+const CardFavorite = React.forwardRef<
+  HTMLButtonElement,
+  React.ButtonHTMLAttributes<HTMLButtonElement> & { favorited: boolean }
+>(({ className, favorited, ...props }, ref) => (
+  <button
+    ref={ref}
+    className={`focus:outline-none ${favorited ? 'text-black-000' : 'text-gray-400'} ${className}`}
+    {...props}
+  >
+    {favorited ? <IconHeartFilled size={24} /> : <IconHeart size={24} />} {/* Render icons as React components */}
+  </button>
+))
+
+CardFavorite.displayName = 'CardFavorite'
 
 const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
   ({ className, ...props }, ref) => (
@@ -40,4 +55,4 @@ const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
 )
 CardFooter.displayName = 'CardFooter'
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+export { Card, CardHeader, CardFavorite, CardFooter, CardTitle, CardDescription, CardContent }

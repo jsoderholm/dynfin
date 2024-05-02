@@ -4,11 +4,11 @@ import GitHubButton from './github-button'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { schema } from '@/presenters/authentication-presenter'
+import { AuthFormSchema } from '@/presenters/authentication-presenter'
 
 export type UserAuthFormProps = {
-  registerForm: ReturnType<typeof useForm<z.infer<typeof schema>>>
-  onRegister: (values: z.infer<typeof schema>) => Promise<void>
+  registerForm: ReturnType<typeof useForm<z.infer<typeof AuthFormSchema>>>
+  onRegister: (values: z.infer<typeof AuthFormSchema>) => Promise<void>
   onGitHub: () => Promise<void>
 }
 
