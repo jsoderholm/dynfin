@@ -2,18 +2,17 @@ import { cn } from '@/lib/utils'
 import { Link } from '@tanstack/react-router'
 
 import React from 'react'
-import { IconArrowRight, IconHeart, IconHexagonLetterD, IconLogout, IconNews } from '@tabler/icons-react'
+import { IconArrowRight, IconHeart, IconHexagonLetterD, IconNews } from '@tabler/icons-react'
 import { Button } from './ui/button'
 import { SidebarState } from '@/presenters/app-shell-presenter'
 
 export interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   className?: string
-  handleSignOut: () => void
   collapsed: SidebarState['collapsed']
   setCollapsed: SidebarState['setCollapsed']
 }
 
-const Sidebar = ({ className, handleSignOut, collapsed, setCollapsed }: SidebarProps) => {
+const Sidebar = ({ className, collapsed, setCollapsed }: SidebarProps) => {
   return (
     <aside className={cn('h-screen sticky top-0 w-48 transition-all duration-200', collapsed && 'w-28', className)}>
       <div className='flex h-full flex-col overflow-y-auto border-r px-3 py-4'>
@@ -46,16 +45,10 @@ const Sidebar = ({ className, handleSignOut, collapsed, setCollapsed }: SidebarP
             </Link>
           </li>
         </ul>
-        <div className='flex flex-col items-center space-y-2 mt-auto'>
-          <Button className='w-full' variant='ghost' onClick={() => setCollapsed(!collapsed)}>
-            <IconArrowRight className={cn('h-6 w-6', collapsed ? 'rotate-0' : 'rotate-180')} />
-            <span className={cn('ml-3 whitespace-nowrap', collapsed && 'hidden')}>Collapse</span>
-          </Button>
-          <Button className='w-full' variant='ghost' onClick={handleSignOut}>
-            <IconLogout className='h-6 w-6 ' />
-            <span className={cn('ml-3 whitespace-nowrap', collapsed && 'hidden')}>Logout</span>
-          </Button>
-        </div>
+        <Button className='w-full mt-auto' variant='ghost' onClick={() => setCollapsed(!collapsed)}>
+          <IconArrowRight className={cn('h-6 w-6', collapsed ? 'rotate-0' : 'rotate-180')} />
+          <span className={cn('ml-3 whitespace-nowrap', collapsed && 'hidden')}>Collapse</span>
+        </Button>
       </div>
     </aside>
   )

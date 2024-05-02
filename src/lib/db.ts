@@ -1,7 +1,7 @@
-import { QueryDocumentSnapshot, collection, doc, getDoc, setDoc } from 'firebase/firestore'
+import { QueryDocumentSnapshot, collection, doc, getDoc, setDoc, FirestoreDataConverter } from 'firebase/firestore'
 import { db } from './firebase'
-import { FirestoreDataConverter } from 'firebase/firestore'
 import { CompanyProfile, GraphInfo } from './api/finage'
+import { NewsInfo } from './api/stock-news'
 import { AuthState } from '@/stores/auth-store'
 import { UserCredential } from 'firebase/auth'
 
@@ -25,10 +25,16 @@ const graphConverter: FirestoreDataConverter<GraphInfo> = {
   fromFirestore: (snap: QueryDocumentSnapshot) => snap.data() as GraphInfo,
 }
 
+const newsInfoConverter: FirestoreDataConverter<NewsInfo> = {
+  toFirestore: (data: NewsInfo) => data,
+  fromFirestore: (snap: QueryDocumentSnapshot) => snap.data() as NewsInfo,
+}
+
 const firestore = {
   companies: collection(db, 'companies').withConverter(companyProfileConverter),
   graphs: collection(db, 'graphs').withConverter(graphConverter),
   users: collection(db, 'users').withConverter(userConverter),
+  news: collection(db, 'news').withConverter(newsInfoConverter),
 }
 
 export async function getCompanyProfileFromFirestore(symbol: string) {
@@ -61,4 +67,46 @@ export async function createUserInFirestore(credentials: UserCredential, data: U
   }
 
   await setDoc(docRef, data)
+}
+
+export async function addCompanyToSaved(uid: string, companySymbol: string) {
+  const userRef = doc(firestore.users, uid)
+  const docSnap = await getDoc(userRef)
+
+  if (docSnap.exists()) {
+    const userData: UserData = docSnap.data() as UserData
+    const updatedSaved = [...userData.saved, companySymbol]
+    await setDoc(userRef, { ...userData, saved: updatedSaved }, { merge: true })
+  } else {
+    console.log('User not found, cannot add saved company.')
+  }
+}
+
+export async function removeCompanyFromSaved(uid: string, companySymbol: string) {
+  const userRef = doc(firestore.users, uid)
+  const docSnap = await getDoc(userRef)
+
+  if (docSnap.exists()) {
+    const userData: UserData = docSnap.data() as UserData
+    const updatedSaved = userData.saved.filter((sym) => sym !== companySymbol) // Filter out the symbol
+    await setDoc(userRef, { ...userData, saved: updatedSaved }, { merge: true })
+  } else {
+    console.log('User not found, cannot remove saved company.')
+  }
+}
+
+export const fetchSavedCompanies = async (uid: string) => {
+  const userRef = doc(firestore.users, uid)
+  const docSnap = await getDoc(userRef)
+  if (docSnap.exists() && docSnap.data().saved) {
+    const userData = docSnap.data() as UserData // Type assertion for better type safety
+    const savedData: { symbol: string; name: string }[] = userData.saved.map((symbol: string) => ({
+      symbol,
+      name: '',
+    }))
+    return savedData
+  } else {
+    console.error('No such user or no saved data found')
+    return []
+  }
 }
