@@ -73,9 +73,7 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite, userLoggedIn }: Brows
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        <Link to='/details/$symbol' params={{ symbol: tickers[0] }}>
-          <Button variant='ghost'>{`Read more`}</Button>
-        </Link>
+        <NewsModal title={title} content={text} />
       </CardFooter>
     </Card>
   )
