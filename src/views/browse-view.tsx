@@ -54,12 +54,12 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite }: BrowseItemProps) =>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem as='div' className='font-bold'>
-              Tickers in the News
+            <DropdownMenuItem className='font-bold'>
+              <div>Tickers in the News</div>
             </DropdownMenuItem>
             {tickers.map((ticker, index) => (
               <DropdownMenuItem key={index} className='flex justify-between'>
-                <Link to={`/details/${ticker}`}>
+                <Link to='/details/$symbol' params={{ symbol: ticker }}>
                   <Badge color='black' variant='outline'>
                     {ticker}
                   </Badge>
@@ -67,7 +67,7 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite }: BrowseItemProps) =>
                 <span
                   onClick={(e) => {
                     e.stopPropagation()
-                    onToggleFavorite(ticker, title)
+                    handleToggleFavorite
                   }}
                 >
                   {isFavorited(ticker) ? <IconHeartFilled /> : <IconHeart />}
