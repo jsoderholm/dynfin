@@ -44,19 +44,17 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite, userLoggedIn }: Brows
     return <p>Please log in to manage favorites.</p>
   }
 
-  const favorited = isFavorited(tickers[0])
-
-  const handleToggleFavorite = () => {
-    onToggleFavorite(tickers[0], title)
+  const handleToggleFavorite = (ticker: string) => {
+    onToggleFavorite(ticker, title)
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{title.slice(0, title.lastIndexOf(' ', 50)) + '...'}</CardTitle>
+        <CardTitle>{<p className='line-clamp-2'>{title}</p>}</CardTitle>
       </CardHeader>
       <CardContent>
-        <p className='text-muted-foreground'>{text.slice(0, text.lastIndexOf(' ', 100)) + '...'}</p>
+        <p className='line-clamp-3 text-muted-foreground'>{text}</p>
       </CardContent>
       <CardFooter className='flex items-center justify-center'>
         <DropdownMenu>
@@ -69,7 +67,11 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite, userLoggedIn }: Brows
                 <Link to='/details/$symbol' params={{ symbol: ticker }}>
                   {ticker}
                 </Link>
-                <CardFavorite favorited={favorited} onClick={handleToggleFavorite} aria-label='Favorite Toggler' />
+                <CardFavorite
+                  favorited={isFavorited(ticker)}
+                  onClick={() => handleToggleFavorite(ticker)}
+                  aria-label='Favorite Toggler'
+                />
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
