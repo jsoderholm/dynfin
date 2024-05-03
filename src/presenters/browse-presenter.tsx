@@ -56,12 +56,13 @@ function BrowsePresenter() {
 
 const Loading = () => {
   return (
-    <div className='container my-10'>
+    <div className='container py-10'>
       <div>
         <div>
           <Skeleton className='h-10 w-28 rounded' />
         </div>
-        <div className='my-5 grid gap-6 grid-cols-3'>
+        <br />
+        <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
           {Array.from({ length: 6 }).map((_, i) => (
             <Skeleton key={i} className='h-64' />
           ))}
