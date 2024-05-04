@@ -74,7 +74,7 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite, userLoggedIn }: Brows
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        <NewsModal title={title} content={text} />
+        <NewsModal news={info} />
       </CardFooter>
     </Card>
   )
