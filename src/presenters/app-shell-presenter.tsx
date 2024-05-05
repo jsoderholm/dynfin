@@ -37,7 +37,7 @@ export const SettingsFormSchema = z.object({
 const AppShellPresenter = () => {
   const navigate = useNavigate()
 
-  const { user, logout } = useAuthStore()
+  const { user, logout, deleteUser } = useAuthStore()
   const { collapsed, setCollapsed } = useSidebarStore()
   const { open, onOpenChange } = useSettingsModalStore()
   const router = useRouterState()
@@ -79,6 +79,7 @@ const AppShellPresenter = () => {
       onSave={onSubmit}
       modalOpen={open}
       onOpenChange={onOpenChange}
+      deleteUser={deleteUser}
     >
       <Outlet />
     </AppShell>
