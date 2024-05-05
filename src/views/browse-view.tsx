@@ -24,13 +24,29 @@ interface NewsInfoProps extends FavoriteItemProps {
   data: CombinedInfo[]
   onPageChange: (newPage: number) => void
   currentPage: number
+  currentTab: string
+  onSetTab: (newTab: string) => void
 }
 
-function BrowseView({ data, isFavorited, onToggleFavorite, userLoggedIn, currentPage, onPageChange }: NewsInfoProps) {
+function BrowseView({
+  data,
+  isFavorited,
+  onToggleFavorite,
+  userLoggedIn,
+  currentPage,
+  onPageChange,
+  currentTab,
+  onSetTab,
+}: NewsInfoProps) {
+  const handleTabChange = (newTab: string) => {
+    onSetTab(newTab)
+    onPageChange(1)
+  }
+
   return (
     <div className='container py-10'>
       <h2 className='text-3xl font-semibold pb-6'>Browse</h2>
-      <Tabs defaultValue='all'>
+      <Tabs defaultValue={currentTab} onValueChange={handleTabChange}>
         <TabsList className='my-6'>
           <TabsTrigger value='all'>All News</TabsTrigger>
           <TabsTrigger value='trending'>Trending</TabsTrigger>
@@ -88,6 +104,8 @@ function BrowseView({ data, isFavorited, onToggleFavorite, userLoggedIn, current
           isFavorited={isFavorited}
           onToggleFavorite={onToggleFavorite}
           userLoggedIn={userLoggedIn}
+          currentTab={currentTab}
+          onSetTab={onSetTab}
         />
       </Pagination>
     </div>

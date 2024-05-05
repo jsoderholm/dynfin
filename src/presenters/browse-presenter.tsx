@@ -4,6 +4,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useEffect } from 'react'
 import useAuthStore from '@/stores/auth-store'
 import useSavedStore from '@/stores/saved-store'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 function BrowsePresenter() {
   const { user } = useAuthStore()
@@ -20,6 +21,8 @@ function BrowsePresenter() {
   const loading = browseLoading || savedLoading
   const currentPage = useBrowseStore((state) => state.currentPage)
   const setPage = useBrowseStore((state) => state.setPage)
+  const currentTab = useBrowseStore((state) => state.currentTab)
+  const setTab = useBrowseStore((state) => state.setTab)
 
   useEffect(() => {
     if (user) {
@@ -34,6 +37,10 @@ function BrowsePresenter() {
   useEffect(() => {
     setPage(currentPage)
   }, [setPage])
+
+  useEffect(() => {
+    setTab(currentTab)
+  }, [setTab])
 
   const handleToggleFavorite = (ticker: string, title: string) => {
     if (!user) {
@@ -50,8 +57,12 @@ function BrowsePresenter() {
     setPage(currentPage)
   }
 
+  const handleTabChange = (currentTab: string) => {
+    setTab(currentTab)
+  }
+
   if (loading) {
-    return <Loading />
+    return <Loading currentTab={currentTab} />
   }
 
   return browse ? (
@@ -63,6 +74,8 @@ function BrowsePresenter() {
         userLoggedIn={!!user}
         currentPage={currentPage}
         onPageChange={handlePageChange}
+        currentTab={currentTab}
+        onSetTab={handleTabChange}
       />
     </div>
   ) : (
@@ -73,13 +86,22 @@ function BrowsePresenter() {
   )
 }
 
-const Loading = () => {
+interface LoadingProps {
+  currentTab: string
+}
+
+const Loading = ({ currentTab }: LoadingProps) => {
   return (
     <div className='container py-10'>
+      <h2 className='text-3xl font-semibold pb-6'>Browse</h2>
       <div>
-        <div>
-          <Skeleton className='h-10 w-28 rounded' />
-        </div>
+        <Tabs defaultValue={currentTab}>
+          <TabsList className='my-6'>
+            <TabsTrigger value='all'>All News</TabsTrigger>
+            <TabsTrigger value='trending'>Trending</TabsTrigger>
+            <TabsTrigger value='saved'>Saved</TabsTrigger>
+          </TabsList>
+        </Tabs>
         <br />
         <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
           {Array.from({ length: 6 }).map((_, i) => (

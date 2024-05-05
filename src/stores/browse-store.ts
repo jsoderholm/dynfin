@@ -7,6 +7,8 @@ interface BrowseState {
   browseLoading: boolean
   currentPage: number
   setPage: (page: number) => void
+  currentTab: string
+  setTab: (tab: string) => void
 }
 
 const useBrowseStore = create<BrowseState>((set) => ({
@@ -26,6 +28,8 @@ const useBrowseStore = create<BrowseState>((set) => ({
   browseLoading: false,
   currentPage: 1,
   setPage: (page) => set({ currentPage: page }),
+  currentTab: 'all',
+  setTab: (tab) => set({ currentTab: tab }),
 }))
 
 export default useBrowseStore
