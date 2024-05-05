@@ -11,11 +11,11 @@ export interface AuthState {
   user: User | null
   login: (credentials: Credentials) => Promise<boolean>
   logout: () => Promise<void>
-  deleteUser: () => Promise<boolean>
+  deleteUser: () => Promise<void>
   saved: string[]
 }
 
-const useAuthStore = create<AuthState>()(() => ({
+const useAuthStore = create<AuthState>()((_, get) => ({
   user: null,
   login: async (credentials: Credentials) => {
     const { email, password } = credentials
@@ -37,19 +37,15 @@ const useAuthStore = create<AuthState>()(() => ({
   },
   saved: [],
   deleteUser: async () => {
-    if (!auth.currentUser) {
-      console.error('No user logged in');
-      return false;
+    const user = get().user
+    if (!user) {
+      return
     }
     try {
-      await firebaseDeleteUser(auth.currentUser);
-      useAuthStore.setState({ user: null, saved: [] });
-  
-      console.log('User account deleted successfully');
-      return true;
+      await firebaseDeleteUser(user)
+      useAuthStore.setState({ user: null, saved: [] })
     } catch (error) {
-      console.error('Error deleting user:', error);
-      return false;
+      console.error('Error deleting user:', error)
     }
   },
 }))

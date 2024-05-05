@@ -1,5 +1,13 @@
 import { IconSettings, IconLogout, IconUser } from '@tabler/icons-react'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from './ui/dialog'
 import { AuthState } from '@/stores/auth-store'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import {
@@ -15,12 +23,24 @@ import { z } from 'zod'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import { useForm } from 'react-hook-form'
 import { Input } from './ui/input'
-import { Button } from './ui/button'
+import { Button, buttonVariants } from './ui/button'
 import { RadioGroup, RadioGroupItem } from './ui/radio-group'
 import { SettingsFormSchema } from '@/presenters/app-shell-presenter'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from './ui/alert-dialog'
 
 export type AvatarMenuProps = {
   user: AuthState['user']
+  deleteUser: AuthState['deleteUser']
   handleSignOut: () => void
   settingsForm: ReturnType<typeof useForm<z.infer<typeof SettingsFormSchema>>>
   onSave: (values: z.infer<typeof SettingsFormSchema>) => Promise<void>
@@ -28,7 +48,15 @@ export type AvatarMenuProps = {
   onOpenChange: (open: boolean) => void
 }
 
-const AvatarMenu = ({ user, handleSignOut, onSave, settingsForm, modalOpen, onOpenChange }: AvatarMenuProps) => {
+const AvatarMenu = ({
+  user,
+  handleSignOut,
+  onSave,
+  settingsForm,
+  modalOpen,
+  onOpenChange,
+  deleteUser,
+}: AvatarMenuProps) => {
   return (
     <Dialog open={modalOpen} onOpenChange={onOpenChange}>
       <DropdownMenu>
@@ -87,14 +115,14 @@ const AvatarMenu = ({ user, handleSignOut, onSave, settingsForm, modalOpen, onOp
               control={settingsForm.control}
               name='avatar'
               render={({ field }) => (
-                <FormItem className='space-y-1'>
+                <FormItem>
                   <FormLabel>Avatar</FormLabel>
                   <FormDescription>This is your public avatar.</FormDescription>
                   <FormMessage />
                   <RadioGroup
                     onValueChange={field.onChange}
                     defaultValue={field.value}
-                    className='grid max-w-md grid-cols-4 gap-8 pt-2'
+                    className='grid max-w-md grid-cols-4 gap-8'
                   >
                     <AvatarFormItem avatar='avatar1.png' />
                     <AvatarFormItem avatar='avatar2.png' />
@@ -109,6 +137,30 @@ const AvatarMenu = ({ user, handleSignOut, onSave, settingsForm, modalOpen, onOp
             </Button>
           </form>
         </Form>
+        <DialogFooter>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button className='w-full' variant='destructive'>
+                Delete Account
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete your account and remove your data from our
+                  servers.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={deleteUser} className={buttonVariants({ variant: 'destructive' })}>
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )
