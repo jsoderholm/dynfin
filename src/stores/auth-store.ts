@@ -1,5 +1,5 @@
 import { auth } from '@/lib/firebase'
-import { User, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
+import { User, onAuthStateChanged, signInWithEmailAndPassword, deleteUser as firebaseDeleteUser } from 'firebase/auth'
 import { create } from 'zustand'
 
 export type Credentials = {
@@ -11,6 +11,7 @@ export interface AuthState {
   user: User | null
   login: (credentials: Credentials) => Promise<boolean>
   logout: () => Promise<void>
+  deleteUser: () => Promise<boolean>
   saved: string[]
 }
 
@@ -35,6 +36,22 @@ const useAuthStore = create<AuthState>()(() => ({
     }
   },
   saved: [],
+  deleteUser: async () => {
+    if (!auth.currentUser) {
+      console.error('No user logged in');
+      return false;
+    }
+    try {
+      await firebaseDeleteUser(auth.currentUser);
+      useAuthStore.setState({ user: null, saved: [] });
+  
+      console.log('User account deleted successfully');
+      return true;
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      return false;
+    }
+  },
 }))
 
 onAuthStateChanged(auth, (user) => {
