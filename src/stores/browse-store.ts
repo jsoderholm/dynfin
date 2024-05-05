@@ -3,16 +3,18 @@ import { create } from 'zustand'
 
 interface BrowseState {
   browse: CombinedInfo[] | null
-  setBrowse: () => Promise<void>
+  setBrowse: (page: number) => Promise<void>
   browseLoading: boolean
+  currentPage: number
+  setPage: (page: number) => void
 }
 
 const useBrowseStore = create<BrowseState>((set) => ({
   browse: null,
-  setBrowse: async () => {
+  setBrowse: async (page) => {
     set({ browseLoading: true })
     try {
-      const data = await getCombinedInfoFromStockNews([])
+      const data = await getCombinedInfoFromStockNews(page, [])
 
       set({ browse: data })
     } catch (error) {
@@ -22,6 +24,8 @@ const useBrowseStore = create<BrowseState>((set) => ({
     }
   },
   browseLoading: false,
+  currentPage: 1,
+  setPage: (page) => set({ currentPage: page }),
 }))
 
 export default useBrowseStore

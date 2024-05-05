@@ -1,6 +1,15 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFavorite, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { CombinedInfo } from '@/lib/api/stock-news'
 import { Link } from '@tanstack/react-router'
@@ -13,9 +22,11 @@ interface FavoriteItemProps {
 
 interface NewsInfoProps extends FavoriteItemProps {
   data: CombinedInfo[]
+  onPageChange: (newPage: number) => void
+  currentPage: number
 }
 
-function BrowseView({ data, isFavorited, onToggleFavorite, userLoggedIn }: NewsInfoProps) {
+function BrowseView({ data, isFavorited, onToggleFavorite, userLoggedIn, currentPage, onPageChange }: NewsInfoProps) {
   return (
     <div className='container py-10'>
       <h2 className='text-3xl font-semibold pb-6'>Browse</h2>
@@ -68,6 +79,17 @@ function BrowseView({ data, isFavorited, onToggleFavorite, userLoggedIn }: NewsI
           </div>
         </TabsContent>
       </Tabs>
+
+      <Pagination className='my-5 '>
+        <PaginationNumbers
+          currentPage={currentPage}
+          onPageChange={onPageChange}
+          data={data}
+          isFavorited={isFavorited}
+          onToggleFavorite={onToggleFavorite}
+          userLoggedIn={userLoggedIn}
+        />
+      </Pagination>
     </div>
   )
 }
@@ -140,6 +162,82 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite, userLoggedIn }: Brows
       </CardFooter>
     </Card>
   )
+}
+
+const PaginationNumbers = ({ currentPage, onPageChange }: NewsInfoProps) => {
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1) {
+      onPageChange(newPage)
+      window.scrollTo(0, 0)
+    }
+  }
+
+  if (currentPage == 1) {
+    return (
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} />
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink isActive>{currentPage}</PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink onClick={() => handlePageChange(currentPage + 1)}>{currentPage + 1}</PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink onClick={() => handlePageChange(currentPage + 2)}>{currentPage + 2}</PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
+        </PaginationItem>
+      </PaginationContent>
+    )
+  } else if (currentPage < 3) {
+    return (
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} />
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink onClick={() => handlePageChange(currentPage - 1)}>{currentPage - 1}</PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink isActive>{currentPage}</PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink onClick={() => handlePageChange(currentPage + 1)}>{currentPage + 1}</PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
+        </PaginationItem>
+      </PaginationContent>
+    )
+  } else {
+    return (
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} />
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink onClick={() => handlePageChange(1)}>
+            <PaginationEllipsis />
+          </PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink onClick={() => handlePageChange(currentPage - 1)}>{currentPage - 1}</PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink isActive>{currentPage}</PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink onClick={() => handlePageChange(currentPage + 1)}>{currentPage + 1}</PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
+        </PaginationItem>
+      </PaginationContent>
+    )
+  }
 }
 
 export default BrowseView

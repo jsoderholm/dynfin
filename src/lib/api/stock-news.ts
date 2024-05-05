@@ -29,10 +29,10 @@ export type TrendingInfo = {
 
 export type CombinedInfo = NewsInfo | TrendingInfo
 
-export async function getCombinedInfoFromStockNews(saved: string[]): Promise<CombinedInfo[]> {
-  const newsPromise = getNewsInfoFromStockNews()
-  const trendingPromise = getTrendingNewsInfoFromStockNews()
-  const savedPromise = getSavedNewsInfoFromStockNews(saved)
+export async function getCombinedInfoFromStockNews(page: number, saved: string[]): Promise<CombinedInfo[]> {
+  const newsPromise = getNewsInfoFromStockNews(page)
+  const trendingPromise = getTrendingNewsInfoFromStockNews(page)
+  const savedPromise = getSavedNewsInfoFromStockNews(page, saved)
 
   try {
     const [newsData, trendingData, savedData] = await Promise.all([newsPromise, trendingPromise, savedPromise])
@@ -48,11 +48,12 @@ export async function getCombinedInfoFromStockNews(saved: string[]): Promise<Com
   }
 }
 
-export async function getNewsInfoFromStockNews(): Promise<NewsInfo[]> {
+export async function getNewsInfoFromStockNews(page: number): Promise<NewsInfo[]> {
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCKNEWS_API_KEY,
     section: 'alltickers',
     items: '48',
+    page: page.toString(),
   })
   const url = `${BASE_URL}category?${params}`
 
@@ -65,10 +66,11 @@ export async function getNewsInfoFromStockNews(): Promise<NewsInfo[]> {
   }
 }
 
-export async function getTrendingNewsInfoFromStockNews(): Promise<TrendingInfo[]> {
+export async function getTrendingNewsInfoFromStockNews(page: number): Promise<TrendingInfo[]> {
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCKNEWS_API_KEY,
     items: '48',
+    page: page.toString(),
   })
   const url = `${BASE_URL}trending-headlines?${params}`
 
@@ -81,11 +83,12 @@ export async function getTrendingNewsInfoFromStockNews(): Promise<TrendingInfo[]
   }
 }
 
-export async function getSavedNewsInfoFromStockNews(tickers: string[]): Promise<NewsInfo[]> {
+export async function getSavedNewsInfoFromStockNews(page: number, tickers: string[]): Promise<NewsInfo[]> {
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCKNEWS_API_KEY,
     tickers: tickers.toString(),
     items: '48',
+    page: page.toString(),
   })
   const url = `${BASE_URL}?${params}`
 

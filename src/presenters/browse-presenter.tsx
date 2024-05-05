@@ -18,6 +18,8 @@ function BrowsePresenter() {
   const setBrowse = useBrowseStore((state) => state.setBrowse)
   const browseLoading = useBrowseStore((state) => state.browseLoading)
   const loading = browseLoading || savedLoading
+  const currentPage = useBrowseStore((state) => state.currentPage)
+  const setPage = useBrowseStore((state) => state.setPage)
 
   useEffect(() => {
     if (user) {
@@ -26,8 +28,12 @@ function BrowsePresenter() {
   }, [user, setSaved])
 
   useEffect(() => {
-    setBrowse()
-  }, [setBrowse])
+    setBrowse(currentPage)
+  }, [setBrowse, currentPage])
+
+  useEffect(() => {
+    setPage(currentPage)
+  }, [setPage])
 
   const handleToggleFavorite = (ticker: string, title: string) => {
     if (!user) {
@@ -37,7 +43,11 @@ function BrowsePresenter() {
   }
 
   const handleRetry = () => {
-    setBrowse()
+    setBrowse(currentPage)
+  }
+
+  const handlePageChange = (currentPage: number) => {
+    setPage(currentPage)
   }
 
   if (loading) {
@@ -51,6 +61,8 @@ function BrowsePresenter() {
         isFavorited={isFavorited}
         onToggleFavorite={handleToggleFavorite}
         userLoggedIn={!!user}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
       />
     </div>
   ) : (
