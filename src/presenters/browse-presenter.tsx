@@ -45,7 +45,14 @@ function BrowsePresenter() {
   }
 
   return browse ? (
-    <BrowseView data={browse} isFavorited={isFavorited} onToggleFavorite={handleToggleFavorite} userLoggedIn={!!user} />
+    <div>
+      <BrowseView
+        data={browse}
+        isFavorited={isFavorited}
+        onToggleFavorite={handleToggleFavorite}
+        userLoggedIn={!!user}
+      />
+    </div>
   ) : (
     <div className='text-destructive'>
       <h2 className='text-3xl font-semibold pb-6'>Failed to fetch news items</h2>
