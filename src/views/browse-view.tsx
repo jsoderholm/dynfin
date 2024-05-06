@@ -66,7 +66,7 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite, userLoggedIn }: Brows
                 </Link>
                 <CardFavorite
                   favorited={isFavorited(ticker)}
-                  onClick={onToggleFavorite(ticker, title)}
+                  onClick={() => onToggleFavorite(ticker, title)}
                   aria-label='Favorite Toggler'
                 />
               </DropdownMenuItem>
