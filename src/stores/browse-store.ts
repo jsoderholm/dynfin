@@ -1,4 +1,4 @@
-import { NewsInfo, getNewsInfoFromStockNews } from '@/lib/api/stock-news'
+import { NewsInfo, getNewsInfoByCategoryFromStockNews } from '@/lib/api/stock-news'
 import { create } from 'zustand'
 
 interface BrowseState {
@@ -12,7 +12,7 @@ const useBrowseStore = create<BrowseState>((set) => ({
   setBrowse: async () => {
     set({ browseLoading: true })
     try {
-      const data = await getNewsInfoFromStockNews()
+      const data = await getNewsInfoByCategoryFromStockNews()
       set({ browse: data })
     } catch (error) {
       console.error('Failed to fetch browse list:', error)
