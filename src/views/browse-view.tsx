@@ -1,7 +1,9 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFavorite, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { NewsInfo } from '@/lib/api/stock-news'
 import { Link } from '@tanstack/react-router'
+import NewsModal from '@/components/news-modal'
 
 interface FavoriteItemProps {
   isFavorited: (ticker: string) => boolean
@@ -50,18 +52,30 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite, userLoggedIn }: Brows
   }
 
   return (
-    <Card>
+    <Card className='flex flex-col'>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardFavorite favorited={favorited} onClick={handleToggleFavorite} aria-label='Favorite Toggler' />
+        <CardTitle>{title.slice(0, title.lastIndexOf(' ', 50)) + '...'}</CardTitle>
       </CardHeader>
-      <CardContent>
-        <p className='text-muted-foreground'>{text}</p>
+      <CardContent className='flex-grow'>
+        <p className='text-muted-foreground'>{text.slice(0, text.lastIndexOf(' ', 100)) + '...'}</p>
       </CardContent>
-      <CardFooter className='flex items-center justify-center'>
-        <Link to='/details/$symbol' params={{ symbol: tickers[0] }}>
-          <Button variant='ghost'>{`View Company Profile for ${tickers[0]}`}</Button>
-        </Link>
+      <CardFooter className='grid sm:grid-cols-2 gap-6'>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant='secondary'>Tickers</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className='w-10'>
+            {tickers.map((ticker, index) => (
+              <DropdownMenuItem key={index} className='justify-between'>
+                <Link to='/details/$symbol' params={{ symbol: ticker }} className='badge'>
+                  {ticker}
+                </Link>
+                <CardFavorite favorited={favorited} onClick={handleToggleFavorite} aria-label='Favorite Toggler' />
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <NewsModal news={info} />
       </CardFooter>
     </Card>
   )

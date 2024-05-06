@@ -23,7 +23,7 @@ export async function getNewsInfoByCategoryFromStockNews(): Promise<NewsInfo[]> 
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCKNEWS_API_KEY,
     section: 'alltickers',
-    items: '3',
+    items: '12',
   })
   const url = `${BASE_URL}category?${params}`
 
