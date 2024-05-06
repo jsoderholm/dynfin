@@ -100,7 +100,6 @@ interface LoadingProps {
 const Loading = ({ currentTab }: LoadingProps) => {
   return (
     <div className='container py-10'>
-      <h2 className='text-3xl font-semibold pb-6'>Browse</h2>
       <div>
         <Tabs defaultValue={currentTab}>
           <TabsList className='my-6'>

@@ -44,8 +44,7 @@ function BrowseView({
   }
 
   return (
-    <div className='container py-10'>
-      <h2 className='text-3xl font-semibold pb-6'>Browse</h2>
+    <div className='container py-3'>
       <Tabs defaultValue={currentTab} onValueChange={handleTabChange}>
         <TabsList className='my-6'>
           <TabsTrigger value='all'>All News</TabsTrigger>
