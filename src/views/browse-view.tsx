@@ -4,7 +4,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { NewsInfo } from '@/lib/api/stock-news'
 import { Link } from '@tanstack/react-router'
 import NewsModal from '@/components/news-modal'
-import { Badge } from '@tabler/icons-react'
+
 interface FavoriteItemProps {
   isFavorited: (ticker: string) => boolean
   onToggleFavorite: (ticker: string, title: string) => void

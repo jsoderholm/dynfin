@@ -1,6 +1,7 @@
 import React from 'react'
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from './ui/button'
+import { Link } from '@tanstack/react-router'
 import { NewsInfo } from '@/lib/api/stock-news'
 
 interface NewsModalProps {
@@ -29,7 +30,7 @@ const NewsModal: React.FC<NewsModalProps> = ({ news }) => {
         <div style={{ marginTop: '10px' }}>
           <strong>Tickers:</strong>
           {news.tickers.map((ticker, index) => (
-            <Link key={index} to={`/details/${ticker}`} className={badgeVariants({ variant: 'outline' })}>
+            <Link key={index} to={`/details/${ticker}`} className='badge'>
               {ticker}
             </Link>
           ))}
