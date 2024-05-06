@@ -1,5 +1,5 @@
 import { auth } from '@/lib/firebase'
-import { User, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth'
+import { User, onAuthStateChanged, signInWithEmailAndPassword, deleteUser as firebaseDeleteUser } from 'firebase/auth'
 import { create } from 'zustand'
 
 export type Credentials = {
@@ -11,10 +11,11 @@ export interface AuthState {
   user: User | null
   login: (credentials: Credentials) => Promise<boolean>
   logout: () => Promise<void>
+  deleteUser: () => Promise<void>
   saved: string[]
 }
 
-const useAuthStore = create<AuthState>()(() => ({
+const useAuthStore = create<AuthState>()((_, get) => ({
   user: null,
   login: async (credentials: Credentials) => {
     const { email, password } = credentials
@@ -35,6 +36,18 @@ const useAuthStore = create<AuthState>()(() => ({
     }
   },
   saved: [],
+  deleteUser: async () => {
+    const user = get().user
+    if (!user) {
+      return
+    }
+    try {
+      await firebaseDeleteUser(user)
+      useAuthStore.setState({ user: null, saved: [] })
+    } catch (error) {
+      console.error('Error deleting user:', error)
+    }
+  },
 }))
 
 onAuthStateChanged(auth, (user) => {

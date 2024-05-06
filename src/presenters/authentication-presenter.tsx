@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { create } from 'zustand'
 
-export const schema = z.object({
+export const AuthFormSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 })
@@ -30,22 +30,22 @@ const AuthenticationPresenter = () => {
   const login = useAuthStore((state) => state.login)
   const { open, onOpenChange } = useModalStore()
 
-  const registerForm = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+  const registerForm = useForm<z.infer<typeof AuthFormSchema>>({
+    resolver: zodResolver(AuthFormSchema),
   })
 
-  const loginForm = useForm<z.infer<typeof schema>>({
-    resolver: zodResolver(schema),
+  const loginForm = useForm<z.infer<typeof AuthFormSchema>>({
+    resolver: zodResolver(AuthFormSchema),
   })
 
-  async function onLogin(values: z.infer<typeof schema>) {
+  async function onLogin(values: z.infer<typeof AuthFormSchema>) {
     const { email, password } = values
     const success = await login({ email, password })
     if (!success) return
     navigate({ to: '/' })
   }
 
-  async function onRegister(values: z.infer<typeof schema>) {
+  async function onRegister(values: z.infer<typeof AuthFormSchema>) {
     const { email, password } = values
 
     try {
