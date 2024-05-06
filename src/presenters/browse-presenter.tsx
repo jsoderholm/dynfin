@@ -36,15 +36,15 @@ function BrowsePresenter() {
       currentPage,
       Array.from(saved).map((item) => item.symbol),
     )
-  }, [setBrowse, currentPage])
+  }, [setBrowse, currentPage, saved])
 
   useEffect(() => {
     setPage(currentPage)
-  }, [setPage])
+  }, [currentPage])
 
   useEffect(() => {
     setTab(currentTab)
-  }, [setTab])
+  }, [currentTab])
 
   const handleToggleFavorite = (ticker: string, title: string) => {
     if (!user) {
