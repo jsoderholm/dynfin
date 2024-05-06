@@ -40,11 +40,11 @@ function BrowsePresenter() {
 
   useEffect(() => {
     setPage(currentPage)
-  }, [currentPage])
+  }, [currentPage, setPage])
 
   useEffect(() => {
     setTab(currentTab)
-  }, [currentTab])
+  }, [currentTab, setTab])
 
   const handleToggleFavorite = (ticker: string, title: string) => {
     if (!user) {
