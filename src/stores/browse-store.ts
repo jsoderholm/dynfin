@@ -1,4 +1,5 @@
-import { CombinedInfo, getCombinedInfoFromStockNews } from '@/lib/api/stock-news'
+import { CombinedInfo, getCombinedInfoFromStockNews, getNewsInfoByCategoryFromStockNews} from '@/lib/api/stock-news'
+
 import { create } from 'zustand'
 
 interface BrowseState {
@@ -17,6 +18,7 @@ const useBrowseStore = create<BrowseState>((set) => ({
     set({ browseLoading: true })
     try {
       const data = await getCombinedInfoFromStockNews(page, saved)
+
 
       set({ browse: data })
     } catch (error) {

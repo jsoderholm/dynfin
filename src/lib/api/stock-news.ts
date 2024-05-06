@@ -30,7 +30,7 @@ export type TrendingInfo = {
 export type CombinedInfo = NewsInfo | TrendingInfo
 
 export async function getCombinedInfoFromStockNews(page: number, saved: string[]): Promise<CombinedInfo[]> {
-  const newsPromise = getNewsInfoFromStockNews(page)
+  const newsPromise = getNewsInfoByCategoryFromStockNews(page)
   const trendingPromise = getTrendingNewsInfoFromStockNews(page)
   const savedPromise = getSavedNewsInfoFromStockNews(page, saved)
 
@@ -48,7 +48,8 @@ export async function getCombinedInfoFromStockNews(page: number, saved: string[]
   }
 }
 
-export async function getNewsInfoFromStockNews(page: number): Promise<NewsInfo[]> {
+export async function getNewsInfoByCategoryFromStockNews(page: number = 1): Promise<NewsInfo[]> {
+
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCKNEWS_API_KEY,
     section: 'alltickers',
@@ -66,7 +67,7 @@ export async function getNewsInfoFromStockNews(page: number): Promise<NewsInfo[]
   }
 }
 
-export async function getTrendingNewsInfoFromStockNews(page: number): Promise<TrendingInfo[]> {
+export async function getTrendingNewsInfoFromStockNews(page: number = 1): Promise<TrendingInfo[]> {
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCKNEWS_API_KEY,
     items: '48',
@@ -79,17 +80,19 @@ export async function getTrendingNewsInfoFromStockNews(page: number): Promise<Tr
     const response_data: { data: TrendingInfo[] } = response.data
     return response_data.data
   } catch (e) {
-    throw new Error(`Failed to fetch company profile from Stocknewsapi: ${e}`)
+    throw new Error(`Failed to fetch company profile from Stock News API: ${e}`)
   }
 }
 
-export async function getSavedNewsInfoFromStockNews(page: number, tickers: string[]): Promise<NewsInfo[]> {
+
+export async function getSavedNewsInfoFromStockNews(page: number = 1, tickers: string[] = []): Promise<NewsInfo[]> {
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCKNEWS_API_KEY,
     tickers: tickers.toString(),
     items: '48',
     page: page.toString(),
   })
+  
   const url = `${BASE_URL}?${params}`
 
   try {
@@ -97,6 +100,23 @@ export async function getSavedNewsInfoFromStockNews(page: number, tickers: strin
     const response_data: { data: NewsInfo[] } = response.data
     return response_data.data
   } catch (e) {
-    throw new Error(`Failed to fetch company profile from Stocknewsapi: ${e}`)
+    throw new Error(`Failed to fetch company profile from Stock News API: ${e}`)
+  }
+  
+export async function getNewsInfoBySymbolFromStockNews(symbol: string, items: number = 6): Promise<NewsInfo[]> {
+  const params = new URLSearchParams({
+    token: import.meta.env.VITE_STOCKNEWS_API_KEY,
+    tickers: symbol,
+    items: items.toString(),
+  })
+
+  const url = `${BASE_URL}?${params}`
+
+  try {
+    const response = await axios.get(url)
+    const response_data: { data: NewsInfo[] } = response.data
+    return response_data.data
+  } catch (e) {
+    throw new Error(`Failed to fetch company profile from Stock News API: ${e}`)
   }
 }
