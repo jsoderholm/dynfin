@@ -49,7 +49,6 @@ export async function getCombinedInfoFromStockNews(page: number, saved: string[]
 }
 
 export async function getNewsInfoByCategoryFromStockNews(page: number = 1): Promise<NewsInfo[]> {
-
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCKNEWS_API_KEY,
     section: 'alltickers',
@@ -84,7 +83,6 @@ export async function getTrendingNewsInfoFromStockNews(page: number = 1): Promis
   }
 }
 
-
 export async function getSavedNewsInfoFromStockNews(page: number = 1, tickers: string[] = []): Promise<NewsInfo[]> {
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCKNEWS_API_KEY,
@@ -92,7 +90,7 @@ export async function getSavedNewsInfoFromStockNews(page: number = 1, tickers: s
     items: '48',
     page: page.toString(),
   })
-  
+
   const url = `${BASE_URL}?${params}`
 
   try {
@@ -102,7 +100,8 @@ export async function getSavedNewsInfoFromStockNews(page: number = 1, tickers: s
   } catch (e) {
     throw new Error(`Failed to fetch company profile from Stock News API: ${e}`)
   }
-  
+}
+
 export async function getNewsInfoBySymbolFromStockNews(symbol: string, items: number = 6): Promise<NewsInfo[]> {
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCKNEWS_API_KEY,
