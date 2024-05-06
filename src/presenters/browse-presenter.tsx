@@ -8,7 +8,8 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 function BrowsePresenter() {
   const { user } = useAuthStore()
-  const { toggleFavorite, isFavorited, setSaved, savedLoading } = useSavedStore((state) => ({
+  const { saved, toggleFavorite, isFavorited, setSaved, savedLoading } = useSavedStore((state) => ({
+    saved: state.saved,
     toggleFavorite: state.toggleFavorite,
     isFavorited: state.isFavorited,
     setSaved: state.setSaved,
@@ -31,7 +32,10 @@ function BrowsePresenter() {
   }, [user, setSaved])
 
   useEffect(() => {
-    setBrowse(currentPage)
+    setBrowse(
+      currentPage,
+      Array.from(saved).map((item) => item.symbol),
+    )
   }, [setBrowse, currentPage])
 
   useEffect(() => {
@@ -50,7 +54,10 @@ function BrowsePresenter() {
   }
 
   const handleRetry = () => {
-    setBrowse(currentPage)
+    setBrowse(
+      currentPage,
+      Array.from(saved).map((item) => item.symbol),
+    )
   }
 
   const handlePageChange = (currentPage: number) => {
