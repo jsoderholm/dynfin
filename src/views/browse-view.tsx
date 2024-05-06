@@ -12,7 +12,9 @@ import {
 } from '@/components/ui/pagination'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { CombinedInfo } from '@/lib/api/stock-news'
+
 import { Link } from '@tanstack/react-router'
+import NewsModal from '@/components/news-modal'
 
 interface FavoriteItemProps {
   isFavorited: (ticker: string) => boolean
@@ -144,7 +146,7 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite, userLoggedIn }: Brows
   }
 
   return (
-    <Card>
+    <Card className='flex flex-col'>
       <CardHeader>
         <CardTitle>{<p className='line-clamp-2'>{title}</p>}</CardTitle>
       </CardHeader>
@@ -169,13 +171,13 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite, userLoggedIn }: Brows
                   onClick={() => handleToggleFavorite(ticker)}
                   aria-label='Favorite Toggler'
                 />
+
+        
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        <Link to='/details/$symbol' params={{ symbol: tickers[0] }}>
-          <Button variant='ghost'>{`Read more`}</Button>
-        </Link>
+        <NewsModal news={info} />
       </CardFooter>
     </Card>
   )

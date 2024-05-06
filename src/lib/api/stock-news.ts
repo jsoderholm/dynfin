@@ -29,6 +29,8 @@ export type TrendingInfo = {
 
 export type CombinedInfo = NewsInfo | TrendingInfo
 
+const ITEMS = 12
+
 export async function getCombinedInfoFromStockNews(page: number, saved: string[]): Promise<CombinedInfo[]> {
   const newsPromise = getNewsInfoByCategoryFromStockNews(page)
   const trendingPromise = getTrendingNewsInfoFromStockNews(page)
@@ -52,8 +54,9 @@ export async function getNewsInfoByCategoryFromStockNews(page: number = 1): Prom
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCKNEWS_API_KEY,
     section: 'alltickers',
-    items: '48',
     page: page.toString(),
+    items: ITEMS.toString(),
+
   })
   const url = `${BASE_URL}category?${params}`
 
@@ -69,7 +72,7 @@ export async function getNewsInfoByCategoryFromStockNews(page: number = 1): Prom
 export async function getTrendingNewsInfoFromStockNews(page: number = 1): Promise<TrendingInfo[]> {
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCKNEWS_API_KEY,
-    items: '48',
+    items: ITEMS.toString(),
     page: page.toString(),
   })
   const url = `${BASE_URL}trending-headlines?${params}`
@@ -87,7 +90,7 @@ export async function getSavedNewsInfoFromStockNews(page: number = 1, tickers: s
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCKNEWS_API_KEY,
     tickers: tickers.toString(),
-    items: '48',
+    items: ITEMS.toString(),
     page: page.toString(),
   })
 
