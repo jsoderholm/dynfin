@@ -30,7 +30,7 @@ const NewsModal: React.FC<NewsModalProps> = ({ news }) => {
         <div style={{ marginTop: '10px' }}>
           <strong>Tickers:</strong>
           {news.tickers.map((ticker, index) => (
-            <Link key={index} to={`/details/${ticker}`} className='badge'>
+            <Link to='/details/$symbol' params={{ symbol: ticker }} className='badge'>
               {ticker}
             </Link>
           ))}
