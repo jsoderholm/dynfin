@@ -4,6 +4,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { NewsInfo } from '@/lib/api/stock-news'
 import { Link } from '@tanstack/react-router'
 import NewsModal from '@/components/news-modal'
+import { Badge } from '@tabler/icons-react'
 interface FavoriteItemProps {
   isFavorited: (ticker: string) => boolean
   onToggleFavorite: (ticker: string, title: string) => void
@@ -51,22 +52,22 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite, userLoggedIn }: Brows
   }
 
   return (
-    <Card>
+    <Card className='flex flex-col'>
       <CardHeader>
         <CardTitle>{title.slice(0, title.lastIndexOf(' ', 50)) + '...'}</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className='flex-grow'>
         <p className='text-muted-foreground'>{text.slice(0, text.lastIndexOf(' ', 100)) + '...'}</p>
       </CardContent>
-      <CardFooter className='flex items-center justify-center'>
+      <CardFooter className='grid sm:grid-cols-2 gap-6'>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant='ghost'>Tickers</Button>
+            <Button variant='secondary'>Tickers</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className='w-10'>
             {tickers.map((ticker, index) => (
               <DropdownMenuItem key={index} className='justify-between'>
-                <Link to='/details/$symbol' params={{ symbol: ticker }}>
+                <Link to='/details/$symbol' params={{ symbol: ticker }} className='badge'>
                   {ticker}
                 </Link>
                 <CardFavorite favorited={favorited} onClick={handleToggleFavorite} aria-label='Favorite Toggler' />

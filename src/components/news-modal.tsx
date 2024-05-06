@@ -11,7 +11,7 @@ const NewsModal: React.FC<NewsModalProps> = ({ news }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant='ghost'>Read more</Button>
+        <Button>Read more</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogTitle>{news.title}</DialogTitle>
@@ -26,6 +26,14 @@ const NewsModal: React.FC<NewsModalProps> = ({ news }) => {
         <p>
           <strong>Topics:</strong> {news.topics.join(', ')}
         </p>
+        <div style={{ marginTop: '10px' }}>
+          <strong>Tickers:</strong>
+          {news.tickers.map((ticker, index) => (
+            <Link key={index} to={`/details/${ticker}`} className={badgeVariants({ variant: 'outline' })}>
+              {ticker}
+            </Link>
+          ))}
+        </div>
         <a href={news.news_url} target='_blank' rel='noopener noreferrer'>
           Read Full Article
         </a>
