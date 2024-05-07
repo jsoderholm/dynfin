@@ -4,10 +4,12 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useEffect } from 'react'
 import useAuthStore from '@/stores/auth-store'
 import useSavedStore from '@/stores/saved-store'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 function BrowsePresenter() {
   const { user } = useAuthStore()
-  const { toggleFavorite, isFavorited, setSaved, savedLoading } = useSavedStore((state) => ({
+  const { saved, toggleFavorite, isFavorited, setSaved, savedLoading } = useSavedStore((state) => ({
+    saved: state.saved,
     toggleFavorite: state.toggleFavorite,
     isFavorited: state.isFavorited,
     setSaved: state.setSaved,
@@ -18,6 +20,10 @@ function BrowsePresenter() {
   const setBrowse = useBrowseStore((state) => state.setBrowse)
   const browseLoading = useBrowseStore((state) => state.browseLoading)
   const loading = browseLoading || savedLoading
+  const currentPage = useBrowseStore((state) => state.currentPage)
+  const setPage = useBrowseStore((state) => state.setPage)
+  const currentTab = useBrowseStore((state) => state.currentTab)
+  const setTab = useBrowseStore((state) => state.setTab)
 
   useEffect(() => {
     if (user) {
@@ -26,8 +32,16 @@ function BrowsePresenter() {
   }, [user, setSaved])
 
   useEffect(() => {
-    setBrowse()
-  }, [setBrowse])
+    setBrowse(currentPage)
+  }, [setBrowse, currentPage, saved])
+
+  useEffect(() => {
+    setPage(currentPage)
+  }, [currentPage, setPage])
+
+  useEffect(() => {
+    setTab(currentTab)
+  }, [currentTab, setTab])
 
   const handleToggleFavorite = (ticker: string, title: string) => {
     if (!user) {
@@ -36,16 +50,35 @@ function BrowsePresenter() {
     toggleFavorite(user.uid, ticker, title)
   }
 
-  const handleRetry = () => {
-    setBrowse()
+  function handleRetry() {
+    setBrowse(currentPage)
+  }
+
+  function handlePageChange(currentPage: number) {
+    setPage(currentPage)
+  }
+
+  function handleTabChange(currentTab: string) {
+    setTab(currentTab)
   }
 
   if (loading) {
-    return <Loading />
+    return <Loading currentTab={currentTab} />
   }
 
   return browse ? (
-    <BrowseView data={browse} isFavorited={isFavorited} onToggleFavorite={handleToggleFavorite} userLoggedIn={!!user} />
+    <div>
+      <BrowseView
+        data={browse}
+        isFavorited={isFavorited}
+        onToggleFavorite={handleToggleFavorite}
+        userLoggedIn={!!user}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+        currentTab={currentTab}
+        onSetTab={handleTabChange}
+      />
+    </div>
   ) : (
     <div className='text-destructive'>
       <h2 className='text-3xl font-semibold pb-6'>Failed to fetch news items</h2>
@@ -54,26 +87,26 @@ function BrowsePresenter() {
   )
 }
 
-const Loading = () => {
+interface LoadingProps {
+  currentTab: string
+}
+
+const Loading = ({ currentTab }: LoadingProps) => {
   return (
-    <div className='container'>
-      <div className='my-6'>
-        <Skeleton className='h-8 w-8' />
+    <div className='container '>
+      <div className='flex justify-between py-6'>
+        <h2 className='text-3xl font-semibold'>Browse</h2>
+        <Tabs defaultValue={currentTab}>
+          <TabsList>
+            <TabsTrigger value='all'>All News</TabsTrigger>
+            <TabsTrigger value='trending'>Trending</TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
-      <Skeleton className='mb-6 h-10 w-1/4' />
-      <div className='grid grid-cols-1 lg:grid-cols-3 gap-10 h-96 mb-10'>
-        <Skeleton className='h-full col-span-1' />
-        <Skeleton className='h-full col-span-2' />
-      </div>
-      <Skeleton className='mb-6 h-10 w-1/4' />
-      <div className='grid grid-cols-4 gap-10 mb-10'>
-        {Array.from({ length: 8 }).map((_, i) => (
-          <Skeleton key={i} className='h-48' />
+      <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+        {Array.from({ length: 6 }).map((_, i) => (
+          <Skeleton key={i} className='h-64' />
         ))}
-      </div>
-      <Skeleton className='mb-6 h-10 w-1/4' />
-      <div>
-        <Skeleton className='h-96' />
       </div>
     </div>
   )

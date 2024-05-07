@@ -1,18 +1,24 @@
-import { NewsInfo, getNewsInfoByCategoryFromStockNews } from '@/lib/api/stock-news'
+import { CombinedInfo, getCombinedInfoFromStockNews } from '@/lib/api/stock-news'
+
 import { create } from 'zustand'
 
 interface BrowseState {
-  browse: NewsInfo[] | null
-  setBrowse: () => Promise<void>
+  browse: CombinedInfo[] | null
+  setBrowse: (page: number) => Promise<void>
   browseLoading: boolean
+  currentPage: number
+  setPage: (page: number) => void
+  currentTab: string
+  setTab: (tab: string) => void
 }
 
 const useBrowseStore = create<BrowseState>((set) => ({
   browse: null,
-  setBrowse: async () => {
+  setBrowse: async (page) => {
     set({ browseLoading: true })
     try {
-      const data = await getNewsInfoByCategoryFromStockNews()
+      const data = await getCombinedInfoFromStockNews(page)
+
       set({ browse: data })
     } catch (error) {
       console.error('Failed to fetch browse list:', error)
@@ -21,6 +27,10 @@ const useBrowseStore = create<BrowseState>((set) => ({
     }
   },
   browseLoading: false,
+  currentPage: 1,
+  setPage: (page) => set({ currentPage: page }),
+  currentTab: 'all',
+  setTab: (tab) => set({ currentTab: tab }),
 }))
 
 export default useBrowseStore
