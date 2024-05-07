@@ -45,12 +45,6 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite, userLoggedIn }: Brows
     return <p>Please log in to manage favorites.</p>
   }
 
-  const favorited = isFavorited(tickers[0])
-
-  const handleToggleFavorite = () => {
-    onToggleFavorite(tickers[0], title)
-  }
-
   return (
     <Card className='flex flex-col'>
       <CardHeader>
@@ -70,7 +64,11 @@ const BrowseItem = ({ info, isFavorited, onToggleFavorite, userLoggedIn }: Brows
                 <Link to='/details/$symbol' params={{ symbol: ticker }} className='badge'>
                   {ticker}
                 </Link>
-                <CardFavorite favorited={favorited} onClick={handleToggleFavorite} aria-label='Favorite Toggler' />
+                <CardFavorite
+                  favorited={isFavorited(ticker)}
+                  onClick={() => onToggleFavorite(ticker, title)}
+                  aria-label='Favorite Toggler'
+                />
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>

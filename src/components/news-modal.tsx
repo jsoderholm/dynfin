@@ -14,7 +14,7 @@ const NewsModal: React.FC<NewsModalProps> = ({ news }) => {
       <DialogTrigger asChild>
         <Button>Read more</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className='max-h-[80vh] overflow-y-auto p-4'>
         <DialogTitle>{news.title}</DialogTitle>
         <img src={news.image_url} alt='News related visual' />
         <p>{news.text}</p>
