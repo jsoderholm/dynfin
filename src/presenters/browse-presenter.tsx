@@ -93,21 +93,20 @@ interface LoadingProps {
 
 const Loading = ({ currentTab }: LoadingProps) => {
   return (
-    <div className='container py-10'>
-      <div>
+    <div className='container '>
+      <div className='flex justify-between py-6'>
+        <h2 className='text-3xl font-semibold'>Browse</h2>
         <Tabs defaultValue={currentTab}>
-          <TabsList className='my-6'>
+          <TabsList>
             <TabsTrigger value='all'>All News</TabsTrigger>
             <TabsTrigger value='trending'>Trending</TabsTrigger>
-            <TabsTrigger value='saved'>Saved</TabsTrigger>
           </TabsList>
         </Tabs>
-        <br />
-        <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
-          {Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton key={i} className='h-64' />
-          ))}
-        </div>
+      </div>
+      <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+        {Array.from({ length: 6 }).map((_, i) => (
+          <Skeleton key={i} className='h-64' />
+        ))}
       </div>
     </div>
   )

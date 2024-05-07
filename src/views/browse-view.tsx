@@ -21,12 +21,16 @@ function BrowseView(props: BrowseViewProps) {
   }
 
   return (
-    <div className='container py-3'>
+    <div className='container'>
       <Tabs defaultValue={currentTab} onValueChange={handleTabChange}>
-        <TabsList className='my-6'>
-          <TabsTrigger value='all'>All News</TabsTrigger>
-          <TabsTrigger value='trending'>Trending</TabsTrigger>
-        </TabsList>
+        <div className='flex justify-between py-6'>
+          <h2 className='text-3xl font-semibold'>Browse</h2>
+          <TabsList>
+            <TabsTrigger value='all'>All News</TabsTrigger>
+            <TabsTrigger value='trending'>Trending</TabsTrigger>
+          </TabsList>
+        </div>
+
         <TabsContent value='all'>
           <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
             {Array.from(data)
