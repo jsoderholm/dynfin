@@ -9,5 +9,5 @@ interface ImportMetaEnv {
   VITE_FIREBASE_MESSAGINGSENDERID: string
   VITE_FIREBASE_APPID: string
   VITE_FINAGE_API_KEY: string
-  VITE_STOCKNEWS_API_KEY: string
+  VITE_STOCK_NEWS_API_KEY: string
 }

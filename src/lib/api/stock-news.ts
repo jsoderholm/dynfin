@@ -104,7 +104,7 @@ export async function getSavedNewsInfoFromStockNews(page: number = 1, tickers: s
 
 export async function getNewsInfoBySymbolFromStockNews(symbol: string, items: number = 6): Promise<NewsInfo[]> {
   const params = new URLSearchParams({
-    token: import.meta.env.VITE_STOCKNEWS_API_KEY,
+    token: import.meta.env.VITE_STOCK_NEWS_API_KEY,
     tickers: symbol,
     items: items.toString(),
   })
