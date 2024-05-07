@@ -2,38 +2,14 @@ import useBrowseStore from '@/stores/browse-store'
 import BrowseView from '@/views/browse-view'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useEffect } from 'react'
-import useAuthStore from '@/stores/auth-store'
-import useSavedStore from '@/stores/saved-store'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 function BrowsePresenter() {
-  const { user } = useAuthStore()
-  const { saved, toggleFavorite, isFavorited, setSaved, savedLoading } = useSavedStore((state) => ({
-    saved: state.saved,
-    toggleFavorite: state.toggleFavorite,
-    isFavorited: state.isFavorited,
-    setSaved: state.setSaved,
-    savedLoading: state.savedLoading,
-  }))
-
-  const browse = useBrowseStore((state) => state.browse)
-  const setBrowse = useBrowseStore((state) => state.setBrowse)
-  const browseLoading = useBrowseStore((state) => state.browseLoading)
-  const loading = browseLoading || savedLoading
-  const currentPage = useBrowseStore((state) => state.currentPage)
-  const setPage = useBrowseStore((state) => state.setPage)
-  const currentTab = useBrowseStore((state) => state.currentTab)
-  const setTab = useBrowseStore((state) => state.setTab)
-
-  useEffect(() => {
-    if (user) {
-      setSaved(user.uid)
-    }
-  }, [user, setSaved])
+  const { browse, setBrowse, browseLoading, currentPage, setPage, currentTab, setTab } = useBrowseStore()
 
   useEffect(() => {
     setBrowse(currentPage)
-  }, [setBrowse, currentPage, saved])
+  }, [setBrowse, currentPage])
 
   useEffect(() => {
     setPage(currentPage)
@@ -42,13 +18,6 @@ function BrowsePresenter() {
   useEffect(() => {
     setTab(currentTab)
   }, [currentTab, setTab])
-
-  const handleToggleFavorite = (ticker: string, title: string) => {
-    if (!user) {
-      return
-    }
-    toggleFavorite(user.uid, ticker, title)
-  }
 
   function handleRetry() {
     setBrowse(currentPage)
@@ -62,7 +31,7 @@ function BrowsePresenter() {
     setTab(currentTab)
   }
 
-  if (loading) {
+  if (browseLoading) {
     return <Loading currentTab={currentTab} />
   }
 
@@ -70,9 +39,6 @@ function BrowsePresenter() {
     <div>
       <BrowseView
         data={browse}
-        isFavorited={isFavorited}
-        onToggleFavorite={handleToggleFavorite}
-        userLoggedIn={!!user}
         currentPage={currentPage}
         onPageChange={handlePageChange}
         currentTab={currentTab}
@@ -104,7 +70,7 @@ const Loading = ({ currentTab }: LoadingProps) => {
         </Tabs>
       </div>
       <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
-        {Array.from({ length: 6 }).map((_, i) => (
+        {Array.from({ length: 12 }).map((_, i) => (
           <Skeleton key={i} className='h-64' />
         ))}
       </div>

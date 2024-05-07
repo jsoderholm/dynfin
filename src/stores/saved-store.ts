@@ -8,8 +8,6 @@ interface SavedState {
   }>
   savedLoading: boolean
   setSaved: (userID: string) => Promise<void>
-  addSaved: (userID: string, item: { symbol: string; name: string }) => Promise<void>
-  removeSaved: (userID: string, symbol: string) => Promise<void>
   toggleFavorite: (userId: string, symbol: string, name: string) => void
   isFavorited: (symbol: string) => boolean
 }
@@ -34,16 +32,6 @@ const useSavedStore = create<SavedState>((set, get) => ({
     } finally {
       set({ savedLoading: false })
     }
-  },
-
-  addSaved: async (userId: string, item: { symbol: string; name: string }) => {
-    await addCompanyToSaved(userId, item.symbol)
-    await get().setSaved(userId) // Refresh the saved items from Firebase
-  },
-
-  removeSaved: async (userId: string, symbol: string) => {
-    await removeCompanyFromSaved(userId, symbol)
-    await get().setSaved(userId) // Refresh the saved items from Firebase
   },
 
   toggleFavorite: (userId: string, symbol: string, name: string) =>

@@ -13,7 +13,7 @@ export type PaginationProps = {
 type BrowseViewProps = Omit<BrowseItemProps, 'info'> & PaginationProps & { data: CombinedInfo[] }
 
 function BrowseView(props: BrowseViewProps) {
-  const { data, currentPage, onPageChange, currentTab, onSetTab, isFavorited, onToggleFavorite, userLoggedIn } = props
+  const { data, currentPage, onPageChange, currentTab, onSetTab } = props
 
   function handleTabChange(newTab: string) {
     onSetTab(newTab)
@@ -36,12 +36,7 @@ function BrowseView(props: BrowseViewProps) {
             {Array.from(data)
               .filter((item) => item.dataType === 'news')
               .map((item) => (
-                <BrowseItem
-                  info={item}
-                  isFavorited={isFavorited}
-                  onToggleFavorite={onToggleFavorite}
-                  userLoggedIn={userLoggedIn}
-                />
+                <BrowseItem info={item} />
               ))}
           </div>
         </TabsContent>
@@ -50,17 +45,12 @@ function BrowseView(props: BrowseViewProps) {
             {Array.from(data)
               .filter((item) => item.dataType === 'trending')
               .map((item) => (
-                <BrowseItem
-                  info={item}
-                  isFavorited={isFavorited}
-                  onToggleFavorite={onToggleFavorite}
-                  userLoggedIn={userLoggedIn}
-                />
+                <BrowseItem info={item} />
               ))}
           </div>
         </TabsContent>
       </Tabs>
-      <Pagination className='my-5 '>
+      <Pagination className='my-5'>
         <PaginationNumbers currentPage={currentPage} onPageChange={onPageChange} />
       </Pagination>
     </div>
