@@ -13,7 +13,7 @@ export type NewsInfo = {
   sentiment: string
   type: string
   tickers: string[]
-  dataType: string
+  dataType: 'news'
 }
 
 export type TrendingInfo = {
@@ -24,25 +24,23 @@ export type TrendingInfo = {
   sentiment: string
   date: Date
   tickers: string[]
-  dataType: string
+  dataType: 'trending'
 }
 
 export type CombinedInfo = NewsInfo | TrendingInfo
 
 const ITEMS = 12
 
-export async function getCombinedInfoFromStockNews(page: number, saved: string[]): Promise<CombinedInfo[]> {
+export async function getCombinedInfoFromStockNews(page: number): Promise<CombinedInfo[]> {
   const newsPromise = getNewsInfoByCategoryFromStockNews(page)
   const trendingPromise = getTrendingNewsInfoFromStockNews(page)
-  const savedPromise = getSavedNewsInfoFromStockNews(page, saved)
 
   try {
-    const [newsData, trendingData, savedData] = await Promise.all([newsPromise, trendingPromise, savedPromise])
+    const [newsData, trendingData] = await Promise.all([newsPromise, trendingPromise])
     // Merge the data from both sources into a single array
     const combinedData: CombinedInfo[] = [
-      ...newsData.map((newsItem) => ({ ...newsItem, dataType: 'news' })),
-      ...trendingData.map((trendingItem) => ({ ...trendingItem, dataType: 'trending' })),
-      ...savedData.map((trendingItem) => ({ ...trendingItem, dataType: 'saved' })),
+      ...newsData.map((newsItem) => ({ ...newsItem, dataType: 'news' as const })),
+      ...trendingData.map((trendingItem) => ({ ...trendingItem, dataType: 'trending' as const })),
     ]
     return combinedData
   } catch (e) {
@@ -52,11 +50,10 @@ export async function getCombinedInfoFromStockNews(page: number, saved: string[]
 
 export async function getNewsInfoByCategoryFromStockNews(page: number = 1): Promise<NewsInfo[]> {
   const params = new URLSearchParams({
-    token: import.meta.env.VITE_STOCKNEWS_API_KEY,
+    token: import.meta.env.VITE_STOCK_NEWS_API_KEY,
     section: 'alltickers',
     page: page.toString(),
     items: ITEMS.toString(),
-
   })
   const url = `${BASE_URL}category?${params}`
 
@@ -71,7 +68,7 @@ export async function getNewsInfoByCategoryFromStockNews(page: number = 1): Prom
 
 export async function getTrendingNewsInfoFromStockNews(page: number = 1): Promise<TrendingInfo[]> {
   const params = new URLSearchParams({
-    token: import.meta.env.VITE_STOCKNEWS_API_KEY,
+    token: import.meta.env.VITE_STOCK_NEWS_API_KEY,
     items: ITEMS.toString(),
     page: page.toString(),
   })
@@ -88,7 +85,7 @@ export async function getTrendingNewsInfoFromStockNews(page: number = 1): Promis
 
 export async function getSavedNewsInfoFromStockNews(page: number = 1, tickers: string[] = []): Promise<NewsInfo[]> {
   const params = new URLSearchParams({
-    token: import.meta.env.VITE_STOCKNEWS_API_KEY,
+    token: import.meta.env.VITE_STOCK_NEWS_API_KEY,
     tickers: tickers.toString(),
     items: ITEMS.toString(),
     page: page.toString(),
