@@ -32,10 +32,7 @@ function BrowsePresenter() {
   }, [user, setSaved])
 
   useEffect(() => {
-    setBrowse(
-      currentPage,
-      Array.from(saved).map((item) => item.symbol),
-    )
+    setBrowse(currentPage)
   }, [setBrowse, currentPage, saved])
 
   useEffect(() => {
@@ -53,18 +50,15 @@ function BrowsePresenter() {
     toggleFavorite(user.uid, ticker, title)
   }
 
-  const handleRetry = () => {
-    setBrowse(
-      currentPage,
-      Array.from(saved).map((item) => item.symbol),
-    )
+  function handleRetry() {
+    setBrowse(currentPage)
   }
 
-  const handlePageChange = (currentPage: number) => {
+  function handlePageChange(currentPage: number) {
     setPage(currentPage)
   }
 
-  const handleTabChange = (currentTab: string) => {
+  function handleTabChange(currentTab: string) {
     setTab(currentTab)
   }
 

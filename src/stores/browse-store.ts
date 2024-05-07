@@ -4,7 +4,7 @@ import { create } from 'zustand'
 
 interface BrowseState {
   browse: CombinedInfo[] | null
-  setBrowse: (page: number, saved: string[]) => Promise<void>
+  setBrowse: (page: number) => Promise<void>
   browseLoading: boolean
   currentPage: number
   setPage: (page: number) => void
@@ -14,10 +14,10 @@ interface BrowseState {
 
 const useBrowseStore = create<BrowseState>((set) => ({
   browse: null,
-  setBrowse: async (page, saved) => {
+  setBrowse: async (page) => {
     set({ browseLoading: true })
     try {
-      const data = await getCombinedInfoFromStockNews(page, saved)
+      const data = await getCombinedInfoFromStockNews(page)
 
       set({ browse: data })
     } catch (error) {

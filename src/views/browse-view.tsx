@@ -10,7 +10,7 @@ export type PaginationProps = {
   currentTab: string
   onSetTab: (newTab: string) => void
 }
-type BrowseViewProps = BrowseItemProps & PaginationProps & { data: CombinedInfo[] }
+type BrowseViewProps = Omit<BrowseItemProps, 'info'> & PaginationProps & { data: CombinedInfo[] }
 
 function BrowseView(props: BrowseViewProps) {
   const { data, currentPage, onPageChange, currentTab, onSetTab, isFavorited, onToggleFavorite, userLoggedIn } = props
