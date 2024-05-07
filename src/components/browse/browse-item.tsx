@@ -36,34 +36,28 @@ export const BrowseItem = ({ info, isFavorited, onToggleFavorite, userLoggedIn }
     return <p>Please log in to manage favorites.</p>
   }
 
-  const handleToggleFavorite = (ticker: string) => {
-    onToggleFavorite(ticker, title)
-  }
-
   return (
     <Card className='flex flex-col'>
       <CardHeader>
-        <CardTitle>{<p className='line-clamp-2'>{title}</p>}</CardTitle>
+        <CardTitle>{title.slice(0, title.lastIndexOf(' ', 50)) + '...'}</CardTitle>
       </CardHeader>
-      <CardContent>
-        <p className='line-clamp-3 text-muted-foreground'>{text}</p>
+      <CardContent className='flex-grow'>
+        <p className='text-muted-foreground'>{text.slice(0, text.lastIndexOf(' ', 100)) + '...'}</p>
       </CardContent>
-      <CardFooter className='flex items-center justify-center'>
+      <CardFooter className='grid sm:grid-cols-2 gap-6'>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className='outline-none' variant='ghost'>
-              Tickers
-            </Button>
+            <Button variant='secondary'>Tickers</Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent className='w-10'>
             {tickers.map((ticker, index) => (
               <DropdownMenuItem key={index} className='justify-between'>
-                <Link to='/details/$symbol' params={{ symbol: ticker }}>
+                <Link to='/details/$symbol' params={{ symbol: ticker }} className='badge'>
                   {ticker}
                 </Link>
                 <CardFavorite
                   favorited={isFavorited(ticker)}
-                  onClick={() => handleToggleFavorite(ticker)}
+                  onClick={() => onToggleFavorite(ticker, title)}
                   aria-label='Favorite Toggler'
                 />
               </DropdownMenuItem>
