@@ -1,3 +1,4 @@
+import { Option } from '@/components/ui/multiple-selector'
 import axios from 'axios'
 
 const BASE_URL = 'https://stocknewsapi.com/api/v1/'
@@ -31,9 +32,9 @@ export type CombinedInfo = NewsInfo | TrendingInfo
 
 const ITEMS = 12
 
-export async function getCombinedInfoFromStockNews(page: number): Promise<CombinedInfo[]> {
-  const newsPromise = getNewsInfoByCategoryFromStockNews(page)
-  const trendingPromise = getTrendingNewsInfoFromStockNews(page)
+export async function getCombinedInfoFromStockNews(page: number, topics: Option[]): Promise<CombinedInfo[]> {
+  const newsPromise = getNewsInfoByCategoryFromStockNews(page, topics)
+  const trendingPromise = getTrendingNewsInfoFromStockNews(page, topics)
 
   try {
     const [newsData, trendingData] = await Promise.all([newsPromise, trendingPromise])
@@ -48,13 +49,32 @@ export async function getCombinedInfoFromStockNews(page: number): Promise<Combin
   }
 }
 
-export async function getNewsInfoByCategoryFromStockNews(page: number = 1): Promise<NewsInfo[]> {
+export async function getNewsInfoByCategoryFromStockNews(page: number = 1, topics: Option[]): Promise<NewsInfo[]> {
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCK_NEWS_API_KEY,
     section: 'alltickers',
     page: page.toString(),
     items: ITEMS.toString(),
   })
+
+  if (topics.length > 0) {
+    const topicValues = topics.filter((topic) => topic.group === 'Topics').map((topic) => topic.value)
+    const sectorValues = topics.filter((topic) => topic.group === 'Sectors').map((topic) => topic.value)
+    const collectionValues = topics.filter((topic) => topic.group === 'Collections').map((topic) => topic.value)
+
+    if (topicValues.length > 0) {
+      params.append('topic', topicValues.join(','))
+    }
+
+    if (sectorValues.length > 0) {
+      params.append('sector', sectorValues.join(','))
+    }
+
+    if (collectionValues.length > 0) {
+      params.append('collection', collectionValues.join(','))
+    }
+  }
+
   const url = `${BASE_URL}category?${params}`
 
   try {
@@ -66,12 +86,31 @@ export async function getNewsInfoByCategoryFromStockNews(page: number = 1): Prom
   }
 }
 
-export async function getTrendingNewsInfoFromStockNews(page: number = 1): Promise<TrendingInfo[]> {
+export async function getTrendingNewsInfoFromStockNews(page: number = 1, topics: Option[]): Promise<TrendingInfo[]> {
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCK_NEWS_API_KEY,
     items: ITEMS.toString(),
     page: page.toString(),
   })
+
+  if (topics.length > 0) {
+    const topicValues = topics.filter((topic) => topic.group === 'Topics').map((topic) => topic.value)
+    const sectorValues = topics.filter((topic) => topic.group === 'Sectors').map((topic) => topic.value)
+    const collectionValues = topics.filter((topic) => topic.group === 'Collections').map((topic) => topic.value)
+
+    if (topicValues.length > 0) {
+      params.append('topic', topicValues.join(','))
+    }
+
+    if (sectorValues.length > 0) {
+      params.append('sector', sectorValues.join(','))
+    }
+
+    if (collectionValues.length > 0) {
+      params.append('collection', collectionValues.join(','))
+    }
+  }
+
   const url = `${BASE_URL}trending-headlines?${params}`
 
   try {

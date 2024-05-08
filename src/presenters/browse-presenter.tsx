@@ -3,13 +3,16 @@ import BrowseView from '@/views/browse-view'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useEffect } from 'react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import MultipleSelector, { Option } from '@/components/ui/multiple-selector'
+import { Button } from '@/components/ui/button'
 
 function BrowsePresenter() {
-  const { browse, setBrowse, browseLoading, currentPage, setPage, currentTab, setTab } = useBrowseStore()
+  const { browse, setBrowse, browseLoading, currentPage, setPage, currentTab, setTab, currentTopics, setTopics } =
+    useBrowseStore()
 
   useEffect(() => {
-    setBrowse(currentPage)
-  }, [setBrowse, currentPage])
+    setBrowse(currentPage, currentTopics)
+  }, [setBrowse, currentPage, currentTopics])
 
   useEffect(() => {
     setPage(currentPage)
@@ -20,7 +23,7 @@ function BrowsePresenter() {
   }, [currentTab, setTab])
 
   function handleRetry() {
-    setBrowse(currentPage)
+    setBrowse(currentPage, currentTopics)
   }
 
   function handlePageChange(currentPage: number) {
@@ -31,8 +34,12 @@ function BrowsePresenter() {
     setTab(currentTab)
   }
 
+  function handleSetTopics(currentTopics: Option[]) {
+    setTopics(currentTopics)
+  }
+
   if (browseLoading) {
-    return <Loading currentTab={currentTab} />
+    return <Loading currentTab={currentTab} currentTopics={currentTopics} />
   }
 
   return browse ? (
@@ -43,6 +50,8 @@ function BrowsePresenter() {
         onPageChange={handlePageChange}
         currentTab={currentTab}
         onSetTab={handleTabChange}
+        currentTopics={currentTopics}
+        onSetTopics={handleSetTopics}
       />
     </div>
   ) : (
@@ -55,13 +64,26 @@ function BrowsePresenter() {
 
 interface LoadingProps {
   currentTab: string
+  currentTopics: Option[]
 }
 
-const Loading = ({ currentTab }: LoadingProps) => {
+const Loading = ({ currentTab, currentTopics }: LoadingProps) => {
   return (
     <div className='container '>
-      <div className='flex justify-between py-6'>
+      <div className='flex justify-between py-6 gap-3'>
         <h2 className='text-3xl font-semibold'>Browse</h2>
+        <MultipleSelector
+          value={currentTopics}
+          hidePlaceholderWhenSelected
+          placeholder='Topics...'
+          emptyIndicator={
+            <p className='text-center text-lg leading-10 text-gray-600 dark:text-gray-400'>no results found.</p>
+          }
+          groupBy='group'
+        />
+        <Button className='mr-60' disabled={currentTopics?.length === 0}>
+          Clear
+        </Button>
         <Tabs defaultValue={currentTab}>
           <TabsList>
             <TabsTrigger value='all'>All News</TabsTrigger>

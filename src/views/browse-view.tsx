@@ -3,6 +3,10 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { CombinedInfo } from '@/lib/api/stock-news'
 import { BrowseItem, BrowseItemProps } from '@/components/browse/browse-item'
 import { PaginationNumbers } from '@/components/browse/browse-pagination'
+import MultipleSelector, { Option } from '@/components/ui/multiple-selector'
+import { TOPICS } from '@/components/browse/browse-filtering'
+import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 export type PaginationProps = {
   onPageChange: (newPage: number) => void
@@ -10,21 +14,65 @@ export type PaginationProps = {
   currentTab: string
   onSetTab: (newTab: string) => void
 }
-type BrowseViewProps = Omit<BrowseItemProps, 'info'> & PaginationProps & { data: CombinedInfo[] }
+
+export type FilteringProps = {
+  currentTopics: Option[] | undefined
+  onSetTopics: (topics: Option[]) => void
+}
+
+type BrowseViewProps = Omit<BrowseItemProps, 'info'> & FilteringProps & PaginationProps & { data: CombinedInfo[] }
 
 function BrowseView(props: BrowseViewProps) {
-  const { data, currentPage, onPageChange, currentTab, onSetTab } = props
+  const { data, currentPage, onPageChange, currentTab, onSetTab, currentTopics, onSetTopics } = props
 
   function handleTabChange(newTab: string) {
     onSetTab(newTab)
     onPageChange(1)
   }
 
+  function sortOption(a: Option, b: Option) {
+    const labelA = a.label.toUpperCase()
+    const labelB = b.label.toUpperCase()
+
+    if (labelA < labelB) {
+      return -1
+    }
+    if (labelA > labelB) {
+      return 1
+    }
+
+    return 0
+  }
+
   return (
     <div className='container'>
       <Tabs defaultValue={currentTab} onValueChange={handleTabChange}>
-        <div className='flex justify-between py-6'>
+        <div className='flex justify-between py-6 gap-3'>
           <h2 className='text-3xl font-semibold'>Browse</h2>
+          <MultipleSelector
+            className='min-h-10'
+            value={currentTopics}
+            onChange={onSetTopics}
+            hidePlaceholderWhenSelected
+            defaultOptions={TOPICS.sort(sortOption)}
+            placeholder='Topics...'
+            emptyIndicator={
+              <p className='text-center text-lg leading-10 text-gray-600 dark:text-gray-400'>no results found.</p>
+            }
+          />
+          <Button className='mr-60' onClick={() => onSetTopics([])} disabled={currentTopics?.length === 0}>
+            Clear
+          </Button>
+          <Select>
+            <SelectTrigger className='w-[180px]'>
+              <SelectValue placeholder='Sector' />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='light'>Light</SelectItem>
+              <SelectItem value='dark'>Dark</SelectItem>
+              <SelectItem value='system'>System</SelectItem>
+            </SelectContent>
+          </Select>
           <TabsList>
             <TabsTrigger value='all'>All News</TabsTrigger>
             <TabsTrigger value='trending'>Trending</TabsTrigger>
