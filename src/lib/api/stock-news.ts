@@ -67,7 +67,9 @@ export async function getNewsInfoByCategoryFromStockNews(page: number = 1, topic
     }
 
     if (sectorValues.length > 0) {
-      params.append('sector', sectorValues.join(','))
+      if (sectorValues[0] !== 'all') {
+        params.append('sector', sectorValues.join(','))
+      }
     }
 
     if (collectionValues.length > 0) {
@@ -95,15 +97,10 @@ export async function getTrendingNewsInfoFromStockNews(page: number = 1, topics:
 
   if (topics.length > 0) {
     const topicValues = topics.filter((topic) => topic.group === 'Topics').map((topic) => topic.value)
-    const sectorValues = topics.filter((topic) => topic.group === 'Sectors').map((topic) => topic.value)
     const collectionValues = topics.filter((topic) => topic.group === 'Collections').map((topic) => topic.value)
 
     if (topicValues.length > 0) {
       params.append('topic', topicValues.join(','))
-    }
-
-    if (sectorValues.length > 0) {
-      params.append('sector', sectorValues.join(','))
     }
 
     if (collectionValues.length > 0) {

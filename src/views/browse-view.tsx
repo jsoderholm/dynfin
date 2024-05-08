@@ -4,7 +4,7 @@ import { CombinedInfo } from '@/lib/api/stock-news'
 import { BrowseItem, BrowseItemProps } from '@/components/browse/browse-item'
 import { PaginationNumbers } from '@/components/browse/browse-pagination'
 import MultipleSelector, { Option } from '@/components/ui/multiple-selector'
-import { TOPICS } from '@/components/browse/browse-filtering'
+import { TOPICS, SECTORS } from '@/lib/browse-filtering'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
@@ -18,16 +18,35 @@ export type PaginationProps = {
 export type FilteringProps = {
   currentTopics: Option[] | undefined
   onSetTopics: (topics: Option[]) => void
+  currentSector: Option
+  onSetSector: (sector: Option) => void
 }
 
 type BrowseViewProps = Omit<BrowseItemProps, 'info'> & FilteringProps & PaginationProps & { data: CombinedInfo[] }
 
 function BrowseView(props: BrowseViewProps) {
-  const { data, currentPage, onPageChange, currentTab, onSetTab, currentTopics, onSetTopics } = props
+  const {
+    data,
+    currentPage,
+    onPageChange,
+    currentTab,
+    onSetTab,
+    currentTopics,
+    onSetTopics,
+    currentSector,
+    onSetSector,
+  } = props
 
   function handleTabChange(newTab: string) {
     onSetTab(newTab)
     onPageChange(1)
+  }
+
+  const handleSetSector = (value: string) => {
+    const sector = SECTORS.find((sector) => sector.value === value)
+    if (sector) {
+      onSetSector(sector)
+    }
   }
 
   function sortOption(a: Option, b: Option) {
@@ -50,7 +69,7 @@ function BrowseView(props: BrowseViewProps) {
         <div className='flex justify-between py-6 gap-3'>
           <h2 className='text-3xl font-semibold'>Browse</h2>
           <MultipleSelector
-            className='min-h-10'
+            className=' w-100 min-h-10'
             value={currentTopics}
             onChange={onSetTopics}
             hidePlaceholderWhenSelected
@@ -60,19 +79,23 @@ function BrowseView(props: BrowseViewProps) {
               <p className='text-center text-lg leading-10 text-gray-600 dark:text-gray-400'>no results found.</p>
             }
           />
-          <Button className='mr-60' onClick={() => onSetTopics([])} disabled={currentTopics?.length === 0}>
+          <Button onClick={() => onSetTopics([])} disabled={currentTopics?.length === 0}>
             Clear
           </Button>
-          <Select>
-            <SelectTrigger className='w-[180px]'>
-              <SelectValue placeholder='Sector' />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value='light'>Light</SelectItem>
-              <SelectItem value='dark'>Dark</SelectItem>
-              <SelectItem value='system'>System</SelectItem>
-            </SelectContent>
-          </Select>
+          {currentTab === 'all' ? (
+            <Select defaultValue={currentSector.value} onValueChange={handleSetSector}>
+              <SelectTrigger className='w-80'>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {SECTORS.map((sector) => (
+                  <SelectItem value={sector.value}>{sector.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          ) : (
+            ''
+          )}
           <TabsList>
             <TabsTrigger value='all'>All News</TabsTrigger>
             <TabsTrigger value='trending'>Trending</TabsTrigger>

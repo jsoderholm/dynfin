@@ -5,14 +5,27 @@ import { useEffect } from 'react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import MultipleSelector, { Option } from '@/components/ui/multiple-selector'
 import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { SECTORS } from '@/lib/browse-filtering'
 
 function BrowsePresenter() {
-  const { browse, setBrowse, browseLoading, currentPage, setPage, currentTab, setTab, currentTopics, setTopics } =
-    useBrowseStore()
+  const {
+    browse,
+    setBrowse,
+    browseLoading,
+    currentPage,
+    setPage,
+    currentTab,
+    setTab,
+    currentTopics,
+    setTopics,
+    currentSector,
+    setSector,
+  } = useBrowseStore()
 
   useEffect(() => {
-    setBrowse(currentPage, currentTopics)
-  }, [setBrowse, currentPage, currentTopics])
+    setBrowse(currentPage, [...currentTopics, currentSector])
+  }, [setBrowse, currentPage, currentTopics, currentSector])
 
   useEffect(() => {
     setPage(currentPage)
@@ -23,7 +36,7 @@ function BrowsePresenter() {
   }, [currentTab, setTab])
 
   function handleRetry() {
-    setBrowse(currentPage, currentTopics)
+    setBrowse(currentPage, [...currentTopics, currentSector])
   }
 
   function handlePageChange(currentPage: number) {
@@ -39,7 +52,7 @@ function BrowsePresenter() {
   }
 
   if (browseLoading) {
-    return <Loading currentTab={currentTab} currentTopics={currentTopics} />
+    return <Loading currentTab={currentTab} currentTopics={currentTopics} currentSector={currentSector} />
   }
 
   return browse ? (
@@ -52,6 +65,8 @@ function BrowsePresenter() {
         onSetTab={handleTabChange}
         currentTopics={currentTopics}
         onSetTopics={handleSetTopics}
+        currentSector={currentSector}
+        onSetSector={setSector}
       />
     </div>
   ) : (
@@ -65,9 +80,10 @@ function BrowsePresenter() {
 interface LoadingProps {
   currentTab: string
   currentTopics: Option[]
+  currentSector: Option
 }
 
-const Loading = ({ currentTab, currentTopics }: LoadingProps) => {
+const Loading = ({ currentTab, currentTopics, currentSector }: LoadingProps) => {
   return (
     <div className='container '>
       <div className='flex justify-between py-6 gap-3'>
@@ -81,9 +97,21 @@ const Loading = ({ currentTab, currentTopics }: LoadingProps) => {
           }
           groupBy='group'
         />
-        <Button className='mr-60' disabled={currentTopics?.length === 0}>
-          Clear
-        </Button>
+        <Button disabled={currentTopics?.length === 0}>Clear</Button>
+        {currentTab === 'all' ? (
+          <Select defaultValue={currentSector.value}>
+            <SelectTrigger className='w-80'>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {SECTORS.map((sector) => (
+                <SelectItem value={sector.value}>{sector.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        ) : (
+          ''
+        )}
         <Tabs defaultValue={currentTab}>
           <TabsList>
             <TabsTrigger value='all'>All News</TabsTrigger>

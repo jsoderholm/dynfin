@@ -13,7 +13,11 @@ interface BrowseState {
   setTab: (tab: string) => void
   currentTopics: Option[]
   setTopics: (topics: Option[]) => void
+  currentSector: Option
+  setSector: (sector: Option) => void
 }
+
+const startingSector: Option = { label: 'All Sectors', value: 'all', group: 'Sectors' }
 
 const useBrowseStore = create<BrowseState>((set) => ({
   browse: null,
@@ -36,6 +40,8 @@ const useBrowseStore = create<BrowseState>((set) => ({
   setTab: (tab) => set({ currentTab: tab }),
   currentTopics: [],
   setTopics: (topics) => set({ currentTopics: topics }),
+  currentSector: startingSector,
+  setSector: (sector: Option) => set({ currentSector: sector }),
 }))
 
 export default useBrowseStore

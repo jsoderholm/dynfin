@@ -1,4 +1,4 @@
-import { Option } from '../ui/multiple-selector'
+import { Option } from '../components/ui/multiple-selector'
 
 export const TOPICS: Option[] = [
   { label: 'CEO', value: 'CEO', group: 'Topics' },
@@ -28,4 +28,16 @@ export const TOPICS: Option[] = [
   { label: 'SPAC', value: 'SPAC', group: 'Topics' },
   { label: 'Technical analysis', value: 'tanalysis', group: 'Topics' },
   { label: 'Warren Buffett', value: 'wbuffett', group: 'Topics' },
+]
+
+export const SECTORS: Option[] = [
+  { label: 'All Sectors', value: 'all', group: 'Sectors' },
+  { label: 'Basic Materials', value: 'Basic+Materials', group: 'Sectors' },
+  { label: 'Conglomerates', value: 'Conglomerates', group: 'Sectors' },
+  { label: 'Financial', value: 'Financial', group: 'Sectors' },
+  { label: 'Healthcare', value: 'Healthcare', group: 'Sectors' },
+  { label: 'Industrial Goods', value: 'Industrial+Goods', group: 'Sectors' },
+  { label: 'Services', value: 'Services', group: 'Sectors' },
+  { label: 'Technology', value: 'Technology', group: 'Sectors' },
+  { label: 'Utilities', value: 'Utilities', group: 'Sectors' },
 ]
