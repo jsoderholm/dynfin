@@ -1,4 +1,4 @@
-import { Option } from '@/components/ui/multiple-selector'
+import { Filter } from '@/stores/browse-store'
 import axios from 'axios'
 
 const BASE_URL = 'https://stocknewsapi.com/api/v1/'
@@ -32,9 +32,9 @@ export type CombinedInfo = NewsInfo | TrendingInfo
 
 const ITEMS = 12
 
-export async function getCombinedInfoFromStockNews(page: number, topics: Option[]): Promise<CombinedInfo[]> {
-  const newsPromise = getNewsInfoByCategoryFromStockNews(page, topics)
-  const trendingPromise = getTrendingNewsInfoFromStockNews(page, topics)
+export async function getCombinedInfoFromStockNews(page: number, filter: Filter): Promise<CombinedInfo[]> {
+  const newsPromise = getNewsInfoByCategoryFromStockNews(page, filter)
+  const trendingPromise = getTrendingNewsInfoFromStockNews(page, filter)
 
   try {
     const [newsData, trendingData] = await Promise.all([newsPromise, trendingPromise])
@@ -49,7 +49,7 @@ export async function getCombinedInfoFromStockNews(page: number, topics: Option[
   }
 }
 
-export async function getNewsInfoByCategoryFromStockNews(page: number = 1, topics: Option[]): Promise<NewsInfo[]> {
+export async function getNewsInfoByCategoryFromStockNews(page: number = 1, filter: Filter): Promise<NewsInfo[]> {
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCK_NEWS_API_KEY,
     section: 'alltickers',
@@ -57,24 +57,28 @@ export async function getNewsInfoByCategoryFromStockNews(page: number = 1, topic
     items: ITEMS.toString(),
   })
 
-  if (topics.length > 0) {
-    const topicValues = topics.filter((topic) => topic.group === 'Topics').map((topic) => topic.value)
-    const sectorValues = topics.filter((topic) => topic.group === 'Sectors').map((topic) => topic.value)
-    const collectionValues = topics.filter((topic) => topic.group === 'Collections').map((topic) => topic.value)
+  if (filter.topics.length > 0) {
+    const topicValues = filter.topics.filter((topic) => topic.group === 'Topics').map((topic) => topic.value)
 
     if (topicValues.length > 0) {
       params.append('topic', topicValues.join(','))
     }
+  }
 
-    if (sectorValues.length > 0) {
-      if (sectorValues[0] !== 'all') {
-        params.append('sector', sectorValues.join(','))
-      }
-    }
+  if (filter.sector.value !== 'all') {
+    params.append('sector', filter.sector.value)
+  }
 
-    if (collectionValues.length > 0) {
-      params.append('collection', collectionValues.join(','))
-    }
+  if (filter.industry.value !== 'all') {
+    params.append('collection', filter.industry.value)
+  }
+
+  if (filter.country.value !== 'all') {
+    params.append('collection', filter.country.value)
+  }
+
+  if (filter.collection.value !== 'all') {
+    params.append('collection', filter.collection.value)
   }
 
   const url = `${BASE_URL}category?${params}`
@@ -88,24 +92,23 @@ export async function getNewsInfoByCategoryFromStockNews(page: number = 1, topic
   }
 }
 
-export async function getTrendingNewsInfoFromStockNews(page: number = 1, topics: Option[]): Promise<TrendingInfo[]> {
+export async function getTrendingNewsInfoFromStockNews(page: number = 1, filter: Filter): Promise<TrendingInfo[]> {
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCK_NEWS_API_KEY,
     items: ITEMS.toString(),
     page: page.toString(),
   })
 
-  if (topics.length > 0) {
-    const topicValues = topics.filter((topic) => topic.group === 'Topics').map((topic) => topic.value)
-    const collectionValues = topics.filter((topic) => topic.group === 'Collections').map((topic) => topic.value)
+  if (filter.topics.length > 0) {
+    const topicValues = filter.topics.filter((topic) => topic.group === 'Topics').map((topic) => topic.value)
 
     if (topicValues.length > 0) {
       params.append('topic', topicValues.join(','))
     }
+  }
 
-    if (collectionValues.length > 0) {
-      params.append('collection', collectionValues.join(','))
-    }
+  if (filter.collection.value !== 'all') {
+    params.append('collection', filter.collection.value)
   }
 
   const url = `${BASE_URL}trending-headlines?${params}`

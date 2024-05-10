@@ -1,31 +1,20 @@
-import useBrowseStore from '@/stores/browse-store'
+import useBrowseStore, { Filter } from '@/stores/browse-store'
 import BrowseView from '@/views/browse-view'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useEffect } from 'react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import MultipleSelector, { Option } from '@/components/ui/multiple-selector'
+import MultipleSelector from '@/components/ui/multiple-selector'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { SECTORS } from '@/lib/browse-filtering'
 
 function BrowsePresenter() {
-  const {
-    browse,
-    setBrowse,
-    browseLoading,
-    currentPage,
-    setPage,
-    currentTab,
-    setTab,
-    currentTopics,
-    setTopics,
-    currentSector,
-    setSector,
-  } = useBrowseStore()
+  const { browse, setBrowse, browseLoading, currentPage, setPage, currentTab, setTab, currentFilter, setFilter } =
+    useBrowseStore()
 
   useEffect(() => {
-    setBrowse(currentPage, [...currentTopics, currentSector])
-  }, [setBrowse, currentPage, currentTopics, currentSector])
+    setBrowse(currentPage, currentFilter)
+  }, [setBrowse, currentPage, currentFilter])
 
   useEffect(() => {
     setPage(currentPage)
@@ -36,7 +25,7 @@ function BrowsePresenter() {
   }, [currentTab, setTab])
 
   function handleRetry() {
-    setBrowse(currentPage, [...currentTopics, currentSector])
+    setBrowse(currentPage, currentFilter)
   }
 
   function handlePageChange(currentPage: number) {
@@ -47,12 +36,8 @@ function BrowsePresenter() {
     setTab(currentTab)
   }
 
-  function handleSetTopics(currentTopics: Option[]) {
-    setTopics(currentTopics)
-  }
-
   if (browseLoading) {
-    return <Loading currentTab={currentTab} currentTopics={currentTopics} currentSector={currentSector} />
+    return <Loading currentTab={currentTab} currentFilter={currentFilter} />
   }
 
   return browse ? (
@@ -63,10 +48,8 @@ function BrowsePresenter() {
         onPageChange={handlePageChange}
         currentTab={currentTab}
         onSetTab={handleTabChange}
-        currentTopics={currentTopics}
-        onSetTopics={handleSetTopics}
-        currentSector={currentSector}
-        onSetSector={setSector}
+        currentFilter={currentFilter}
+        onSetFilter={setFilter}
       />
     </div>
   ) : (
@@ -79,17 +62,16 @@ function BrowsePresenter() {
 
 interface LoadingProps {
   currentTab: string
-  currentTopics: Option[]
-  currentSector: Option
+  currentFilter: Filter
 }
 
-const Loading = ({ currentTab, currentTopics, currentSector }: LoadingProps) => {
+const Loading = ({ currentTab, currentFilter }: LoadingProps) => {
   return (
     <div className='container '>
       <div className='flex justify-between py-6 gap-3'>
         <h2 className='text-3xl font-semibold'>Browse</h2>
         <MultipleSelector
-          value={currentTopics}
+          value={currentFilter.topics}
           hidePlaceholderWhenSelected
           placeholder='Topics...'
           emptyIndicator={
@@ -97,9 +79,9 @@ const Loading = ({ currentTab, currentTopics, currentSector }: LoadingProps) => 
           }
           groupBy='group'
         />
-        <Button disabled={currentTopics?.length === 0}>Clear</Button>
+        <Button disabled={currentFilter.topics?.length === 0}>Clear</Button>
         {currentTab === 'all' ? (
-          <Select defaultValue={currentSector.value}>
+          <Select defaultValue={currentFilter.sector.value}>
             <SelectTrigger className='w-80'>
               <SelectValue />
             </SelectTrigger>

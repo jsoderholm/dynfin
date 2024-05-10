@@ -1,30 +1,35 @@
 import { Option } from '@/components/ui/multiple-selector'
 import { CombinedInfo, getCombinedInfoFromStockNews } from '@/lib/api/stock-news'
+import { COLLECTIONS, COUNTRIES, INDUSTRIES, SECTORS } from '@/lib/browse-filtering'
 
 import { create } from 'zustand'
 
+export type Filter = {
+  topics: Option[]
+  sector: Option
+  industry: Option
+  country: Option
+  collection: Option
+}
+
 interface BrowseState {
   browse: CombinedInfo[] | null
-  setBrowse: (page: number, topics: Option[]) => Promise<void>
+  setBrowse: (page: number, filter: Filter) => Promise<void>
   browseLoading: boolean
   currentPage: number
   setPage: (page: number) => void
   currentTab: string
   setTab: (tab: string) => void
-  currentTopics: Option[]
-  setTopics: (topics: Option[]) => void
-  currentSector: Option
-  setSector: (sector: Option) => void
+  currentFilter: Filter
+  setFilter: (filter: Filter) => void
 }
-
-const startingSector: Option = { label: 'All Sectors', value: 'all', group: 'Sectors' }
 
 const useBrowseStore = create<BrowseState>((set) => ({
   browse: null,
-  setBrowse: async (page, topics) => {
+  setBrowse: async (page, filter) => {
     set({ browseLoading: true })
     try {
-      const data = await getCombinedInfoFromStockNews(page, topics)
+      const data = await getCombinedInfoFromStockNews(page, filter)
 
       set({ browse: data })
     } catch (error) {
@@ -38,10 +43,14 @@ const useBrowseStore = create<BrowseState>((set) => ({
   setPage: (page) => set({ currentPage: page }),
   currentTab: 'all',
   setTab: (tab) => set({ currentTab: tab }),
-  currentTopics: [],
-  setTopics: (topics) => set({ currentTopics: topics }),
-  currentSector: startingSector,
-  setSector: (sector: Option) => set({ currentSector: sector }),
+  currentFilter: {
+    topics: [],
+    sector: SECTORS[0],
+    industry: INDUSTRIES[0],
+    country: COUNTRIES[0],
+    collection: COLLECTIONS[0],
+  },
+  setFilter: (filter: Filter) => set({ currentFilter: filter }),
 }))
 
 export default useBrowseStore
