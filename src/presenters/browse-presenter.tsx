@@ -86,8 +86,13 @@ const Loading = ({ currentTab, currentFilter }: LoadingProps) => {
             <TabsTrigger value='trending'>Trending</TabsTrigger>
           </TabsList>
         </div>
-        <div className='flex gap-3 pt-3'>
-          <MultipleSelector value={currentFilter.topics} hidePlaceholderWhenSelected placeholder='Topics...' />
+        <div className='flex pt-3 gap-3 '>
+          <MultipleSelector
+            className='min-h-10 w-1/2'
+            value={currentFilter.topics}
+            hidePlaceholderWhenSelected
+            placeholder='Topics...'
+          />
           <Button>Clear filters</Button>
         </div>
         <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>

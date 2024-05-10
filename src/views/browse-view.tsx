@@ -111,7 +111,7 @@ function BrowseView(props: BrowseViewProps) {
         </div>
         <div className='flex pt-3 gap-3'>
           <MultipleSelector
-            className='min-h-10 max-w-80'
+            className='min-h-10 w-1/2'
             value={currentFilter.topics}
             onChange={(values) => (filter.topics = values) && handleSetFilter()}
             hidePlaceholderWhenSelected
