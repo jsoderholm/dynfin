@@ -102,7 +102,6 @@ function BrowseView(props: BrowseViewProps) {
             filter={filter}
             currentFilter={currentFilter}
             setFilter={handleSetFilter}
-            resetFilter={resetFilter}
             currentTab={currentTab}
           />
           <TabsList>
@@ -110,9 +109,9 @@ function BrowseView(props: BrowseViewProps) {
             <TabsTrigger value='trending'>Trending</TabsTrigger>
           </TabsList>
         </div>
-        <div className='flex gap-3 pt-3 '>
+        <div className='flex pt-3 gap-3'>
           <MultipleSelector
-            className='min-h-10 max-w-60'
+            className='min-h-10 max-w-80'
             value={currentFilter.topics}
             onChange={(values) => (filter.topics = values) && handleSetFilter()}
             hidePlaceholderWhenSelected

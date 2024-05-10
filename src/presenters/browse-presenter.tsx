@@ -5,8 +5,8 @@ import { useEffect } from 'react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import MultipleSelector from '@/components/ui/multiple-selector'
 import { Button } from '@/components/ui/button'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { SECTORS } from '@/lib/browse-filtering'
+import { Input } from '@/components/ui/input'
+import { BrowseFilter } from '@/components/browse/browse-filter'
 
 function BrowsePresenter() {
   const { browse, setBrowse, browseLoading, currentPage, setPage, currentTab, setTab, currentFilter, setFilter } =
@@ -68,44 +68,34 @@ interface LoadingProps {
 const Loading = ({ currentTab, currentFilter }: LoadingProps) => {
   return (
     <div className='container '>
-      <div className='flex justify-between py-6 gap-3'>
-        <h2 className='text-3xl font-semibold'>Browse</h2>
-        <MultipleSelector
-          value={currentFilter.topics}
-          hidePlaceholderWhenSelected
-          placeholder='Topics...'
-          emptyIndicator={
-            <p className='text-center text-lg leading-10 text-gray-600 dark:text-gray-400'>no results found.</p>
-          }
-          groupBy='group'
-        />
-        <Button disabled={currentFilter.topics?.length === 0}>Clear</Button>
-        {currentTab === 'all' ? (
-          <Select defaultValue={currentFilter.sector.value}>
-            <SelectTrigger className='w-80'>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {SECTORS.map((sector) => (
-                <SelectItem value={sector.value}>{sector.label}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        ) : (
-          ''
-        )}
-        <Tabs defaultValue={currentTab}>
+      <Tabs defaultValue={currentTab}>
+        <div className='flex pt-6 gap-3'>
+          <h2 className='text-3xl font-semibold'>Browse</h2>
+          <Input placeholder='Search' />
+          <Button className='mr-20' type='submit' variant='outline'>
+            Search
+          </Button>
+          <BrowseFilter
+            filter={currentFilter}
+            currentFilter={currentFilter}
+            currentTab=''
+            setFilter={function (): void {}}
+          />
           <TabsList>
             <TabsTrigger value='all'>All News</TabsTrigger>
             <TabsTrigger value='trending'>Trending</TabsTrigger>
           </TabsList>
-        </Tabs>
-      </div>
-      <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
-        {Array.from({ length: 12 }).map((_, i) => (
-          <Skeleton key={i} className='h-64' />
-        ))}
-      </div>
+        </div>
+        <div className='flex gap-3 pt-3'>
+          <MultipleSelector value={currentFilter.topics} hidePlaceholderWhenSelected placeholder='Topics...' />
+          <Button>Clear filters</Button>
+        </div>
+        <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+          {Array.from({ length: 12 }).map((_, i) => (
+            <Skeleton key={i} className='h-64' />
+          ))}
+        </div>
+      </Tabs>
     </div>
   )
 }

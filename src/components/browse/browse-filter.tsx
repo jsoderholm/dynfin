@@ -9,7 +9,6 @@ export type BrowseFilterProps = {
   filter: Filter
   currentFilter: Filter
   setFilter: () => void
-  resetFilter: () => void
   currentTab: string
 }
 
@@ -21,7 +20,7 @@ export const BrowseFilter = (props: BrowseFilterProps) => {
       <PopoverTrigger>
         <Button variant='outline'>Filter</Button>
       </PopoverTrigger>
-      <PopoverContent className='w-100' onCloseAutoFocus={() => setFilter}>
+      <PopoverContent className='w-100' onCloseAutoFocus={() => setFilter()}>
         <div className='flex gap-2'></div>
         {currentTab === 'all' ? (
           <div>
@@ -89,7 +88,7 @@ export const BrowseFilter = (props: BrowseFilterProps) => {
             ))}
           </SelectContent>
         </Select>
-        <Button className='w-full mt-3' onClick={() => setFilter}>
+        <Button className='w-full mt-3' onClick={() => setFilter()}>
           Save Filters
         </Button>
       </PopoverContent>
