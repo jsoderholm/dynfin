@@ -44,6 +44,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@radix-ui/react-tooltip", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:1.0.7"],\
             ["@tabler/icons-react", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:3.1.0"],\
             ["@tanstack/react-router", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:1.18.3"],\
+            ["@tanstack/react-table", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:8.17.0"],\
             ["@tanstack/router-devtools", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:1.18.3"],\
             ["@tanstack/router-vite-plugin", "npm:1.18.1"],\
             ["@types/node", "npm:20.11.24"],\
@@ -3481,6 +3482,33 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@tanstack/react-table", [\
+        ["npm:8.17.0", {\
+          "packageLocation": "./.yarn/cache/@tanstack-react-table-npm-8.17.0-b6ab9e9798-8c643b4152.zip/node_modules/@tanstack/react-table/",\
+          "packageDependencies": [\
+            ["@tanstack/react-table", "npm:8.17.0"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:8.17.0", {\
+          "packageLocation": "./.yarn/__virtual__/@tanstack-react-table-virtual-eb628982ea/0/cache/@tanstack-react-table-npm-8.17.0-b6ab9e9798-8c643b4152.zip/node_modules/@tanstack/react-table/",\
+          "packageDependencies": [\
+            ["@tanstack/react-table", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:8.17.0"],\
+            ["@tanstack/table-core", "npm:8.16.0"],\
+            ["@types/react", "npm:18.2.61"],\
+            ["@types/react-dom", "npm:18.2.19"],\
+            ["react", "npm:18.2.0"],\
+            ["react-dom", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:18.2.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/react-dom",\
+            "@types/react",\
+            "react-dom",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@tanstack/router-devtools", [\
         ["npm:1.18.3", {\
           "packageLocation": "./.yarn/cache/@tanstack-router-devtools-npm-1.18.3-c091ceb817-146183ee2f.zip/node_modules/@tanstack/router-devtools/",\
@@ -3537,6 +3565,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@tanstack-store-npm-0.1.3-e59ab981df-47f6a6d2e0.zip/node_modules/@tanstack/store/",\
           "packageDependencies": [\
             ["@tanstack/store", "npm:0.1.3"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@tanstack/table-core", [\
+        ["npm:8.16.0", {\
+          "packageLocation": "./.yarn/cache/@tanstack-table-core-npm-8.16.0-c05e7272b0-c2c33c542c.zip/node_modules/@tanstack/table-core/",\
+          "packageDependencies": [\
+            ["@tanstack/table-core", "npm:8.16.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -5918,6 +5955,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@radix-ui/react-tooltip", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:1.0.7"],\
             ["@tabler/icons-react", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:3.1.0"],\
             ["@tanstack/react-router", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:1.18.3"],\
+            ["@tanstack/react-table", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:8.17.0"],\
             ["@tanstack/router-devtools", "virtual:67c6531c22d00c091163ff982ad541cdeddccb7dc548c66b9d7e6f20a6919cde9d70665156357f28966184d9bdc016e8150c8ae7a22d4d3482c320cc0f6218fd#npm:1.18.3"],\
             ["@tanstack/router-vite-plugin", "npm:1.18.1"],\
             ["@types/node", "npm:20.11.24"],\
