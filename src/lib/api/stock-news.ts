@@ -32,8 +32,12 @@ export type CombinedInfo = NewsInfo | TrendingInfo
 
 const ITEMS = 12
 
-export async function getCombinedInfoFromStockNews(page: number, filter: Filter): Promise<CombinedInfo[]> {
-  const newsPromise = getNewsInfoByCategoryFromStockNews(page, filter)
+export async function getCombinedInfoFromStockNews(
+  page: number,
+  filter: Filter,
+  search: string,
+): Promise<CombinedInfo[]> {
+  const newsPromise = getNewsInfoByCategoryFromStockNews(page, filter, search)
   const trendingPromise = getTrendingNewsInfoFromStockNews(page, filter)
 
   try {
@@ -49,7 +53,11 @@ export async function getCombinedInfoFromStockNews(page: number, filter: Filter)
   }
 }
 
-export async function getNewsInfoByCategoryFromStockNews(page: number = 1, filter: Filter): Promise<NewsInfo[]> {
+export async function getNewsInfoByCategoryFromStockNews(
+  page: number = 1,
+  filter: Filter,
+  search: string,
+): Promise<NewsInfo[]> {
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCK_NEWS_API_KEY,
     section: 'alltickers',
@@ -79,6 +87,10 @@ export async function getNewsInfoByCategoryFromStockNews(page: number = 1, filte
 
   if (filter.collection.value !== 'all') {
     params.append('collection', filter.collection.value)
+  }
+
+  if (search !== '') {
+    params.append('search', search)
   }
 
   const url = `${BASE_URL}category?${params}`

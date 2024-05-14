@@ -9,12 +9,23 @@ import { Input } from '@/components/ui/input'
 import { BrowseFilter } from '@/components/browse/browse-filter'
 
 function BrowsePresenter() {
-  const { browse, setBrowse, browseLoading, currentPage, setPage, currentTab, setTab, currentFilter, setFilter } =
-    useBrowseStore()
+  const {
+    browse,
+    setBrowse,
+    browseLoading,
+    currentPage,
+    setPage,
+    currentTab,
+    setTab,
+    currentFilter,
+    setFilter,
+    currentSearch,
+    setSearch,
+  } = useBrowseStore()
 
   useEffect(() => {
-    setBrowse(currentPage, currentFilter)
-  }, [setBrowse, currentPage, currentFilter])
+    setBrowse(currentPage, currentFilter, currentSearch)
+  }, [setBrowse, currentPage, currentFilter, currentSearch])
 
   useEffect(() => {
     setPage(currentPage)
@@ -25,19 +36,11 @@ function BrowsePresenter() {
   }, [currentTab, setTab])
 
   function handleRetry() {
-    setBrowse(currentPage, currentFilter)
-  }
-
-  function handlePageChange(currentPage: number) {
-    setPage(currentPage)
-  }
-
-  function handleTabChange(currentTab: string) {
-    setTab(currentTab)
+    setBrowse(currentPage, currentFilter, currentSearch)
   }
 
   if (browseLoading) {
-    return <Loading currentTab={currentTab} currentFilter={currentFilter} />
+    return <Loading currentTab={currentTab} currentFilter={currentFilter} currentSearch={currentSearch} />
   }
 
   return browse ? (
@@ -45,11 +48,13 @@ function BrowsePresenter() {
       <BrowseView
         data={browse}
         currentPage={currentPage}
-        onPageChange={handlePageChange}
+        onPageChange={setPage}
         currentTab={currentTab}
-        onSetTab={handleTabChange}
+        onSetTab={setTab}
         currentFilter={currentFilter}
         onSetFilter={setFilter}
+        currentSearch={currentSearch}
+        onSearch={setSearch}
       />
     </div>
   ) : (
@@ -63,16 +68,17 @@ function BrowsePresenter() {
 interface LoadingProps {
   currentTab: string
   currentFilter: Filter
+  currentSearch: string
 }
 
-const Loading = ({ currentTab, currentFilter }: LoadingProps) => {
+const Loading = ({ currentTab, currentFilter, currentSearch }: LoadingProps) => {
   return (
     <div className='container '>
       <Tabs defaultValue={currentTab}>
         <div className='flex pt-6 gap-3'>
           <h2 className='text-3xl font-semibold'>Browse</h2>
           <Input placeholder='Search' />
-          <Button className='mr-20' type='submit' variant='outline'>
+          <Button className='mr-20' type='submit' variant='outline' value={currentSearch}>
             Search
           </Button>
           <BrowseFilter

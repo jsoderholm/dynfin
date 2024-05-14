@@ -6,9 +6,9 @@ import { PaginationNumbers } from '@/components/browse/browse-pagination'
 import MultipleSelector, { Option } from '@/components/ui/multiple-selector'
 import { TOPICS, SECTORS, INDUSTRIES, COUNTRIES, COLLECTIONS } from '@/lib/browse-filtering'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Filter } from '@/stores/browse-store'
 import { BrowseFilter } from '@/components/browse/browse-filter'
+import { BrowseSearch, SearchProps } from '@/components/browse/browse-search'
 
 export type PaginationProps = {
   onPageChange: (newPage: number) => void
@@ -22,10 +22,14 @@ export type FilteringProps = {
   onSetFilter: (filter: Filter) => void
 }
 
-type BrowseViewProps = Omit<BrowseItemProps, 'info'> & FilteringProps & PaginationProps & { data: CombinedInfo[] }
+type BrowseViewProps = Omit<BrowseItemProps, 'info'> &
+  FilteringProps &
+  PaginationProps &
+  SearchProps & { data: CombinedInfo[] }
 
 function BrowseView(props: BrowseViewProps) {
-  const { data, currentPage, onPageChange, currentTab, onSetTab, currentFilter, onSetFilter } = props
+  const { data, currentPage, onPageChange, currentTab, onSetTab, currentFilter, onSetFilter, onSearch, currentSearch } =
+    props
 
   const filter: Filter = {
     topics: currentFilter.topics,
@@ -94,29 +98,43 @@ function BrowseView(props: BrowseViewProps) {
       <Tabs defaultValue={currentTab} onValueChange={handleTabChange}>
         <div className='pt-6 flex gap-3'>
           <h2 className='text-3xl font-semibold'>Browse</h2>
-          <Input type='search' placeholder='Search' />
-          <Button className='mr-20' type='submit' variant='outline'>
-            Search
-          </Button>
-          <BrowseFilter
-            filter={filter}
-            currentFilter={currentFilter}
-            setFilter={handleSetFilter}
-            currentTab={currentTab}
-          />
-          <TabsList>
-            <TabsTrigger value='all'>All News</TabsTrigger>
-            <TabsTrigger value='trending'>Trending</TabsTrigger>
-          </TabsList>
+          {currentTab === 'all' ? (
+            <div className='flex w-full gap-3 justify-end'>
+              <BrowseSearch currentSearch={currentSearch} onSearch={onSearch} />{' '}
+              <BrowseFilter
+                filter={filter}
+                currentFilter={currentFilter}
+                setFilter={handleSetFilter}
+                currentTab={currentTab}
+              />
+              <TabsList className='justify-end'>
+                <TabsTrigger value='all'>All News</TabsTrigger>
+                <TabsTrigger value='trending'>Trending</TabsTrigger>
+              </TabsList>
+            </div>
+          ) : (
+            <div className='flex w-full gap-3 justify-end'>
+              <BrowseFilter
+                filter={filter}
+                currentFilter={currentFilter}
+                setFilter={handleSetFilter}
+                currentTab={currentTab}
+              />
+              <TabsList className='justify-end'>
+                <TabsTrigger value='all'>All News</TabsTrigger>
+                <TabsTrigger value='trending'>Trending</TabsTrigger>
+              </TabsList>
+            </div>
+          )}
         </div>
-        <div className='flex pt-3 gap-3'>
+        <div className='flex justify-end pt-3 gap-3'>
           <MultipleSelector
-            className='min-h-10 w-1/2'
+            className='min-h-10 w-1/2 '
             value={currentFilter.topics}
             onChange={(values) => (filter.topics = values) && handleSetFilter()}
             hidePlaceholderWhenSelected
             defaultOptions={TOPICS.sort(sortOption)}
-            placeholder='Topics...'
+            placeholder='Select topics...'
             emptyIndicator={
               <p className='text-center text-lg leading-10 text-gray-600 dark:text-gray-400'>no results found.</p>
             }

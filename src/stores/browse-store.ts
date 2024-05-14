@@ -14,7 +14,7 @@ export type Filter = {
 
 interface BrowseState {
   browse: CombinedInfo[] | null
-  setBrowse: (page: number, filter: Filter) => Promise<void>
+  setBrowse: (page: number, filter: Filter, search: string) => Promise<void>
   browseLoading: boolean
   currentPage: number
   setPage: (page: number) => void
@@ -22,14 +22,16 @@ interface BrowseState {
   setTab: (tab: string) => void
   currentFilter: Filter
   setFilter: (filter: Filter) => void
+  currentSearch: string
+  setSearch: (search: string) => void
 }
 
 const useBrowseStore = create<BrowseState>((set) => ({
   browse: null,
-  setBrowse: async (page, filter) => {
+  setBrowse: async (page, filter, search) => {
     set({ browseLoading: true })
     try {
-      const data = await getCombinedInfoFromStockNews(page, filter)
+      const data = await getCombinedInfoFromStockNews(page, filter, search)
 
       set({ browse: data })
     } catch (error) {
@@ -51,6 +53,8 @@ const useBrowseStore = create<BrowseState>((set) => ({
     collection: COLLECTIONS[0],
   },
   setFilter: (filter: Filter) => set({ currentFilter: filter }),
+  currentSearch: '',
+  setSearch: (search: string) => set({ currentSearch: search }),
 }))
 
 export default useBrowseStore
