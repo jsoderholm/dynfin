@@ -98,34 +98,17 @@ function BrowseView(props: BrowseViewProps) {
       <Tabs defaultValue={currentTab} onValueChange={handleTabChange}>
         <div className='pt-6 flex gap-3'>
           <h2 className='text-3xl font-semibold'>Browse</h2>
-          {currentTab === 'all' ? (
-            <div className='flex w-full gap-3 justify-end'>
-              <BrowseSearch currentSearch={currentSearch} onSearch={onSearch} />{' '}
-              <BrowseFilter
-                filter={filter}
-                currentFilter={currentFilter}
-                setFilter={handleSetFilter}
-                currentTab={currentTab}
-              />
-              <TabsList className='justify-end'>
-                <TabsTrigger value='all'>All News</TabsTrigger>
-                <TabsTrigger value='trending'>Trending</TabsTrigger>
-              </TabsList>
-            </div>
-          ) : (
-            <div className='flex w-full gap-3 justify-end'>
-              <BrowseFilter
-                filter={filter}
-                currentFilter={currentFilter}
-                setFilter={handleSetFilter}
-                currentTab={currentTab}
-              />
-              <TabsList className='justify-end'>
-                <TabsTrigger value='all'>All News</TabsTrigger>
-                <TabsTrigger value='trending'>Trending</TabsTrigger>
-              </TabsList>
-            </div>
-          )}
+          <BrowseSearch currentSearch={currentSearch} onSearch={onSearch} currentTab={currentTab} />{' '}
+          <BrowseFilter
+            filter={filter}
+            currentFilter={currentFilter}
+            setFilter={handleSetFilter}
+            currentTab={currentTab}
+          />
+          <TabsList className='justify-end'>
+            <TabsTrigger value='all'>All News</TabsTrigger>
+            <TabsTrigger value='trending'>Trending</TabsTrigger>
+          </TabsList>
         </div>
         <div className='flex justify-end pt-3 gap-3'>
           <MultipleSelector

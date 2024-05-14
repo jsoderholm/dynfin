@@ -8,13 +8,14 @@ import { z } from 'zod'
 export type SearchProps = {
   currentSearch: string
   onSearch: (search: string) => void
+  currentTab: string
 }
 
 const formSchema = z.object({
   search: z.string(),
 })
 
-export const BrowseSearch = ({ onSearch, currentSearch }: SearchProps) => {
+export const BrowseSearch = ({ onSearch, currentSearch, currentTab }: SearchProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,12 +36,12 @@ export const BrowseSearch = ({ onSearch, currentSearch }: SearchProps) => {
           render={({ field }) => (
             <FormItem className='w-3/4'>
               <FormControl>
-                <Input placeholder='Search...' {...field} />
+                <Input placeholder='Search...' {...field} disabled={currentTab === 'trending'} />
               </FormControl>
             </FormItem>
           )}
         />
-        <Button className='ml-1' type='submit'>
+        <Button className='ml-1' type='submit' disabled={currentTab === 'trending'}>
           Submit
         </Button>
       </form>
