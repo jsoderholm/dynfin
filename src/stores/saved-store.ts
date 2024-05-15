@@ -44,7 +44,7 @@ const useSavedStore = create<SavedState>((set, get) => ({
         removeCompanyFromSaved(userId, symbol)
       } else {
         newSaved.add({ symbol, name })
-        addCompanyToSaved(userId, symbol)
+        addCompanyToSaved(userId, symbol, name)
       }
       return { saved: newSaved }
     }),

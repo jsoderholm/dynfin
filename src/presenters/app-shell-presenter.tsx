@@ -70,7 +70,7 @@ const AppShellPresenter = () => {
 
   return (
     <AppShell
-      user={user}
+      user={router.location.pathname !== '/authentication' ? user : null}
       handleSignOut={handleSignOut}
       collapsed={collapsed}
       setCollapsed={setCollapsed}

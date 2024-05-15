@@ -12,7 +12,10 @@ export interface AuthState {
   login: (credentials: Credentials) => Promise<boolean>
   logout: () => Promise<void>
   deleteUser: () => Promise<void>
-  saved: string[]
+  saved: {
+    name: string
+    symbol: string
+  }[]
 }
 
 const useAuthStore = create<AuthState>()((_, get) => ({
