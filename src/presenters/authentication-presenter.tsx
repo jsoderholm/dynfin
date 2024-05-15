@@ -6,6 +6,7 @@ import AuthenticationView from '@/views/authentication-view'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from '@tanstack/react-router'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { create } from 'zustand'
@@ -29,6 +30,7 @@ const AuthenticationPresenter = () => {
   const navigate = useNavigate()
   const login = useAuthStore((state) => state.login)
   const { open, onOpenChange } = useModalStore()
+  const [loadingAuthAction, setLoadingAuthAction] = useState(false)
 
   const registerForm = useForm<z.infer<typeof AuthFormSchema>>({
     resolver: zodResolver(AuthFormSchema),
@@ -40,7 +42,9 @@ const AuthenticationPresenter = () => {
 
   async function onLogin(values: z.infer<typeof AuthFormSchema>) {
     const { email, password } = values
+    setLoadingAuthAction(true)
     const success = await login({ email, password })
+    setLoadingAuthAction(false)
     if (!success) return
     navigate({ to: '/' })
   }
@@ -49,23 +53,29 @@ const AuthenticationPresenter = () => {
     const { email, password } = values
 
     try {
+      setLoadingAuthAction(true)
       await createUserWithEmailAndPassword(auth, email, password).then((credentials) =>
         createUserInFirestore(credentials, { uid: credentials.user.uid, saved: [] }),
       )
       navigate({ to: '/' })
     } catch (e) {
       console.error(e)
+    } finally {
+      setLoadingAuthAction(false)
     }
   }
 
   async function onGitHub() {
     try {
+      setLoadingAuthAction(true)
       await signInUserGitHub(auth).then((credentials) =>
         createUserInFirestore(credentials, { uid: credentials.user.uid, saved: [] }),
       )
       navigate({ to: '/' })
     } catch (e) {
       console.error(e)
+    } finally {
+      setLoadingAuthAction(false)
     }
   }
 
@@ -78,6 +88,7 @@ const AuthenticationPresenter = () => {
       onGitHub={onGitHub}
       open={open}
       onOpenChange={onOpenChange}
+      loading={loadingAuthAction}
     />
   )
 }

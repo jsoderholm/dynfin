@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '../ui/form'
 import { z } from 'zod'
 import { AuthFormSchema } from '@/presenters/authentication-presenter'
+import { IconLoader2 } from '@tabler/icons-react'
 
 export type UserAuthModalProps = {
   loginForm: ReturnType<typeof useForm<z.infer<typeof AuthFormSchema>>>
@@ -13,9 +14,10 @@ export type UserAuthModalProps = {
   onGitHub: () => Promise<void>
   open: boolean
   onOpenChange: (open: boolean) => void
+  loading?: boolean
 }
 
-const UserAuthModal = ({ loginForm, onLogin, onGitHub, open, onOpenChange }: UserAuthModalProps) => {
+const UserAuthModal = ({ loginForm, onLogin, onGitHub, open, onOpenChange, loading = false }: UserAuthModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
@@ -55,7 +57,8 @@ const UserAuthModal = ({ loginForm, onLogin, onGitHub, open, onOpenChange }: Use
                 </FormItem>
               )}
             />
-            <Button type='submit' className='my-2'>
+            <Button type='submit' className='my-2' disabled={loading}>
+              {loading && <IconLoader2 className='mr-2 h-4 w-4 animate-spin' />}
               Sign In
             </Button>
           </form>
@@ -68,7 +71,7 @@ const UserAuthModal = ({ loginForm, onLogin, onGitHub, open, onOpenChange }: Use
             <span className='bg-background px-2 text-muted-foreground'>Or continue with</span>
           </div>
         </div>
-        <GitHubButton onClick={onGitHub} />
+        <GitHubButton onClick={onGitHub} loading={loading} />
       </DialogContent>
     </Dialog>
   )

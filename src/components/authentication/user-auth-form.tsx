@@ -5,14 +5,16 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { AuthFormSchema } from '@/presenters/authentication-presenter'
+import { IconLoader2 } from '@tabler/icons-react'
 
 export type UserAuthFormProps = {
   registerForm: ReturnType<typeof useForm<z.infer<typeof AuthFormSchema>>>
   onRegister: (values: z.infer<typeof AuthFormSchema>) => Promise<void>
   onGitHub: () => Promise<void>
+  loading?: boolean
 }
 
-const UserAuthForm = ({ registerForm, onRegister, onGitHub }: UserAuthFormProps) => {
+const UserAuthForm = ({ registerForm, onRegister, onGitHub, loading = false }: UserAuthFormProps) => {
   return (
     <div className='grid gap-6'>
       <Form {...registerForm}>
@@ -43,7 +45,8 @@ const UserAuthForm = ({ registerForm, onRegister, onGitHub }: UserAuthFormProps)
               </FormItem>
             )}
           />
-          <Button type='submit' className='my-2'>
+          <Button type='submit' className='my-2' disabled={loading}>
+            {loading && <IconLoader2 className='mr-2 h-4 w-4 animate-spin' />}
             Create Account
           </Button>
         </form>
@@ -56,7 +59,7 @@ const UserAuthForm = ({ registerForm, onRegister, onGitHub }: UserAuthFormProps)
           <span className='bg-background px-2 text-muted-foreground'>Or continue with</span>
         </div>
       </div>
-      <GitHubButton onClick={onGitHub} />
+      <GitHubButton onClick={onGitHub} loading={loading} />
     </div>
   )
 }
