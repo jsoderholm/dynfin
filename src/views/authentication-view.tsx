@@ -6,10 +6,10 @@ type AuthenticationViewProps = UserAuthFormProps & UserAuthModalProps
 
 const AuthenticationView = (props: AuthenticationViewProps) => {
   return (
-    <div className='container h-screen flex-1 flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0 bg-white'>
+    <div className='container h-screen flex-1 flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0 '>
       <UserAuthModal {...props} />
       <div className='relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r'>
-        <div className='absolute inset-0 bg-primary' />
+        <div className='absolute inset-0 bg-primary dark:bg-background' />
         <div className='relative flex items-center text-lg font-medium'>dynfin</div>
         <div className='relative mt-auto'>
           <blockquote className='space-y-2'>
