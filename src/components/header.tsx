@@ -6,6 +6,7 @@ import { Link } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
 import AvatarMenu, { AvatarMenuProps } from './avatar-menu'
+import { ModeToggle, ModeToggleProps } from './mode-toggle'
 
 export type HeaderProps = {
   className?: string
@@ -13,13 +14,14 @@ export type HeaderProps = {
   hideBackButton: boolean
   handleSignOut: () => void
 } & React.HTMLAttributes<HTMLElement> &
-  AvatarMenuProps
+  AvatarMenuProps &
+  ModeToggleProps
 
 const Header = (props: HeaderProps) => {
   const { className, hideBackButton } = props
 
   return (
-    <header className={cn('sticky flex top-0 bg-white z-10 border-b h-16', className)}>
+    <header className={cn('sticky flex top-0 z-10 border-b h-16', className)}>
       <div className={cn('flex items-center flex-1 justify-between h-full px-4', hideBackButton && 'md:justify-end')}>
         <div className='md:hidden'>
           <Sheet>
@@ -59,7 +61,10 @@ const Header = (props: HeaderProps) => {
             <IconArrowLeft />
           </Button>
         </Link>
-        <AvatarMenu {...props} />
+        <div className='flex items-center space-x-4'>
+          <ModeToggle {...props} />
+          <AvatarMenu {...props} />
+        </div>
       </div>
     </header>
   )

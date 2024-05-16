@@ -64,7 +64,7 @@ const AvatarMenu = ({
           <Avatar>
             <AvatarImage src={`/${user?.photoURL}` ?? ''} alt='avatar' />
             <AvatarFallback>
-              <IconUser color='gray' />
+              <IconUser />
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
