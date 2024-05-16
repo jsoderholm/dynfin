@@ -42,7 +42,7 @@ export const BrowseSearch = ({ onSearch, currentSearch, currentTab }: SearchProp
           )}
         />
         <Button className='ml-1' type='submit' disabled={currentTab === 'trending'}>
-          Submit
+          Search
         </Button>
       </form>
     </Form>

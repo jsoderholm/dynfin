@@ -4,7 +4,6 @@ import { CombinedInfo } from '@/lib/api/stock-news'
 import { BrowseItem, BrowseItemProps } from '@/components/browse/browse-item'
 import { PaginationNumbers } from '@/components/browse/browse-pagination'
 import MultipleSelector, { Option } from '@/components/ui/multiple-selector'
-import { TOPICS, SECTORS, INDUSTRIES, COUNTRIES, COLLECTIONS } from '@/lib/browse-filtering'
 import { Button } from '@/components/ui/button'
 import { Filter } from '@/stores/browse-store'
 import { BrowseFilter } from '@/components/browse/browse-filter'
@@ -19,7 +18,11 @@ export type PaginationProps = {
 
 export type FilteringProps = {
   currentFilter: Filter
-  onSetFilter: (filter: Filter) => void
+  filter: Filter
+  onSetFilter: () => void
+  resetFilter: () => void
+  clearDisabled: () => boolean | undefined
+  filterTopics: Option[]
 }
 
 type BrowseViewProps = Omit<BrowseItemProps, 'info'> &
@@ -39,100 +42,41 @@ function BrowseView(props: BrowseViewProps) {
     onSearch,
     currentSearch,
     maxPages,
+    filter,
+    resetFilter,
+    clearDisabled,
+    filterTopics,
   } = props
-
-  const filter: Filter = {
-    topics: currentFilter.topics,
-    sector: currentFilter.sector,
-    industry: currentFilter.industry,
-    country: currentFilter.country,
-    collection: currentFilter.collection,
-  }
-
-  function handleTabChange(newTab: string) {
-    onSetTab(newTab)
-    onPageChange(1)
-  }
-
-  const resetFilter = () => {
-    filter.topics = []
-    filter.sector = SECTORS[0]
-    filter.industry = INDUSTRIES[0]
-    filter.country = COUNTRIES[0]
-    filter.collection = COLLECTIONS[0]
-    handleSetFilter()
-  }
-
-  const handleSetFilter = () => {
-    if (
-      currentFilter.collection !== filter.collection ||
-      currentFilter.country !== filter.country ||
-      currentFilter.industry !== filter.industry ||
-      currentFilter.sector !== filter.sector ||
-      currentFilter.topics !== filter.topics
-    ) {
-      onSetFilter(filter)
-    }
-  }
-
-  const clearDisabled = () => {
-    if (currentTab == 'all') {
-      return (
-        currentFilter.topics?.length === 0 &&
-        currentFilter.collection.value === 'all' &&
-        currentFilter.country.value === 'all' &&
-        currentFilter.sector.value === 'all' &&
-        currentFilter.industry.value === 'all'
-      )
-    }
-
-    return currentFilter.topics?.length === 0 && currentFilter.collection.value === 'all'
-  }
-
-  function sortOption(a: Option, b: Option) {
-    const labelA = a.label.toUpperCase()
-    const labelB = b.label.toUpperCase()
-
-    if (labelA < labelB) {
-      return -1
-    }
-    if (labelA > labelB) {
-      return 1
-    }
-
-    return 0
-  }
 
   return (
     <div className='container'>
-      <Tabs defaultValue={currentTab} onValueChange={handleTabChange}>
+      <Tabs defaultValue={currentTab} onValueChange={onSetTab}>
         <div className='pt-6 flex gap-3'>
           <h2 className='text-3xl font-semibold'>Browse</h2>
           <BrowseSearch currentSearch={currentSearch} onSearch={onSearch} currentTab={currentTab} />{' '}
-          <BrowseFilter
-            filter={filter}
-            currentFilter={currentFilter}
-            setFilter={handleSetFilter}
-            currentTab={currentTab}
-          />
+          <BrowseFilter filter={filter} currentFilter={currentFilter} setFilter={onSetFilter} currentTab={currentTab} />
           <TabsList className='justify-end'>
             <TabsTrigger value='all'>All News</TabsTrigger>
             <TabsTrigger value='trending'>Trending</TabsTrigger>
           </TabsList>
         </div>
-        <div className='flex justify-end pt-3 gap-3'>
-          <MultipleSelector
-            className='min-h-10 w-1/2'
-            disabled={currentTab === 'trending'}
-            value={currentFilter.topics}
-            onChange={(values) => (filter.topics = values) && handleSetFilter()}
-            hidePlaceholderWhenSelected
-            defaultOptions={TOPICS.sort(sortOption)}
-            placeholder='Select topics...'
-            emptyIndicator={
-              <p className='text-center text-lg leading-10 text-gray-600 dark:text-gray-400'>no results found.</p>
-            }
-          />
+        <div className='flex justify-end min-h-10 pt-3 gap-3 '>
+          {currentTab === 'all' ? (
+            <MultipleSelector
+              className='flex min-h-10 max-w-96'
+              value={currentFilter.topics}
+              onChange={(values) => (filter.topics = values) && onSetFilter()}
+              hidePlaceholderWhenSelected
+              defaultOptions={filterTopics}
+              placeholder='Select topics...'
+              emptyIndicator={
+                <p className='text-center text-lg leading-10 text-gray-600 dark:text-gray-400'>no results found.</p>
+              }
+            />
+          ) : (
+            ''
+          )}
+
           <Button onClick={() => resetFilter()} disabled={clearDisabled()}>
             Clear filters
           </Button>

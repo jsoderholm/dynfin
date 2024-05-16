@@ -83,11 +83,11 @@ export async function getNewsInfoByCategoryFromStockNews(
   }
 
   if (filter.industry.value !== 'all') {
-    params.append('collection', filter.industry.value)
+    params.append('industry', filter.industry.value)
   }
 
   if (filter.country.value !== 'all') {
-    params.append('collection', filter.country.value)
+    params.append('country', filter.country.value)
   }
 
   if (filter.collection.value !== 'all') {
