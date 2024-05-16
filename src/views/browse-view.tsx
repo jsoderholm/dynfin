@@ -13,8 +13,7 @@ import { BrowseSearch, SearchProps } from '@/components/browse/browse-search'
 export type PaginationProps = {
   onPageChange: (newPage: number) => void
   currentPage: number
-  currentTab: string
-  onSetTab: (newTab: string) => void
+  maxPages: number
 }
 
 export type FilteringProps = {
@@ -25,11 +24,21 @@ export type FilteringProps = {
 type BrowseViewProps = Omit<BrowseItemProps, 'info'> &
   FilteringProps &
   PaginationProps &
-  SearchProps & { data: CombinedInfo[] }
+  SearchProps & { data: CombinedInfo[] } & { currentTab: string; onSetTab: (newTab: string) => void }
 
 function BrowseView(props: BrowseViewProps) {
-  const { data, currentPage, onPageChange, currentTab, onSetTab, currentFilter, onSetFilter, onSearch, currentSearch } =
-    props
+  const {
+    data,
+    currentPage,
+    onPageChange,
+    currentTab,
+    onSetTab,
+    currentFilter,
+    onSetFilter,
+    onSearch,
+    currentSearch,
+    maxPages,
+  } = props
 
   const filter: Filter = {
     topics: currentFilter.topics,
@@ -112,7 +121,8 @@ function BrowseView(props: BrowseViewProps) {
         </div>
         <div className='flex justify-end pt-3 gap-3'>
           <MultipleSelector
-            className='min-h-10 w-1/2 '
+            className={`min-h-10 w-1/2 ${currentTab === 'trending' ? 'opacity-50' : ''}`}
+            disabled={currentTab === 'trending'}
             value={currentFilter.topics}
             onChange={(values) => (filter.topics = values) && handleSetFilter()}
             hidePlaceholderWhenSelected
@@ -147,7 +157,7 @@ function BrowseView(props: BrowseViewProps) {
         </TabsContent>
       </Tabs>
       <Pagination className='my-5'>
-        <PaginationNumbers currentPage={currentPage} onPageChange={onPageChange} />
+        <PaginationNumbers currentPage={currentPage} onPageChange={onPageChange} maxPages={maxPages} />
       </Pagination>
     </div>
   )

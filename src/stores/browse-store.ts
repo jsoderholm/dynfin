@@ -19,6 +19,8 @@ interface BrowseState {
   currentPage: number
   setPage: (page: number) => void
   currentTab: string
+  newsPages: number
+  trendingPages: number
   setTab: (tab: string) => void
   currentFilter: Filter
   setFilter: (filter: Filter) => void
@@ -33,7 +35,7 @@ const useBrowseStore = create<BrowseState>((set) => ({
     try {
       const data = await getCombinedInfoFromStockNews(page, filter, search)
 
-      set({ browse: data })
+      set({ browse: data[0], newsPages: data[1], trendingPages: data[2] })
     } catch (error) {
       console.error('Failed to fetch browse list:', error)
     } finally {
@@ -42,6 +44,8 @@ const useBrowseStore = create<BrowseState>((set) => ({
   },
   browseLoading: false,
   currentPage: 1,
+  newsPages: 0,
+  trendingPages: 0,
   setPage: (page) => set({ currentPage: page }),
   currentTab: 'all',
   setTab: (tab) => set({ currentTab: tab }),

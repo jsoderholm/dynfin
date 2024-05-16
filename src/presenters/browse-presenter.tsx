@@ -21,7 +21,12 @@ function BrowsePresenter() {
     setFilter,
     currentSearch,
     setSearch,
+    newsPages,
+    trendingPages,
   } = useBrowseStore()
+
+  const maxPages = currentTab === 'all' ? newsPages : trendingPages
+  console.log(maxPages)
 
   useEffect(() => {
     setBrowse(currentPage, currentFilter, currentSearch)
@@ -50,6 +55,7 @@ function BrowsePresenter() {
         currentPage={currentPage}
         onPageChange={setPage}
         currentTab={currentTab}
+        maxPages={maxPages}
         onSetTab={setTab}
         currentFilter={currentFilter}
         onSetFilter={setFilter}

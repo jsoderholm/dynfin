@@ -36,18 +36,22 @@ export async function getCombinedInfoFromStockNews(
   page: number,
   filter: Filter,
   search: string,
-): Promise<CombinedInfo[]> {
+): Promise<[CombinedInfo[], number, number]> {
   const newsPromise = getNewsInfoByCategoryFromStockNews(page, filter, search)
   const trendingPromise = getTrendingNewsInfoFromStockNews(page, filter)
 
   try {
     const [newsData, trendingData] = await Promise.all([newsPromise, trendingPromise])
+    const newsItems = newsData[0]
+    const newsPages = newsData[1]
+    const trendingItems = trendingData[0]
+    const trendingPages = trendingData[1]
     // Merge the data from both sources into a single array
     const combinedData: CombinedInfo[] = [
-      ...newsData.map((newsItem) => ({ ...newsItem, dataType: 'news' as const })),
-      ...trendingData.map((trendingItem) => ({ ...trendingItem, dataType: 'trending' as const })),
+      ...newsItems.map((newsItem) => ({ ...newsItem, dataType: 'news' as const })),
+      ...trendingItems.map((trendingItem) => ({ ...trendingItem, dataType: 'trending' as const })),
     ]
-    return combinedData
+    return [combinedData, newsPages, trendingPages]
   } catch (e) {
     throw new Error(`Failed to fetch combined data from Stocknewsapi: ${e}`)
   }
@@ -57,12 +61,13 @@ export async function getNewsInfoByCategoryFromStockNews(
   page: number = 1,
   filter: Filter,
   search: string,
-): Promise<NewsInfo[]> {
+): Promise<[NewsInfo[], number]> {
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCK_NEWS_API_KEY,
     section: 'alltickers',
     page: page.toString(),
     items: ITEMS.toString(),
+    fallback: 'true',
   })
 
   if (filter.topics.length > 0) {
@@ -97,18 +102,22 @@ export async function getNewsInfoByCategoryFromStockNews(
 
   try {
     const response = await axios.get(url)
-    const response_data: { data: NewsInfo[] } = response.data
-    return response_data.data
+    const response_data = response.data
+    return [response_data.data, response_data.total_pages]
   } catch (e) {
     throw new Error(`Failed to fetch company profile from Stocknewsapi: ${e}`)
   }
 }
 
-export async function getTrendingNewsInfoFromStockNews(page: number = 1, filter: Filter): Promise<TrendingInfo[]> {
+export async function getTrendingNewsInfoFromStockNews(
+  page: number = 1,
+  filter: Filter,
+): Promise<[TrendingInfo[], number]> {
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCK_NEWS_API_KEY,
     items: ITEMS.toString(),
     page: page.toString(),
+    fallback: 'true',
   })
 
   if (filter.topics.length > 0) {
@@ -127,8 +136,8 @@ export async function getTrendingNewsInfoFromStockNews(page: number = 1, filter:
 
   try {
     const response = await axios.get(url)
-    const response_data: { data: TrendingInfo[] } = response.data
-    return response_data.data
+    const response_data = response.data
+    return [response_data.data, response_data.total_pages]
   } catch (e) {
     throw new Error(`Failed to fetch company profile from Stock News API: ${e}`)
   }
