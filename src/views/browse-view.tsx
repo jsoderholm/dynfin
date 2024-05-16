@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Filter } from '@/stores/browse-store'
 import { BrowseFilter } from '@/components/browse/browse-filter'
 import { BrowseSearch, SearchProps } from '@/components/browse/browse-search'
+import { Icons } from '@/components/icons'
 
 export type PaginationProps = {
   onPageChange: (newPage: number) => void
@@ -121,7 +122,7 @@ function BrowseView(props: BrowseViewProps) {
         </div>
         <div className='flex justify-end pt-3 gap-3'>
           <MultipleSelector
-            className={`min-h-10 w-1/2 ${currentTab === 'trending' ? 'opacity-50' : ''}`}
+            className='min-h-10 w-1/2'
             disabled={currentTab === 'trending'}
             value={currentFilter.topics}
             onChange={(values) => (filter.topics = values) && handleSetFilter()}
@@ -138,13 +139,20 @@ function BrowseView(props: BrowseViewProps) {
         </div>
         <div className='flex pt-3 justify-between gap-3 '></div>
         <TabsContent value='all'>
-          <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
-            {Array.from(data)
-              .filter((item) => item.dataType === 'news')
-              .map((item) => (
-                <BrowseItem info={item} />
-              ))}
-          </div>
+          {maxPages === undefined ? (
+            <div className='flex justify-center text-lg'>
+              <p className='pr-2'>No items found</p>
+              <Icons.not_found />
+            </div>
+          ) : (
+            <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+              {Array.from(data)
+                .filter((item) => item.dataType === 'news')
+                .map((item) => (
+                  <BrowseItem info={item} />
+                ))}
+            </div>
+          )}
         </TabsContent>
         <TabsContent value='trending'>
           <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
