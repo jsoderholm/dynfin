@@ -1,6 +1,5 @@
 import {
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -8,80 +7,29 @@ import {
 } from '@/components/ui/pagination'
 import { PaginationProps } from '@/views/browse-view'
 
-type PaginationNumbersProps = Pick<PaginationProps, 'currentPage' | 'onPageChange'>
-
-export const PaginationNumbers = ({ currentPage, onPageChange }: PaginationNumbersProps) => {
-  const handlePageChange = (newPage: number) => {
-    if (newPage >= 1) {
-      onPageChange(newPage)
-      window.scrollTo(0, 0)
-    }
+export const PaginationNumbers = ({ currentPage, onPageChange, maxPages }: PaginationProps) => {
+  if (maxPages === undefined) {
+    return
   }
 
-  if (currentPage == 1) {
-    return (
-      <PaginationContent>
+  return (
+    <PaginationContent>
+      {/* Show previous button if we are not on page 1 (i.e. there is a page to go back to) */}
+      {currentPage > 1 && (
         <PaginationItem>
-          <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} />
+          <PaginationPrevious onClick={() => onPageChange(currentPage - 1)} />
         </PaginationItem>
+      )}
+
+      <PaginationItem>
+        <PaginationLink isActive={true}>{currentPage}</PaginationLink>
+      </PaginationItem>
+
+      {currentPage < maxPages && (
         <PaginationItem>
-          <PaginationLink isActive>{currentPage}</PaginationLink>
+          <PaginationNext onClick={() => onPageChange(currentPage + 1)} />
         </PaginationItem>
-        <PaginationItem>
-          <PaginationLink onClick={() => handlePageChange(currentPage + 1)}>{currentPage + 1}</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink onClick={() => handlePageChange(currentPage + 2)}>{currentPage + 2}</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
-        </PaginationItem>
-      </PaginationContent>
-    )
-  } else if (currentPage < 3) {
-    return (
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} />
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink onClick={() => handlePageChange(currentPage - 1)}>{currentPage - 1}</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink isActive>{currentPage}</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink onClick={() => handlePageChange(currentPage + 1)}>{currentPage + 1}</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
-        </PaginationItem>
-      </PaginationContent>
-    )
-  } else {
-    return (
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} />
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink onClick={() => handlePageChange(1)}>
-            <PaginationEllipsis />
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink onClick={() => handlePageChange(currentPage - 1)}>{currentPage - 1}</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink isActive>{currentPage}</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink onClick={() => handlePageChange(currentPage + 1)}>{currentPage + 1}</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationNext onClick={() => handlePageChange(currentPage + 1)} />
-        </PaginationItem>
-      </PaginationContent>
-    )
-  }
+      )}
+    </PaginationContent>
+  )
 }
