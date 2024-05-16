@@ -1,4 +1,5 @@
 import AppShell from '@/components/app-shell'
+import { useTheme } from '@/components/theme-provider'
 import useAuthStore from '@/stores/auth-store'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Outlet, useNavigate, useRouterState } from '@tanstack/react-router'
@@ -40,6 +41,7 @@ const AppShellPresenter = () => {
   const { user, logout, deleteUser } = useAuthStore()
   const { collapsed, setCollapsed } = useSidebarStore()
   const { open, onOpenChange } = useSettingsModalStore()
+  const { theme, setTheme } = useTheme()
   const router = useRouterState()
   const hideBackButton = router.location.pathname === '/' || router.location.pathname === '/saved'
 
@@ -80,6 +82,8 @@ const AppShellPresenter = () => {
       modalOpen={open}
       onOpenChange={onOpenChange}
       deleteUser={deleteUser}
+      theme={theme}
+      setTheme={setTheme}
     >
       <Outlet />
     </AppShell>

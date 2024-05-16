@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+import NewsModal from '@/components/news-modal'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { NewsInfo } from '@/lib/api/stock-news'
 
@@ -17,9 +17,7 @@ function NewsView({ data }: NewsViewProps) {
         <p className='text-muted-foreground'>{text}</p>
       </CardContent>
       <CardFooter>
-        <Button variant='secondary' className='w-full'>
-          Read more
-        </Button>
+        <NewsModal news={data} />
       </CardFooter>
     </Card>
   )

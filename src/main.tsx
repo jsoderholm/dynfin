@@ -5,6 +5,7 @@ import '@/styles/index.css'
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
 import { Icons } from './components/icons'
+import { ThemeProvider } from './components/theme-provider'
 
 const router = createRouter({
   routeTree,
@@ -20,9 +21,11 @@ declare module '@tanstack/react-router' {
 
 function App() {
   return (
-    <div className='flex flex-col h-full'>
-      <RouterProvider router={router} defaultPreload='intent' />
-    </div>
+    <ThemeProvider>
+      <div className='flex flex-col h-full'>
+        <RouterProvider router={router} defaultPreload='intent' />
+      </div>
+    </ThemeProvider>
   )
 }
 

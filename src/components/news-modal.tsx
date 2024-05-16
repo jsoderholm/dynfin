@@ -32,7 +32,7 @@ const NewsModal: React.FC<NewsModalProps> = ({ news }) => {
         </div>
         {isNewsInfo && <img src={news.image_url} className='h-[259.88px]' alt='News related visual' />}
         <p className='text-muted-foreground'>{news.text}</p>
-        <div className='grid grid-cols-4 gap-x-4'>
+        <div className='grid grid-cols-4 gap-4'>
           {news.tickers.map((ticker) => (
             <TooltipProvider>
               <Tooltip>
