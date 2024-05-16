@@ -5,11 +5,11 @@ export const columns: ColumnDef<{
   name: string
 }>[] = [
   {
-    accessorKey: 'symbol',
-    header: 'Symbol',
-  },
-  {
     accessorKey: 'name',
     header: 'Name',
+  },
+  {
+    accessorKey: 'symbol',
+    header: 'Symbol',
   },
 ]
