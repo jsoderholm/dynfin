@@ -49,9 +49,8 @@ const AuthenticationPresenter = () => {
     const { email, password } = values
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password).then((credentials) =>
-        createUserInFirestore(credentials, { uid: credentials.user.uid, saved: [] }),
-      )
+      const credentials = await createUserWithEmailAndPassword(auth, email, password)
+      await createUserInFirestore(credentials, { uid: credentials.user.uid, saved: [] })
       navigate({ to: '/' })
     } catch (e) {
       console.error(e)
