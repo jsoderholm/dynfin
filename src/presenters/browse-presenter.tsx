@@ -5,9 +5,9 @@ import { useEffect } from 'react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import MultipleSelector, { Option } from '@/components/ui/multiple-selector'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { BrowseFilter } from '@/components/browse/browse-filter'
 import { COLLECTIONS, COUNTRIES, INDUSTRIES, SECTORS, TOPICS } from '@/lib/browse-filtering'
+import { BrowseSearch } from '@/components/browse/browse-search'
 
 function BrowsePresenter() {
   const {
@@ -154,31 +154,30 @@ const Loading = ({ currentTab, currentFilter, currentSearch }: LoadingProps) => 
   return (
     <div className='container '>
       <Tabs defaultValue={currentTab}>
-        <div className='flex pt-6 gap-3'>
+        <div className='pt-6 md:flex gap-3'>
           <h2 className='text-3xl font-semibold'>Browse</h2>
-          <Input placeholder='Search' className='w-3/4' value={currentSearch} />
-          <Button className='mr-20' type='submit' value={currentSearch}>
-            Search
-          </Button>
-          <BrowseFilter
-            filter={currentFilter}
-            currentFilter={currentFilter}
-            currentTab=''
-            setFilter={function (): void {}}
-          />
-          <TabsList>
-            <TabsTrigger value='all'>All News</TabsTrigger>
-            <TabsTrigger value='trending'>Trending</TabsTrigger>
-          </TabsList>
+          <BrowseSearch currentSearch={currentSearch} onSearch={function (): void {}} currentTab={currentTab} />
+          <div className='flex gap-3 justify-between mt-3 md:mt-0'>
+            <BrowseFilter
+              filter={currentFilter}
+              currentFilter={currentFilter}
+              currentTab=''
+              setFilter={function (): void {}}
+            />
+            <TabsList>
+              <TabsTrigger value='all'>All News</TabsTrigger>
+              <TabsTrigger value='trending'>Trending</TabsTrigger>
+            </TabsList>
+          </div>
         </div>
-        <div className='flex pt-3 gap-3 '>
+        <div className='justify-end min-h-10 pt-3 gap-3 md:flex'>
           <MultipleSelector
-            className='min-h-10 max-w-96'
+            className='min-h-10 md:max-w-96'
             value={currentFilter.topics}
             hidePlaceholderWhenSelected
             placeholder='Select topics...'
           />
-          <Button>Clear filters</Button>
+          <Button className='w-full md:w-fit'>Clear filters</Button>
         </div>
         <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
           {Array.from({ length: 12 }).map((_, i) => (

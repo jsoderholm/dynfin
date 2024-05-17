@@ -34,7 +34,7 @@ export const BrowseSearch = ({ onSearch, currentSearch, currentTab }: SearchProp
           control={form.control}
           name='search'
           render={({ field }) => (
-            <FormItem className='w-3/4'>
+            <FormItem className='w-full md:w-3/4 lg:w-3/4'>
               <FormControl>
                 <Input placeholder='Search...' {...field} disabled={currentTab === 'trending'} />
               </FormControl>
