@@ -38,12 +38,19 @@ export const SettingsFormSchema = z.object({
 const AppShellPresenter = () => {
   const navigate = useNavigate()
 
-  const { user, logout, deleteUser } = useAuthStore()
+  const { user, logout, deleteUser, deletingUser } = useAuthStore()
   const { collapsed, setCollapsed } = useSidebarStore()
   const { open, onOpenChange } = useSettingsModalStore()
   const { theme, setTheme } = useTheme()
   const router = useRouterState()
   const hideBackButton = router.location.pathname === '/' || router.location.pathname === '/saved'
+
+  async function handleDeleteUser() {
+    const deleted = await deleteUser()
+    if (deleted) {
+      navigate({ to: '/authentication' })
+    }
+  }
 
   async function handleSignOut() {
     try {
@@ -81,7 +88,8 @@ const AppShellPresenter = () => {
       onSave={onSubmit}
       modalOpen={open}
       onOpenChange={onOpenChange}
-      deleteUser={deleteUser}
+      deleteUser={handleDeleteUser}
+      deletingUser={deletingUser}
       theme={theme}
       setTheme={setTheme}
     >

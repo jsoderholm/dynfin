@@ -21,7 +21,7 @@ const Header = (props: HeaderProps) => {
   const { className, hideBackButton } = props
 
   return (
-    <header className={cn('sticky flex top-0 z-10 border-b h-16', className)}>
+    <header className={cn('sticky flex top-0 z-10 border-b bg-background h-16', className)}>
       <div className={cn('flex items-center flex-1 justify-between h-full px-4', hideBackButton && 'md:justify-end')}>
         <div className='md:hidden'>
           <Sheet>

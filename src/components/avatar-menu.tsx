@@ -1,4 +1,4 @@
-import { IconSettings, IconLogout, IconUser } from '@tabler/icons-react'
+import { IconSettings, IconLogout, IconUser, IconLoader2 } from '@tabler/icons-react'
 import {
   Dialog,
   DialogContent,
@@ -40,12 +40,13 @@ import {
 
 export type AvatarMenuProps = {
   user: AuthState['user']
-  deleteUser: AuthState['deleteUser']
+  deleteUser: () => Promise<void>
   handleSignOut: () => void
   settingsForm: ReturnType<typeof useForm<z.infer<typeof SettingsFormSchema>>>
   onSave: (values: z.infer<typeof SettingsFormSchema>) => Promise<void>
   modalOpen: boolean
   onOpenChange: (open: boolean) => void
+  deletingUser: boolean
 }
 
 const AvatarMenu = ({
@@ -56,6 +57,7 @@ const AvatarMenu = ({
   modalOpen,
   onOpenChange,
   deleteUser,
+  deletingUser,
 }: AvatarMenuProps) => {
   return (
     <Dialog open={modalOpen} onOpenChange={onOpenChange}>
@@ -133,6 +135,7 @@ const AvatarMenu = ({
               )}
             />
             <Button type='submit' disabled={!settingsForm.formState.isDirty} className='w-full'>
+              {settingsForm.formState.isSubmitting && <IconLoader2 className='mr-2 h-4 w-4 animate-spin' />}
               Save
             </Button>
           </form>
@@ -141,6 +144,7 @@ const AvatarMenu = ({
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button className='w-full' variant='destructive'>
+                {deletingUser && <IconLoader2 className='mr-2 h-4 w-4 animate-spin' />}
                 Delete Account
               </Button>
             </AlertDialogTrigger>

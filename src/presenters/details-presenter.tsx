@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import useAuthStore from '@/stores/auth-store'
 import useDetailsStore from '@/stores/details-store'
@@ -5,6 +6,7 @@ import useSavedStore from '@/stores/saved-store'
 import CompanyProfileView from '@/views/company-profile-view'
 import GraphView from '@/views/graph-view'
 import NewsListView from '@/views/news-list-view'
+import { IconHeart, IconHeartFilled } from '@tabler/icons-react'
 import { getRouteApi } from '@tanstack/react-router'
 import { useEffect } from 'react'
 import { create } from 'zustand'
@@ -59,22 +61,29 @@ function DetailsPresenter() {
   const isFavorited = Array.from(saved).some((obj) => obj.symbol === symbol)
 
   return (
-    <div className='container'>
-      <div className='space-y-10 py-10 '>
+    <div className='container relative'>
+      <Button
+        size='icon'
+        variant={isFavorited ? 'favorite' : 'secondary'}
+        className='absolute top-10 right-8 dark:bg-transparent'
+        onClick={() => toggleFavorite(user?.uid ?? '', symbol, companyProfile?.name)}
+      >
+        {isFavorited ? <IconHeartFilled color='#EA63D9' /> : <IconHeart />}
+      </Button>
+      <div className='space-y-10 py-10'>
         {companyProfileLoading ? (
           <>
-            <Skeleton className='h-8 w-64' />
+            <div className='flex justify-between'>
+              <Skeleton className='h-8 w-64' />
+              <Skeleton className='h-8 w-8' />
+            </div>
             <div className='grid grid-cols-1 lg:grid-cols-3 gap-10 h-80 mb-10'>
               <Skeleton className='h-full col-span-1' />
               <Skeleton className='h-full col-span-2' />
             </div>
           </>
         ) : companyProfile ? (
-          <CompanyProfileView
-            info={companyProfile}
-            toggleFavorite={() => toggleFavorite(user?.uid ?? '', symbol, companyProfile.name)}
-            isFavorited={isFavorited}
-          />
+          <CompanyProfileView info={companyProfile} />
         ) : (
           <ErrorMessage message='Failed to fetch company profile' />
         )}
