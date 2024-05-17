@@ -143,25 +143,6 @@ export async function getTrendingNewsInfoFromStockNews(
   }
 }
 
-export async function getSavedNewsInfoFromStockNews(page: number = 1, tickers: string[] = []): Promise<NewsInfo[]> {
-  const params = new URLSearchParams({
-    token: import.meta.env.VITE_STOCK_NEWS_API_KEY,
-    tickers: tickers.toString(),
-    items: ITEMS.toString(),
-    page: page.toString(),
-  })
-
-  const url = `${BASE_URL}?${params}`
-
-  try {
-    const response = await axios.get(url)
-    const response_data: { data: NewsInfo[] } = response.data
-    return response_data.data
-  } catch (e) {
-    throw new Error(`Failed to fetch company profile from Stock News API: ${e}`)
-  }
-}
-
 export async function getNewsInfoBySymbolFromStockNews(symbol: string, items: number = 6): Promise<NewsInfo[]> {
   const params = new URLSearchParams({
     token: import.meta.env.VITE_STOCK_NEWS_API_KEY,
