@@ -46,6 +46,8 @@ function BrowseView(props: BrowseViewProps) {
     resetFilter,
     clearDisabled,
     filterTopics,
+    form,
+    formSchema,
   } = props
 
   return (
@@ -53,7 +55,13 @@ function BrowseView(props: BrowseViewProps) {
       <Tabs defaultValue={currentTab} onValueChange={onSetTab}>
         <div className='pt-6 md:flex gap-3'>
           <h2 className='text-3xl font-semibold'>Browse</h2>
-          <BrowseSearch currentSearch={currentSearch} onSearch={onSearch} currentTab={currentTab} />{' '}
+          <BrowseSearch
+            currentSearch={currentSearch}
+            onSearch={onSearch}
+            currentTab={currentTab}
+            form={form}
+            formSchema={formSchema}
+          />{' '}
           <div className='flex gap-3 justify-between mt-3 md:mt-0'>
             <BrowseFilter
               filter={filter}

@@ -8,6 +8,9 @@ import { Button } from '@/components/ui/button'
 import { BrowseFilter } from '@/components/browse/browse-filter'
 import { COLLECTIONS, COUNTRIES, INDUSTRIES, SECTORS, TOPICS } from '@/lib/browse-filtering'
 import { BrowseSearch } from '@/components/browse/browse-search'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { UseFormReturn, useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 function BrowsePresenter() {
   const {
@@ -113,8 +116,27 @@ function BrowsePresenter() {
     }
   }
 
+  const formSchema = z.object({
+    search: z.string(),
+  })
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      search: currentSearch,
+    },
+  })
+
   if (browseLoading) {
-    return <Loading currentTab={currentTab} currentFilter={currentFilter} currentSearch={currentSearch} />
+    return (
+      <Loading
+        currentTab={currentTab}
+        currentFilter={currentFilter}
+        currentSearch={currentSearch}
+        form={form}
+        formSchema={formSchema}
+      />
+    )
   }
 
   return browse ? (
@@ -134,6 +156,8 @@ function BrowsePresenter() {
         resetFilter={resetFilter}
         clearDisabled={clearDisabled}
         filterTopics={TOPICS.sort(sortOption)}
+        form={form}
+        formSchema={formSchema}
       />
     </div>
   ) : (
@@ -148,15 +172,41 @@ interface LoadingProps {
   currentTab: string
   currentFilter: Filter
   currentSearch: string
+  formSchema: z.ZodObject<
+    {
+      search: z.ZodString
+    },
+    'strip',
+    z.ZodTypeAny,
+    {
+      search: string
+    },
+    {
+      search: string
+    }
+  >
+  form: UseFormReturn<
+    {
+      search: string
+    },
+    unknown,
+    undefined
+  >
 }
 
-const Loading = ({ currentTab, currentFilter, currentSearch }: LoadingProps) => {
+const Loading = ({ currentTab, currentFilter, currentSearch, form, formSchema }: LoadingProps) => {
   return (
     <div className='container '>
       <Tabs defaultValue={currentTab}>
         <div className='pt-6 md:flex gap-3'>
           <h2 className='text-3xl font-semibold'>Browse</h2>
-          <BrowseSearch currentSearch={currentSearch} onSearch={function (): void {}} currentTab={currentTab} />
+          <BrowseSearch
+            currentSearch={currentSearch}
+            onSearch={function (): void {}}
+            currentTab={currentTab}
+            form={form}
+            formSchema={formSchema}
+          />
           <div className='flex gap-3 justify-between mt-3 md:mt-0'>
             <BrowseFilter
               filter={currentFilter}
