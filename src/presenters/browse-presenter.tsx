@@ -198,16 +198,20 @@ const Loading = ({ currentTab, currentFilter, currentSearch, form, formSchema }:
   return (
     <div className='container '>
       <Tabs defaultValue={currentTab}>
-        <div className='pt-6 md:flex gap-3'>
-          <h2 className='text-3xl font-semibold'>Browse</h2>
-          <BrowseSearch
-            currentSearch={currentSearch}
-            onSearch={function (): void {}}
-            currentTab={currentTab}
-            form={form}
-            formSchema={formSchema}
-          />
-          <div className='flex gap-3 justify-between mt-3 md:mt-0'>
+        <div className='pt-6 space-y-3 md:flex md:space-y-0 gap-3 justify-between'>
+          <h2 className='flex text-3xl font-semibold'>Browse</h2>
+          {currentTab === 'all' ? (
+            <BrowseSearch
+              currentSearch={currentSearch}
+              onSearch={function (): void {}}
+              currentTab={currentTab}
+              form={form}
+              formSchema={formSchema}
+            />
+          ) : (
+            ''
+          )}
+          <div className='flex gap-3 justify-between'>
             <BrowseFilter
               filter={currentFilter}
               currentFilter={currentFilter}
@@ -221,12 +225,16 @@ const Loading = ({ currentTab, currentFilter, currentSearch, form, formSchema }:
           </div>
         </div>
         <div className='justify-end min-h-10 pt-3 gap-3 md:flex'>
-          <MultipleSelector
-            className='min-h-10 md:max-w-96'
-            value={currentFilter.topics}
-            hidePlaceholderWhenSelected
-            placeholder='Select topics...'
-          />
+          {currentTab === 'all' ? (
+            <MultipleSelector
+              className='min-h-10 md:max-w-96'
+              value={currentFilter.topics}
+              hidePlaceholderWhenSelected
+              placeholder='Select topics...'
+            />
+          ) : (
+            ''
+          )}
           <Button className='w-full md:w-fit'>Clear filters</Button>
         </div>
         <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>

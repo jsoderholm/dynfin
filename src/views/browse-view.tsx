@@ -53,16 +53,21 @@ function BrowseView(props: BrowseViewProps) {
   return (
     <div className='container'>
       <Tabs defaultValue={currentTab} onValueChange={onSetTab}>
-        <div className='pt-6 md:flex gap-3'>
-          <h2 className='text-3xl font-semibold'>Browse</h2>
-          <BrowseSearch
-            currentSearch={currentSearch}
-            onSearch={onSearch}
-            currentTab={currentTab}
-            form={form}
-            formSchema={formSchema}
-          />{' '}
-          <div className='flex gap-3 justify-between mt-3 md:mt-0'>
+        <div className='pt-6 space-y-3 md:flex md:space-y-0 gap-3 justify-between'>
+          <h2 className='flex text-3xl font-semibold'>Browse</h2>
+          {currentTab === 'all' ? (
+            <BrowseSearch
+              currentSearch={currentSearch}
+              onSearch={onSearch}
+              currentTab={currentTab}
+              form={form}
+              formSchema={formSchema}
+            />
+          ) : (
+            ''
+          )}
+
+          <div className='flex gap-3 justify-between'>
             <BrowseFilter
               filter={filter}
               currentFilter={currentFilter}
