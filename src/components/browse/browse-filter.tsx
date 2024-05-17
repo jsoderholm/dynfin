@@ -21,7 +21,7 @@ export const BrowseFilter = (props: BrowseFilterProps) => {
         <Button variant='outline'>Filter</Button>
       </PopoverTrigger>
       <PopoverContent className='w-100' onCloseAutoFocus={() => setFilter()}>
-        <div className='flex gap-2'></div>
+        <div className='flex'></div>
         {currentTab === 'all' ? (
           <div>
             <Label>Sectors</Label>
@@ -39,7 +39,7 @@ export const BrowseFilter = (props: BrowseFilterProps) => {
                 ))}
               </SelectContent>
             </Select>
-            <Label>Industry</Label>
+            <Label className='flex mt-3 mb-1'>Industry</Label>
             <Select
               defaultValue={currentFilter.industry.value}
               onValueChange={(value) => (filter.industry = INDUSTRIES.find((industry) => industry.value === value)!)}
@@ -54,7 +54,7 @@ export const BrowseFilter = (props: BrowseFilterProps) => {
                 ))}
               </SelectContent>
             </Select>
-            <Label>Country</Label>
+            <Label className='flex mt-3 mb-1'>Country</Label>
             <Select
               defaultValue={currentFilter.country.value}
               onValueChange={(value) => (filter.country = COUNTRIES.find((country) => country.value === value)!)}
@@ -73,7 +73,8 @@ export const BrowseFilter = (props: BrowseFilterProps) => {
         ) : (
           ''
         )}
-        <Label>Collection</Label>
+
+        <Label className='flex mt-3 mb-1'>Collection</Label>
         <Select
           defaultValue={currentFilter.collection.value}
           onValueChange={(value) => (filter.collection = COLLECTIONS.find((topic) => topic.value === value)!)}
@@ -88,6 +89,7 @@ export const BrowseFilter = (props: BrowseFilterProps) => {
             ))}
           </SelectContent>
         </Select>
+
         <Button className='w-full mt-3' onClick={() => setFilter()}>
           Save Filters
         </Button>

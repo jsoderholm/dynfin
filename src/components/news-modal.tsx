@@ -48,13 +48,6 @@ const NewsModal: React.FC<NewsModalProps> = ({ news }) => {
             </TooltipProvider>
           ))}
         </div>
-        {isNewsInfo && (
-          <Button>
-            <a href={news.news_url} target='_blank' rel='noopener noreferrer'>
-              Read full article
-            </a>
-          </Button>
-        )}
       </DialogContent>
     </Dialog>
   )

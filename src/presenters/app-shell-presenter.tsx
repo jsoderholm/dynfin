@@ -1,4 +1,4 @@
-import AppShell from '@/components/app-shell'
+import AppShell from '@/views/app-shell-view'
 import { useTheme } from '@/components/theme-provider'
 import useAuthStore from '@/stores/auth-store'
 import { zodResolver } from '@hookform/resolvers/zod'

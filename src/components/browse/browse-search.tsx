@@ -1,28 +1,36 @@
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
-import { useForm } from 'react-hook-form'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { UseFormReturn } from 'react-hook-form'
 
 export type SearchProps = {
   currentSearch: string
   onSearch: (search: string) => void
   currentTab: string
+  form: UseFormReturn<
+    {
+      search: string
+    },
+    unknown,
+    undefined
+  >
+  formSchema: z.ZodObject<
+    {
+      search: z.ZodString
+    },
+    'strip',
+    z.ZodTypeAny,
+    {
+      search: string
+    },
+    {
+      search: string
+    }
+  >
 }
 
-const formSchema = z.object({
-  search: z.string(),
-})
-
-export const BrowseSearch = ({ onSearch, currentSearch, currentTab }: SearchProps) => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      search: currentSearch,
-    },
-  })
-
+export const BrowseSearch = ({ onSearch, currentTab, form, formSchema }: SearchProps) => {
   function onSubmit(values: z.infer<typeof formSchema>) {
     onSearch(values.search)
   }
@@ -34,7 +42,7 @@ export const BrowseSearch = ({ onSearch, currentSearch, currentTab }: SearchProp
           control={form.control}
           name='search'
           render={({ field }) => (
-            <FormItem className='w-3/4'>
+            <FormItem className='w-full md:w-3/4 lg:w-3/4'>
               <FormControl>
                 <Input placeholder='Search...' {...field} disabled={currentTab === 'trending'} />
               </FormControl>

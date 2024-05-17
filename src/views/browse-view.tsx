@@ -46,24 +46,44 @@ function BrowseView(props: BrowseViewProps) {
     resetFilter,
     clearDisabled,
     filterTopics,
+    form,
+    formSchema,
   } = props
 
   return (
     <div className='container'>
       <Tabs defaultValue={currentTab} onValueChange={onSetTab}>
-        <div className='pt-6 flex gap-3'>
-          <h2 className='text-3xl font-semibold'>Browse</h2>
-          <BrowseSearch currentSearch={currentSearch} onSearch={onSearch} currentTab={currentTab} />{' '}
-          <BrowseFilter filter={filter} currentFilter={currentFilter} setFilter={onSetFilter} currentTab={currentTab} />
-          <TabsList className='justify-end'>
-            <TabsTrigger value='all'>All News</TabsTrigger>
-            <TabsTrigger value='trending'>Trending</TabsTrigger>
-          </TabsList>
+        <div className='pt-6 space-y-3 md:flex md:space-y-0 gap-3 justify-between'>
+          <h2 className='flex text-3xl font-semibold'>Browse</h2>
+          {currentTab === 'all' ? (
+            <BrowseSearch
+              currentSearch={currentSearch}
+              onSearch={onSearch}
+              currentTab={currentTab}
+              form={form}
+              formSchema={formSchema}
+            />
+          ) : (
+            ''
+          )}
+
+          <div className='flex gap-3 justify-between'>
+            <BrowseFilter
+              filter={filter}
+              currentFilter={currentFilter}
+              setFilter={onSetFilter}
+              currentTab={currentTab}
+            />
+            <TabsList className=''>
+              <TabsTrigger value='all'>All News</TabsTrigger>
+              <TabsTrigger value='trending'>Trending</TabsTrigger>
+            </TabsList>
+          </div>
         </div>
-        <div className='flex justify-end min-h-10 pt-3 gap-3 '>
+        <div className='justify-end min-h-10 pt-3 gap-3 md:flex'>
           {currentTab === 'all' ? (
             <MultipleSelector
-              className='flex min-h-10 max-w-96'
+              className='min-h-10 md:max-w-96'
               value={currentFilter.topics}
               onChange={(values) => (filter.topics = values) && onSetFilter()}
               hidePlaceholderWhenSelected
@@ -77,7 +97,7 @@ function BrowseView(props: BrowseViewProps) {
             ''
           )}
 
-          <Button onClick={() => resetFilter()} disabled={clearDisabled()}>
+          <Button className='w-full md:w-fit' onClick={() => resetFilter()} disabled={clearDisabled()}>
             Clear filters
           </Button>
         </div>

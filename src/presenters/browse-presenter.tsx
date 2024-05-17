@@ -5,9 +5,12 @@ import { useEffect } from 'react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import MultipleSelector, { Option } from '@/components/ui/multiple-selector'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { BrowseFilter } from '@/components/browse/browse-filter'
 import { COLLECTIONS, COUNTRIES, INDUSTRIES, SECTORS, TOPICS } from '@/lib/browse-filtering'
+import { BrowseSearch } from '@/components/browse/browse-search'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { UseFormReturn, useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 function BrowsePresenter() {
   const {
@@ -113,8 +116,27 @@ function BrowsePresenter() {
     }
   }
 
+  const formSchema = z.object({
+    search: z.string(),
+  })
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      search: currentSearch,
+    },
+  })
+
   if (browseLoading) {
-    return <Loading currentTab={currentTab} currentFilter={currentFilter} currentSearch={currentSearch} />
+    return (
+      <Loading
+        currentTab={currentTab}
+        currentFilter={currentFilter}
+        currentSearch={currentSearch}
+        form={form}
+        formSchema={formSchema}
+      />
+    )
   }
 
   return browse ? (
@@ -134,6 +156,8 @@ function BrowsePresenter() {
         resetFilter={resetFilter}
         clearDisabled={clearDisabled}
         filterTopics={TOPICS.sort(sortOption)}
+        form={form}
+        formSchema={formSchema}
       />
     </div>
   ) : (
@@ -148,37 +172,70 @@ interface LoadingProps {
   currentTab: string
   currentFilter: Filter
   currentSearch: string
+  formSchema: z.ZodObject<
+    {
+      search: z.ZodString
+    },
+    'strip',
+    z.ZodTypeAny,
+    {
+      search: string
+    },
+    {
+      search: string
+    }
+  >
+  form: UseFormReturn<
+    {
+      search: string
+    },
+    unknown,
+    undefined
+  >
 }
 
-const Loading = ({ currentTab, currentFilter, currentSearch }: LoadingProps) => {
+const Loading = ({ currentTab, currentFilter, currentSearch, form, formSchema }: LoadingProps) => {
   return (
     <div className='container '>
       <Tabs defaultValue={currentTab}>
-        <div className='flex pt-6 gap-3'>
-          <h2 className='text-3xl font-semibold'>Browse</h2>
-          <Input placeholder='Search' className='w-3/4' value={currentSearch} />
-          <Button className='mr-20' type='submit' value={currentSearch}>
-            Search
-          </Button>
-          <BrowseFilter
-            filter={currentFilter}
-            currentFilter={currentFilter}
-            currentTab=''
-            setFilter={function (): void {}}
-          />
-          <TabsList>
-            <TabsTrigger value='all'>All News</TabsTrigger>
-            <TabsTrigger value='trending'>Trending</TabsTrigger>
-          </TabsList>
+        <div className='pt-6 space-y-3 md:flex md:space-y-0 gap-3 justify-between'>
+          <h2 className='flex text-3xl font-semibold'>Browse</h2>
+          {currentTab === 'all' ? (
+            <BrowseSearch
+              currentSearch={currentSearch}
+              onSearch={function (): void {}}
+              currentTab={currentTab}
+              form={form}
+              formSchema={formSchema}
+            />
+          ) : (
+            ''
+          )}
+          <div className='flex gap-3 justify-between'>
+            <BrowseFilter
+              filter={currentFilter}
+              currentFilter={currentFilter}
+              currentTab=''
+              setFilter={function (): void {}}
+            />
+            <TabsList>
+              <TabsTrigger value='all'>All News</TabsTrigger>
+              <TabsTrigger value='trending'>Trending</TabsTrigger>
+            </TabsList>
+          </div>
         </div>
-        <div className='flex pt-3 gap-3 '>
-          <MultipleSelector
-            className='min-h-10 max-w-96'
-            value={currentFilter.topics}
-            hidePlaceholderWhenSelected
-            placeholder='Select topics...'
-          />
-          <Button>Clear filters</Button>
+        <div className='justify-end min-h-10 pt-3 gap-3 md:flex'>
+          {currentTab === 'all' ? (
+            <MultipleSelector
+              className='min-h-10 md:max-w-96'
+              value={currentFilter.topics}
+              hidePlaceholderWhenSelected
+              placeholder='Select topics...'
+            />
+          ) : (
+            ''
+          )}
+          <Button className='w-full md:w-fit'>Clear filters</Button>
         </div>
         <div className='grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
           {Array.from({ length: 12 }).map((_, i) => (

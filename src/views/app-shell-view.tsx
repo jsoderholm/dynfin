@@ -1,9 +1,9 @@
-import Sidebar, { SidebarProps } from './sidebar'
-import Header, { HeaderProps } from './header'
+import Sidebar, { SidebarProps } from '../components/sidebar'
+import Header, { HeaderProps } from '../components/header'
 
 type AppShellProps = SidebarProps & HeaderProps
 
-const AppShell = (props: AppShellProps) => {
+const AppShellView = (props: AppShellProps) => {
   const { user, children } = props
 
   return (
@@ -17,4 +17,4 @@ const AppShell = (props: AppShellProps) => {
   )
 }
 
-export default AppShell
+export default AppShellView
