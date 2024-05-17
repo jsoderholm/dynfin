@@ -8,7 +8,7 @@ interface SavedState {
   }>
   savedLoading: boolean
   setSaved: (userID: string) => Promise<void>
-  toggleFavorite: (userId: string, symbol: string, name: string) => void
+  toggleFavorite: (userId: string, symbol: string, name?: string) => void
   isFavorited: (symbol: string) => boolean
 }
 
@@ -34,7 +34,7 @@ const useSavedStore = create<SavedState>((set, get) => ({
     }
   },
 
-  toggleFavorite: (userId: string, symbol: string, name: string) =>
+  toggleFavorite: (userId: string, symbol: string, name: string = '') =>
     set((state) => {
       const newSaved = new Set([...state.saved])
       const itemExists = [...newSaved].find((item) => item.symbol === symbol)
